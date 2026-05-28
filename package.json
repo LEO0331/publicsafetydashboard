@@ -1,0 +1,44 @@
+{
+  "name": "publicsafetydashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "test": "python3 -m unittest discover -s tests/unit -p 'test_*.py' && rm -rf .tmp-test && tsc --ignoreConfig --ignoreDeprecations 6.0 --outDir .tmp-test --module commonjs --moduleResolution node --target ES2022 --esModuleInterop --skipLibCheck src/server/sqlite.ts src/server/queries.ts && node --test tests/integration/*.test.mjs",
+    "test:e2e": "node e2e/fixtures/seed-e2e-db.mjs && npm run build && playwright test",
+    "lighthouse:ci": "node e2e/fixtures/seed-e2e-db.mjs && npm run build && node scripts/run-lhci.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.4.6",
+    "drizzle-orm": "^0.44.7",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.16.0",
+    "next": "^16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-leaflet": "^5.0.0"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.60.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/leaflet": "^1.9.21",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.5.0",
+    "drizzle-kit": "^0.31.7",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.6",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3"
+  }
+}

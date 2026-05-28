@@ -1,0 +1,1 @@
+DROP INDEX `sources_source_url_unique`;

@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --paper: #f6f1e7;
+  --paper-strong: #efe4d1;
+  --ink: #17211f;
+  --muted: #5f6762;
+  --line: #c9bca6;
+  --field: #fffdf8;
+  --civic-green: #285a4d;
+  --civic-blue: #285179;
+  --signal-red: #a63d2f;
+  --amber: #b5792b;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  min-height: 100vh;
+  background:
+    linear-gradient(90deg, rgba(40, 90, 77, 0.07) 1px, transparent 1px) 0 0 / 42px 42px,
+    linear-gradient(180deg, rgba(166, 61, 47, 0.04), transparent 42vh),
+    var(--paper);
+  color: var(--ink);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+
+::selection {
+  background: rgba(166, 61, 47, 0.22);
+}
+
+.font-display {
+  font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+}
+
+.ledger-panel {
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 252, 245, 0.94)),
+    var(--field);
+  box-shadow: 0 12px 30px rgba(23, 33, 31, 0.08);
+}
+
+.notice-rail {
+  background:
+    linear-gradient(180deg, var(--civic-green), #18362f 62%, var(--signal-red));
+}
+
+.stamp {
+  border: 1px solid color-mix(in srgb, var(--signal-red) 70%, transparent);
+  color: var(--signal-red);
+  transform: rotate(-2deg);
+}
+
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-ring:focus-visible {
+  outline-color: var(--signal-red);
+}
+
+@keyframes ledger-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-ledger-in {
+  animation: ledger-in 420ms ease-out both;
+}

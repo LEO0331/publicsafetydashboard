@@ -1,0 +1,150 @@
+{
+  "project": "Taipei Public Safety Dashboard",
+  "lastUpdated": "2026-05-28",
+  "activeFeatureId": null,
+  "features": [
+    {
+      "id": "F01",
+      "title": "Scaffold app, schema, and baseline tooling",
+      "priority": 1,
+      "status": "completed",
+      "dependsOn": [],
+      "doneCriteria": [
+        "Next.js App Router + TypeScript + Tailwind project exists",
+        "SQLite DB configured with ORM",
+        "Initial schema/migration created for sources, offender_records, geocoded_locations"
+      ],
+      "evidence": [
+   "npm run db:generate -> Drizzle SQL migration generated",
+        "npm run db:migrate -> migrations applied successfully",
+        "npm run lint -> pass",
+        "npm run typecheck -> pass",
+        "npm run build (webpack mode) -> pass"
+      ]
+    },
+    {
+      "id": "F02",
+      "title": "Crawler for Taipei DOT listing with pagination and dedupe",
+      "priority": 2,
+      "status": "completed",
+      "dependsOn": [
+        "F01"
+      ],
+      "doneCriteria": [
+        "crawl_sources.py discovers PDF links across pages",
+        "Supports PageSize fallback strategy",
+        "Stores title/date/sourceUrl/pdfUrl with dedupe and request politeness"
+      ],
+      "evidence": [
+        "scripts/crawl_sources.py implemented with pagination, PDF extraction, URL dedupe, delay, User-Agent, and source logging",
+   "tests/unit/test_ingestion.py crawler extraction test passed"
+      ]
+    },
+    {
+      "id": "F03",
+      "title": "Single PDF importer and parser with confidence/review flags",
+      "priority": 3,
+      "status": "completed",
+      "dependsOn": [
+        "F01",
+        "F02"
+      ],
+      "doneCriteria": [
+        "import_pdf.py supports --url and --file",
+        "Table-first parser with text fallback",
+        "Extracts required columns and stores raw fact text",
+        "Parses violation count/type/alcohol and writes needsReview when incomplete"
+      ],
+      "evidence": [
+        "scripts/import_pdf.py and scripts/parser.py implemented for URL/file imports, pdfplumber table parsing, text fallback, confidence, needsReview, count/type/alcohol parsing",
+   "tests/unit/test_ingestion.py parser tests passed"
+      ]
+    },
+    {
+      "id": "F04",
+      "title": "Records API and dashboard table with filters",
+      "priority": 4,
+      "status": "completed",
+      "dependsOn": [
+        "F01",
+        "F03"
+      ],
+      "doneCriteria": [
+        "GET /api/records and GET /api/stats implemented",
+        "Dashboard shows summary cards and filterable table",
+        "Advanced/disabled-by-default name search"
+      ],
+      "evidence": [
+        "GET /api/records and GET /api/stats implemented",
+        "Dashboard table, filters, summary cards, and advanced-disabled name search implemented",
+   "tests/integration/api_filters.test.mjs passed"
+      ]
+    },
+    {
+      "id": "F05",
+      "title": "Cached geocoding and optional map tab",
+      "priority": 5,
+      "status": "completed",
+      "dependsOn": [
+        "F03",
+        "F04"
+      ],
+      "doneCriteria": [
+        "geocode_locations.py caches Nominatim results with UA and rate limit",
+        "GET /api/locations implemented",
+        "Map tab lazy-loads clustered location markers with grouped popups"
+      ],
+      "evidence": [
+        "scripts/geocode_locations.py implemented with cached Nominatim geocoding and location-only queries",
+        "GET /api/locations implemented",
+        "Lazy Leaflet map tab implemented",
+        "geocoder privacy test passed"
+      ]
+    },
+    {
+      "id": "F06",
+      "title": "Admin import flows and logs",
+      "priority": 6,
+      "status": "completed",
+      "dependsOn": [
+        "F02",
+        "F03",
+        "F04"
+      ],
+      "doneCriteria": [
+        "POST /api/import/crawl, /api/import/pdf-url, /api/import/pdf-file, GET /api/import/logs",
+        "Basic env-token protection for admin endpoints",
+        "Admin page shows parser logs and needsReview rows"
+      ],
+      "evidence": [
+        "Admin import page implemented",
+        "POST /api/import/crawl, /pdf-url, /pdf-file and GET /api/import/logs implemented",
+        "Admin import endpoints require x-admin-token"
+      ]
+    },
+    {
+      "id": "F07",
+      "title": "Tests, seed, and README",
+      "priority": 7,
+      "status": "completed",
+      "dependsOn": [
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06"
+      ],
+      "doneCriteria": [
+        "Crawler/parser/type/geocode/API tests exist and pass",
+        "Seed script imports example PDF URL",
+        "README covers setup/import/privacy/limitations"
+      ],
+      "evidence": [
+        "README.md added",
+        "scripts/seed_example.py added",
+        "npm test covers crawler/parser/geocoder/API filters",
+        "npm run lint, typecheck, test, build, and ./init.sh passed"
+      ]
+    }
+  ]
+}
