@@ -104,7 +104,7 @@ npm run build
 GitHub Actions 已包含：
 
 - `.github/workflows/ci.yml`：lint、typecheck、unit/integration test、Playwright e2e、Lighthouse CI。
-- `.github/workflows/deploy.yml`：建立 Docker image 並推送到 GitHub Container Registry。
+- `.github/workflows/deploy.yml`：`main` 分支 CI 通過後建立 Docker image 並推送到 GitHub Container Registry，也可從 Actions 頁面手動執行。
 
 部署說明請看：
 

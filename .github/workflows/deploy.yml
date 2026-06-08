@@ -14,11 +14,16 @@ permissions:
   contents: read
   packages: write
 
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   docker:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: production
 
     steps:
       - name: Checkout
@@ -34,11 +39,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Normalize GHCR image name
+        id: image
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ${{ steps.image.outputs.name }}
           tags: |
             type=sha,prefix=
             type=raw,value=latest,enable={{is_default_branch}}
@@ -50,3 +59,18 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Deployment summary
+        run: |
+          {
+            echo "## Published container image"
+            echo ""
+            echo "Image repository: \`${{ steps.image.outputs.name }}\`"
+            echo ""
+            echo "Tags:"
+            echo '```text'
+            echo "${{ steps.meta.outputs.tags }}"
+            echo '```'
+            echo ""
+            echo "Configure the runtime host to pull this image, set \`ADMIN_TOKEN\`, and mount persistent storage for \`/app/drizzle\`, \`/app/data\`, and \`/app/logs\`."
+          } >> "$GITHUB_STEP_SUMMARY"

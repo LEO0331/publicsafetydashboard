@@ -112,6 +112,10 @@ npm run build
 The e2e command seeds `drizzle/e2e.db`, builds the app, starts it on `http://127.0.0.1:3100`, and runs Playwright against the real Next.js/API/SQLite boundary.
 The Lighthouse command seeds the same deterministic database, builds the app, starts it on `http://127.0.0.1:4173`, and audits `/` plus `/admin` with score gates for Performance, Accessibility, Best Practices, and SEO.
 
+## Deployment
+
+GitHub Actions publishes a Docker image to GHCR after CI passes on `main`, and it can also be run manually from the Actions tab. See [Deployment](./docs/deployment.md) for the GHCR image flow, required environment variables, persistent volume mounts, and host setup notes.
+
 ## Known Limitations
 
 - PDF table formats may vary across announcements; incomplete rows are retained with `needsReview=true`.
