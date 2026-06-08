@@ -7,7 +7,7 @@ import urllib.request
 from pathlib import Path
 
 from common import DATA_DIR, USER_AGENT, connect_db, content_hash, ensure_dirs, log_import, now_ms
-from parser import records_from_pdf
+from pdf_parser import records_from_pdf
 
 
 def download_pdf(url: str) -> tuple[Path, str]:

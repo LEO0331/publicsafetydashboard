@@ -91,6 +91,7 @@ http://localhost:3000/admin
 npm run lint
 npm run typecheck
 npm test
+npm run test:coverage
 npm run test:e2e
 npm run lighthouse:ci
 npm run build
@@ -98,6 +99,8 @@ npm run build
 ```
 
 `npm run test:e2e` 會建立 deterministic SQLite 測試資料庫，啟動正式 Next.js build，並用 Playwright 驗證核心功能。
+
+`npm run test:coverage` 會對 Python 匯入模組與 Node server integration code 執行至少 80% line coverage 門檻。
 
 `npm run lighthouse:ci` 會檢查 `/` 與 `/admin` 的 Performance、Accessibility、Best Practices、SEO 分數門檻。
 
@@ -114,7 +117,7 @@ GitHub Actions 已包含：
 https://publicsafetydashboard.onrender.com
 ```
 
-GitHub Pages 不使用於本專案，因為完整儀表板需要 API routes、SQLite、Python 匯入與管理端點。完整系統請使用 Render 或 Docker/GHCR 部署。
+完整系統請使用 Render 或 Docker/GHCR 部署，因為儀表板需要 API routes、SQLite、Python 匯入與管理端點。
 
 Render 的 `Start Command` 請留空，讓 Dockerfile 執行 `scripts/start-render.sh`。如果部署出現 status `127`，通常是自訂 Start Command 解析失敗，請刪除該欄位後重新部署。
 

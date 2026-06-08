@@ -56,7 +56,7 @@
         "Parses violation count/type/alcohol and writes needsReview when incomplete"
       ],
       "evidence": [
-        "scripts/import_pdf.py and scripts/parser.py implemented for URL/file imports, pdfplumber table parsing, text fallback, confidence, needsReview, count/type/alcohol parsing",
+        "scripts/import_pdf.py and scripts/pdf_parser.py implemented for URL/file imports, pdfplumber table parsing, text fallback, confidence, needsReview, count/type/alcohol parsing",
    "tests/unit/test_ingestion.py parser tests passed"
       ]
     },

@@ -1,13 +1,20 @@
 import sys
 import unittest
+import unittest.mock
+import sqlite3
+import tempfile
+import urllib.parse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import crawl_sources
+import geocode_locations
+from common import content_hash, normalize_space, parse_taiwan_date
 from crawl_sources import extract_pdf_links
-from geocode_locations import normalized_query
-from parser import parse_alcohol_mg_per_l, parse_violation_count, parse_violation_types, records_from_rows, rows_from_text
+from geocode_locations import geocode, geocode_pending, normalized_query, pending_locations
+from pdf_parser import parse_alcohol_mg_per_l, parse_violation_count, parse_violation_types, records_from_rows, rows_from_text
 
 
 class IngestionTests(unittest.TestCase):
@@ -22,6 +29,28 @@ class IngestionTests(unittest.TestCase):
         self.assertIn("Download.ashx", links[0].pdf_url)
         self.assertEqual(links[0].title, "115.05.23臺北市第9次酒駕累犯公布名單.pdf")
         self.assertIsNotNone(links[0].published_date)
+
+    def test_crawler_uses_page_fallback_date_and_ignores_non_pdf_links(self):
+        html = """
+        <html><body>
+          <span>發布日期：115年5月23日</span>
+          <a href="/News_Content.aspx?id=1">一般頁面</a>
+          <a href="Download.ashx?u=/file&n=list.pdf"></a>
+        </body></html>
+        """
+        links = extract_pdf_links(html, "https://dot.gov.taipei/News.aspx?page=2")
+        self.assertEqual(len(links), 1)
+        self.assertEqual(links[0].title, "Taipei DOT PDF announcement")
+        self.assertEqual(links[0].published_date, parse_taiwan_date("115.05.23"))
+
+    def test_crawl_stops_when_page_has_no_new_pdf_links(self):
+        html_with_pdf = '<a href="/Download.ashx?u=/a.pdf&n=115.05.23.pdf">115.05.23.pdf</a>'
+        with unittest.mock.patch.object(crawl_sources, "fetch_html", side_effect=[html_with_pdf, html_with_pdf]), unittest.mock.patch.object(
+            crawl_sources, "upsert_sources", return_value=1
+        ) as upsert, unittest.mock.patch.object(crawl_sources.time, "sleep"):
+            inserted = crawl_sources.crawl(page_size=20, delay_seconds=0, max_pages=5)
+        self.assertEqual(inserted, 1)
+        self.assertEqual(upsert.call_count, 1)
 
     def test_parser_extracts_expected_columns_from_rows(self):
         records = records_from_rows(
@@ -63,11 +92,97 @@ class IngestionTests(unittest.TestCase):
     def test_alcohol_parser(self):
         self.assertEqual(parse_alcohol_mg_per_l("酒精濃度0.20mg/L"), 0.20)
 
+    def test_common_helpers_normalize_dates_hashes_and_spaces(self):
+        self.assertEqual(parse_taiwan_date("115年5月23日"), parse_taiwan_date("115.05.23"))
+        self.assertEqual(parse_taiwan_date("2026-05-23"), parse_taiwan_date("115.05.23"))
+        self.assertIsNone(parse_taiwan_date("115.99.99"))
+        self.assertEqual(normalize_space("  A\n\tB  "), "A B")
+        self.assertEqual(content_hash(b"abc"), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+
     def test_geocoder_query_uses_only_location_text(self):
         query = normalized_query("忠孝東路一段")
         self.assertEqual(query, "臺北市 忠孝東路一段")
         self.assertNotIn("王小明", query)
         self.assertNotIn("第2次", query)
+
+    def test_geocoder_keeps_existing_taipei_prefix(self):
+        self.assertEqual(normalized_query("臺北市 信義路五段"), "臺北市 信義路五段")
+        self.assertEqual(normalized_query("台北市 信義路五段"), "台北市 信義路五段")
+
+    def test_geocoder_parses_success_and_not_found_without_person_data(self):
+        class FakeResponse:
+            def __init__(self, payload):
+                self.payload = payload
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, traceback):
+                return False
+
+            def read(self):
+                return self.payload
+
+        def fake_urlopen(request, timeout):
+            self.assertEqual(timeout, 30)
+            parsed = urllib.parse.urlparse(request.full_url)
+            query = urllib.parse.parse_qs(parsed.query)
+            self.assertEqual(query["q"], ["臺北市 忠孝東路一段"])
+            self.assertNotIn("王小明", request.full_url)
+            return FakeResponse(b'[{"lat": "25.1", "lon": "121.5", "importance": 0.75}]')
+
+        with unittest.mock.patch.object(geocode_locations.urllib.request, "urlopen", side_effect=fake_urlopen):
+            self.assertEqual(geocode("臺北市 忠孝東路一段"), (25.1, 121.5, 0.75, None))
+
+        with unittest.mock.patch.object(geocode_locations.urllib.request, "urlopen", return_value=FakeResponse(b"[]")):
+            self.assertEqual(geocode("臺北市 不存在路段"), (None, None, None, "not_found"))
+
+    def test_geocoder_processes_only_cached_pending_locations(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path = Path(tmp) / "geocode.db"
+            conn = sqlite3.connect(db_path)
+            conn.row_factory = sqlite3.Row
+            conn.executescript(
+                """
+                CREATE TABLE offender_records (location_text TEXT);
+                CREATE TABLE geocoded_locations (
+                  location_text TEXT,
+                  normalized_query TEXT,
+                  lat REAL,
+                  lng REAL,
+                  geocode_provider TEXT,
+                  confidence REAL,
+                  geocoded_at INTEGER,
+                  error TEXT
+                );
+                INSERT INTO offender_records VALUES ('忠孝東路一段');
+                INSERT INTO offender_records VALUES ('忠孝東路一段');
+                INSERT INTO offender_records VALUES ('南京東路三段');
+                INSERT INTO geocoded_locations VALUES ('南京東路三段', '臺北市 南京東路三段', 25.0, 121.5, 'nominatim', 0.8, 1, NULL);
+                """
+            )
+            conn.commit()
+            conn.close()
+
+            def connect_test_db():
+                test_conn = sqlite3.connect(db_path)
+                test_conn.row_factory = sqlite3.Row
+                return test_conn
+
+            with unittest.mock.patch.object(geocode_locations, "connect_db", side_effect=connect_test_db), unittest.mock.patch.object(
+                geocode_locations, "geocode", return_value=(25.1, 121.6, 0.9, None)
+            ) as geocode_mock, unittest.mock.patch.object(geocode_locations, "now_ms", return_value=123), unittest.mock.patch.object(
+                geocode_locations.time, "sleep"
+            ), unittest.mock.patch.object(geocode_locations, "log_import"):
+                self.assertEqual(pending_locations(), ["忠孝東路一段"])
+                self.assertEqual(geocode_pending(delay_seconds=0), 1)
+
+            geocode_mock.assert_called_once_with("臺北市 忠孝東路一段")
+            with sqlite3.connect(db_path) as verify:
+                rows = verify.execute("SELECT location_text, normalized_query, lat, lng FROM geocoded_locations ORDER BY location_text").fetchall()
+            self.assertEqual(len(rows), 2)
+            self.assertEqual(rows[0][0], "南京東路三段")
+            self.assertEqual(rows[1][0], "忠孝東路一段")
 
 
 if __name__ == "__main__":

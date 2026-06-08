@@ -21,7 +21,7 @@ Two workflows are included:
 - `.github/workflows/ci.yml`: lint, typecheck, unit/integration tests, Playwright e2e, and Lighthouse CI.
 - `.github/workflows/deploy.yml`: builds and publishes a Docker image to GitHub Container Registry after CI passes on `main`, or manually through `workflow_dispatch`.
 
-GitHub Pages is intentionally not used. The complete app needs Next.js API routes, SQLite, Python PDF import scripts, uploads, logs, and server-side admin endpoints.
+The complete app needs Next.js API routes, SQLite, Python PDF import scripts, uploads, logs, and server-side admin endpoints, so deploy it as a Docker/Node service.
 
 ## Docker / Full App Deployment
 

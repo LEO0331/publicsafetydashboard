@@ -18,7 +18,7 @@ The app is a local-first educational dashboard for Taipei City Government public
 
 1. `scripts/crawl_sources.py` discovers PDF URLs from the Taipei DOT listing page.
 2. `scripts/import_pdf.py` downloads or copies a PDF, calculates a stable content hash, and parses records.
-3. `scripts/parser.py` uses `pdfplumber` table extraction first, then a text-row fallback.
+3. `scripts/pdf_parser.py` uses `pdfplumber` table extraction first, then a text-row fallback.
 4. Parsed records are stored in SQLite tables defined by `src/db/schema.ts`.
 5. API routes in `app/api/*` read SQLite through `src/server/queries.ts`.
 6. The dashboard calls API routes from client components and renders summaries, filters, table rows, and grouped map data.

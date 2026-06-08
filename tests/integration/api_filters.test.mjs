@@ -32,6 +32,13 @@ test("records query filters by violation count, type, location, and date", async
     VALUES (?, '2', '李小美', ?, '南京東路三段', '拒測第3次以上', 3, '["拒測"]', 1, 0)
     `
   ).run(source.id, violationDate);
+  db.prepare(
+    `
+    INSERT INTO offender_records
+      (source_id, sequence_no, name, violation_date, location_text, fact_text, violation_count, violation_types_json, parser_confidence, needs_review, is_hidden)
+    VALUES (?, '5', '隱藏個案', ?, '信義路五段', '酒駕第4次', 4, '["酒駕"]', 1, 0, 1)
+    `
+  ).run(source.id, violationDate);
   const secondSource = db
     .prepare("INSERT INTO sources (title, source_url, pdf_url, parse_status) VALUES (?, ?, ?, ?) RETURNING id")
     .get("同頁第二份公告", "https://example.test/page", "https://example.test/second.pdf", "parsed");
@@ -40,6 +47,13 @@ test("records query filters by violation count, type, location, and date", async
     INSERT INTO offender_records
       (source_id, sequence_no, name, violation_date, location_text, fact_text, violation_count, violation_types_json, parser_confidence, needs_review)
     VALUES (?, '3', '周小平', ?, '仁愛路一段', '酒駕第2次', 2, '["酒駕"]', 1, 0)
+    `
+  ).run(secondSource.id, violationDate);
+  db.prepare(
+    `
+    INSERT INTO offender_records
+      (source_id, sequence_no, name, violation_date, location_text, fact_text, violation_count, violation_types_json, parser_confidence, needs_review)
+    VALUES (?, '6', '格式待查', ?, '和平東路二段', '資料格式待查', NULL, 'not-json', 0.4, 1)
     `
   ).run(secondSource.id, violationDate);
   const hiddenSource = db
@@ -67,11 +81,25 @@ test("records query filters by violation count, type, location, and date", async
   assert.equal(filtered.total, 1);
   assert.equal(filtered.rows[0].location_text, "忠孝東路一段");
 
+  const capped = getRecords({ page: "-10", pageSize: "500" });
+  assert.equal(capped.page, 1);
+  assert.equal(capped.pageSize, 100);
+  assert.equal(capped.rows.some((row) => row.name === "隱藏個案"), false);
+
   const stats = getStats();
-  assert.equal(stats.totalRecords, 3);
+  assert.equal(stats.totalRecords, 4);
   assert.equal(stats.announcements, 2);
   assert.equal(stats.topLocations.some((item) => item.location === "隱藏路段"), false);
+  assert.deepEqual(
+    stats.byType.sort((a, b) => a.type.localeCompare(b.type)),
+    [
+      { type: "拒測", count: 1 },
+      { type: "酒駕", count: 2 },
+    ].sort((a, b) => a.type.localeCompare(b.type))
+  );
 
   const locations = getLocations();
   assert.equal(locations.some((item) => item.location === "隱藏路段"), false);
+  assert.equal(locations.some((item) => item.location === "信義路五段"), false);
+  assert.equal(locations.some((item) => item.location === "和平東路二段"), true);
 });

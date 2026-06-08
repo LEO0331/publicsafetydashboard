@@ -45,6 +45,9 @@ jobs:
       - name: Unit and integration tests
         run: npm test
 
+      - name: Coverage gate
+        run: npm run test:coverage
+
       - name: End-to-end tests
         run: npm run test:e2e
 

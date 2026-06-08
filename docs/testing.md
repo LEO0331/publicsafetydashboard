@@ -2,8 +2,8 @@
 
 ## Layers
 
-1. Unit tests: Python parser, crawler extraction, violation parsing, and geocoder privacy checks.
-2. Integration tests: SQLite/API query behavior through `src/server/queries.ts`.
+1. Unit tests: Python PDF parser, crawler extraction, violation parsing, geocoder privacy, and geocode-cache behavior.
+2. Integration tests: SQLite/API query behavior and admin token enforcement through server helpers.
 3. End-to-end tests: Playwright tests for dashboard, map, filter, and admin auth flows.
 4. Lighthouse CI: audits `/` and `/admin` against Performance, Accessibility, Best Practices, and SEO gates.
 
@@ -13,10 +13,26 @@
 npm run lint
 npm run typecheck
 npm test
+npm run test:coverage
 npm run test:e2e
 npm run lighthouse:ci
 npm run build
 ./init.sh
+```
+
+## Coverage Gates
+
+`npm run test:coverage` enforces project-focused coverage without adding a third-party test runner:
+
+- Python ingestion modules tracked: `scripts/common.py`, `scripts/crawl_sources.py`, `scripts/geocode_locations.py`, and `scripts/pdf_parser.py`.
+- Python line coverage threshold: 80%.
+- Node server integration coverage threshold: 80%.
+
+Current local baseline:
+
+```text
+Python tracked modules: 80.72% line coverage
+Node integration/server code: 97.76% line coverage
 ```
 
 ## Test Data
@@ -35,4 +51,4 @@ npm run build
 
 ## CI
 
-`.github/workflows/ci.yml` runs dependency installation, lint, typecheck, unit/integration tests, Playwright e2e, and Lighthouse CI.
+`.github/workflows/ci.yml` runs dependency installation, lint, typecheck, unit/integration tests, coverage gates, Playwright e2e, and Lighthouse CI.

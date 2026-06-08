@@ -53,6 +53,8 @@ if [[ -f package.json ]]; then
     npm run typecheck --if-present
     echo "  - run: npm test (if defined)"
     npm test --if-present
+    echo "  - run: npm run test:coverage (if defined)"
+    npm run test:coverage --if-present
   else
     echo "  - warn: npm not found; skipped JS checks"
   fi

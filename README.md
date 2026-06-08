@@ -105,6 +105,7 @@ Rules enforced by design:
 npm run lint
 npm run typecheck
 npm test
+npm run test:coverage
 npm run test:e2e
 npm run lighthouse:ci
 npm run build
@@ -112,6 +113,7 @@ npm run build
 ```
 
 The e2e command seeds `drizzle/e2e.db`, builds the app, starts it on `http://127.0.0.1:3100`, and runs Playwright against the real Next.js/API/SQLite boundary.
+The coverage command enforces at least 80% line coverage for tracked Python ingestion modules and Node server integration code.
 The Lighthouse command seeds the same deterministic database, builds the app, starts it on `http://127.0.0.1:4173`, and audits `/` plus `/admin` with score gates for Performance, Accessibility, Best Practices, and SEO.
 
 ## Deployment
@@ -120,7 +122,7 @@ Live Render deployment:
 
 https://publicsafetydashboard.onrender.com
 
-GitHub Actions publishes a Docker image to GHCR after CI passes on `main`, and it can also be run manually from the Actions tab. GitHub Pages is intentionally not used because the app needs API routes, SQLite, Python ingestion, and persistent storage. See [Deployment](./docs/deployment.md) for Render setup, the GHCR image flow, required environment variables, and storage notes.
+GitHub Actions publishes a Docker image to GHCR after CI passes on `main`, and it can also be run manually from the Actions tab. See [Deployment](./docs/deployment.md) for Render setup, the GHCR image flow, required environment variables, and storage notes.
 
 On Render, leave the service `Start Command` blank so the Dockerfile runs `scripts/start-render.sh`. If Render exits with status `127`, remove any custom Start Command and redeploy.
 

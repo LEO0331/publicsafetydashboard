@@ -16,6 +16,15 @@ function dateToMs(value?: string | null, endOfDay = false): number | null {
   return Number.isNaN(date.getTime()) ? null : date.getTime();
 }
 
+function parseViolationTypes(value: string | null): string[] {
+  try {
+    const parsed = JSON.parse(value || "[]");
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
 function baseRecordWhere(filters: RecordFilters) {
   const where = ["r.is_hidden = 0", "s.is_hidden = 0"];
   const params: Record<string, unknown> = {};
@@ -78,7 +87,7 @@ export function getStats() {
   const rows = sqlite.prepare(`SELECT r.violation_types_json ${visibleJoin}`).all() as { violation_types_json: string | null }[];
   const byType = new Map<string, number>();
   for (const row of rows) {
-    for (const type of JSON.parse(row.violation_types_json || "[]") as string[]) {
+    for (const type of parseViolationTypes(row.violation_types_json)) {
       byType.set(type, (byType.get(type) ?? 0) + 1);
     }
   }
@@ -124,7 +133,7 @@ export function getLocations() {
       item.dateMin = item.dateMin ? Math.min(item.dateMin, row.violation_date) : row.violation_date;
       item.dateMax = item.dateMax ? Math.max(item.dateMax, row.violation_date) : row.violation_date;
     }
-    for (const type of JSON.parse(row.violation_types_json || "[]") as string[]) {
+    for (const type of parseViolationTypes(row.violation_types_json)) {
       item.types.set(type, (item.types.get(type) ?? 0) + 1);
     }
     grouped.set(row.location_text, item);
