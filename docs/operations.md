@@ -18,7 +18,10 @@ python3 scripts/import_pdf.py --file ./path/to/file.pdf
 python3 scripts/geocode_locations.py
 python3 scripts/rebuild_all.py
 python3 scripts/seed_example.py
+npm run seed:initial
 ```
+
+`npm run seed:initial` imports the bundled starter dataset parsed from the 115.04.22 and 115.05.27 Taipei DOT public PDF announcements. It stores parsed rows only; original PDF binaries/photos are not bundled.
 
 ## Admin UI
 

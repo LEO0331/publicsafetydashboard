@@ -57,6 +57,12 @@ python3 scripts/import_pdf.py --file ./path/to/file.pdf
 python3 scripts/seed_example.py
 ```
 
+匯入內建起始資料（115.04.22 與 115.05.27 公開公告）：
+
+```bash
+npm run seed:initial
+```
+
 地點快取 geocode：
 
 ```bash
@@ -120,6 +126,8 @@ https://publicsafetydashboard.onrender.com
 完整系統請使用 Render 或 Docker/GHCR 部署，因為儀表板需要 API routes、SQLite、Python 匯入與管理端點。
 
 Render 的 `Start Command` 請留空，讓 Dockerfile 執行 `scripts/start-render.sh`。如果部署出現 status `127`，通常是自訂 Start Command 解析失敗，請刪除該欄位後重新部署。
+
+Render 啟動腳本會先執行 migration，並在資料表為空時自動匯入內建起始資料。
 
 部署說明請看：
 

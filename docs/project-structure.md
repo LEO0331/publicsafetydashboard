@@ -7,6 +7,7 @@ src/db/                 Drizzle schema and database client
 src/server/             Server-only query/admin helpers
 scripts/                Python ingestion plus Node maintenance utilities
 scripts/pdf_parser.py   PDF table/text parser used by import_pdf.py
+data/seed/              Bundled parsed starter dataset, no PDF binaries/photos
 drizzle/migrations/     SQL migrations
 e2e/                    Playwright specs
 e2e/fixtures/           Deterministic e2e database seeding

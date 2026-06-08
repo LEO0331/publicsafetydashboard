@@ -120,6 +120,26 @@ def records_from_rows(rows: Iterable[dict[str, str]]) -> list[ParsedRecord]:
     return [row_to_record(row) for row in rows]
 
 
+def rows_from_table(table: list[list[str | None]]) -> list[dict[str, str]]:
+    header_index = next(
+        (
+            index
+            for index, raw in enumerate(table)
+            if {"序號", "姓名", "違規日", "違規條款", "違規地點", "違規事實"}.issubset({normalize_space(cell) for cell in raw})
+        ),
+        None,
+    )
+    if header_index is None:
+        return []
+    headers = [normalize_space(cell) for cell in table[header_index]]
+    rows: list[dict[str, str]] = []
+    for raw in table[header_index + 1 :]:
+        row = {headers[i]: normalize_space(raw[i]) for i in range(min(len(headers), len(raw))) if headers[i]}
+        if normalize_space(row.get("序號")):
+            rows.append(row)
+    return rows
+
+
 def records_from_pdf(path: str) -> list[ParsedRecord]:
     try:
         import pdfplumber
@@ -132,13 +152,9 @@ def records_from_pdf(path: str) -> list[ParsedRecord]:
         for page in pdf.pages:
             text_pages.append(page.extract_text() or "")
             for table in page.extract_tables() or []:
-                if not table or len(table) < 2:
+                if not table:
                     continue
-                headers = [normalize_space(cell) for cell in table[0]]
-                for raw in table[1:]:
-                    row = {headers[i]: normalize_space(raw[i]) for i in range(min(len(headers), len(raw))) if headers[i]}
-                    if row:
-                        table_rows.append(row)
+                table_rows.extend(rows_from_table(table))
     if table_rows:
         return records_from_rows(table_rows)
     return records_from_rows(rows_from_text("\n".join(text_pages)))

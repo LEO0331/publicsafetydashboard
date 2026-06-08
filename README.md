@@ -55,6 +55,12 @@ Seed with the example PDF URL:
 python3 scripts/seed_example.py
 ```
 
+Seed bundled starter data from the 115.04.22 and 115.05.27 public announcements:
+
+```bash
+npm run seed:initial
+```
+
 Geocode cached locations:
 
 ```bash
@@ -125,6 +131,8 @@ https://publicsafetydashboard.onrender.com
 GitHub Actions publishes a Docker image to GHCR after CI passes on `main`, and it can also be run manually from the Actions tab. See [Deployment](./docs/deployment.md) for Render setup, the GHCR image flow, required environment variables, and storage notes.
 
 On Render, leave the service `Start Command` blank so the Dockerfile runs `scripts/start-render.sh`. If Render exits with status `127`, remove any custom Start Command and redeploy.
+
+The Render startup script runs migrations and seeds the bundled starter data only when the records table is empty.
 
 ## Known Limitations
 

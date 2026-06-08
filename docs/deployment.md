@@ -75,7 +75,7 @@ The Docker image starts with:
 sh scripts/start-render.sh
 ```
 
-That script creates local data directories, runs `npm run db:migrate`, then starts Next.js on Render's `$PORT`.
+That script creates local data directories, runs `npm run db:migrate`, seeds the bundled starter dataset if the records table is empty, then starts Next.js on Render's `$PORT`.
 
 If a Render deploy fails with status `127`, check the Render service settings and remove any custom Start Command. A command override bypasses the Dockerfile `CMD` and can fail if Render parses the shell command differently.
 

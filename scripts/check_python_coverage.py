@@ -11,6 +11,7 @@ TARGETS = [
     ROOT / "scripts" / "crawl_sources.py",
     ROOT / "scripts" / "geocode_locations.py",
     ROOT / "scripts" / "pdf_parser.py",
+    ROOT / "scripts" / "seed_initial_data.py",
 ]
 THRESHOLD = 80.0
 

@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
+    "seed:initial": "python3 scripts/seed_initial_data.py",
     "test": "python3 -m unittest discover -s tests/unit -p 'test_*.py' && rm -rf .tmp-test && tsc --ignoreConfig --ignoreDeprecations 6.0 --outDir .tmp-test --module commonjs --moduleResolution node --target ES2022 --esModuleInterop --skipLibCheck src/server/sqlite.ts src/server/queries.ts src/server/admin.ts && node --test tests/integration/*.test.mjs",
     "test:coverage": "python3 scripts/check_python_coverage.py && rm -rf .tmp-test && tsc --ignoreConfig --ignoreDeprecations 6.0 --outDir .tmp-test --module commonjs --moduleResolution node --target ES2022 --esModuleInterop --skipLibCheck src/server/sqlite.ts src/server/queries.ts src/server/admin.ts && node scripts/check-node-coverage.mjs",
     "test:e2e": "node e2e/fixtures/seed-e2e-db.mjs && npm run build && playwright test",

@@ -11,10 +11,11 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import crawl_sources
 import geocode_locations
+import seed_initial_data
 from common import content_hash, normalize_space, parse_taiwan_date
 from crawl_sources import extract_pdf_links
 from geocode_locations import geocode, geocode_pending, normalized_query, pending_locations
-from pdf_parser import parse_alcohol_mg_per_l, parse_violation_count, parse_violation_types, records_from_rows, rows_from_text
+from pdf_parser import parse_alcohol_mg_per_l, parse_violation_count, parse_violation_types, records_from_rows, rows_from_table, rows_from_text
 
 
 class IngestionTests(unittest.TestCase):
@@ -70,6 +71,18 @@ class IngestionTests(unittest.TestCase):
         self.assertIn("酒駕", records[0].violation_types)
         self.assertEqual(records[0].alcohol_mg_per_l, 0.20)
         self.assertFalse(records[0].needs_review)
+
+    def test_table_parser_skips_title_rows_before_header(self):
+        rows = rows_from_table(
+            [
+                ["115.05.27臺北市酒駕及拒測累犯公布名單", None, None, None, None, None, None],
+                ["序號", "照片", "姓名", "違規日", "違規條款", "違規地點", "違規事實"],
+                ["1", "", "翁澤民", "114/6/6", "第35條第3\n項", "環河南路二段", "第3次以上\n(酒駕)（0.20mg/L）"],
+            ]
+        )
+        self.assertEqual(rows[0]["序號"], "1")
+        self.assertEqual(rows[0]["姓名"], "翁澤民")
+        self.assertEqual(rows[0]["違規條款"], "第35條第3 項")
 
     def test_text_fallback_detects_sequence_rows(self):
         rows = rows_from_text("1 王小明 115.05.23 忠孝東路一段 酒駕第2次\n2 李小美 115.05.24 南京東路三段 拒測第3次以上")
@@ -183,6 +196,35 @@ class IngestionTests(unittest.TestCase):
             self.assertEqual(len(rows), 2)
             self.assertEqual(rows[0][0], "南京東路三段")
             self.assertEqual(rows[1][0], "忠孝東路一段")
+
+    def test_initial_seed_inserts_public_pdf_records_without_photos(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path = Path(tmp) / "seed.db"
+            conn = sqlite3.connect(db_path)
+            migrations_dir = ROOT / "drizzle" / "migrations"
+            for migration in sorted(migrations_dir.glob("*.sql")):
+                conn.executescript(migration.read_text(encoding="utf-8"))
+            conn.close()
+
+            def connect_test_db():
+                test_conn = sqlite3.connect(db_path)
+                test_conn.row_factory = sqlite3.Row
+                return test_conn
+
+            with unittest.mock.patch.object(seed_initial_data, "connect_db", side_effect=connect_test_db):
+                self.assertEqual(seed_initial_data.seed_initial_data(), 50)
+                self.assertEqual(seed_initial_data.seed_initial_data(if_empty=True), 0)
+                self.assertEqual(seed_initial_data.seed_initial_data(), 50)
+
+            with sqlite3.connect(db_path) as verify:
+                source_count = verify.execute("SELECT COUNT(*) FROM sources").fetchone()[0]
+                record_count = verify.execute("SELECT COUNT(*) FROM offender_records").fetchone()[0]
+                photo_count = verify.execute("SELECT COUNT(*) FROM offender_records WHERE has_photo = 1").fetchone()[0]
+                needs_review_count = verify.execute("SELECT COUNT(*) FROM offender_records WHERE needs_review = 1").fetchone()[0]
+            self.assertEqual(source_count, 2)
+            self.assertEqual(record_count, 50)
+            self.assertEqual(photo_count, 0)
+            self.assertEqual(needs_review_count, 0)
 
 
 if __name__ == "__main__":
