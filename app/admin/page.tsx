@@ -3,65 +3,16 @@
 import Link from "next/link";
 import { ArrowLeft, FileUp, Globe2, KeyRound, ListRestart, RefreshCw, Upload } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
-
-type Language = "zh" | "en";
-
-const copy = {
-  zh: {
-    badge: "公告匯入作業",
-    title: "匯入管理",
-    subtitle: "爬取政府公告頁、匯入 PDF 網址或上傳本機 PDF。所有來源與解析結果會寫入匯入紀錄。",
-    languageLabel: "介面語言",
-    back: "返回儀表板",
-    adminToken: "管理權杖",
-    tokenPlaceholder: "請輸入 ADMIN_TOKEN",
-    crawlTitle: "政府頁面爬取",
-    crawlDescription: "依分頁循序抓取 PDF 連結，保留來源網址與公告標題。",
-    maxPagesPlaceholder: "最多頁數，可留空",
-    startCrawl: "開始爬取",
-    urlTitle: "PDF 網址匯入",
-    urlDescription: "匯入單一公告 PDF，下載後以內容雜湊去重。",
-    titlePlaceholder: "公告標題",
-    urlPlaceholder: "PDF 網址",
-    importUrl: "匯入網址",
-    fileTitle: "本機 PDF 匯入",
-    fileDescription: "適合人工下載後測試解析品質，資料仍會進入同一個 SQLite 資料庫。",
-    uploadFile: "上傳解析",
-    logsTitle: "解析紀錄",
-    noLogs: "目前尚無匯入紀錄。",
-  },
-  en: {
-    badge: "Announcement Import Operations",
-    title: "Import Admin",
-    subtitle: "Crawl the government listing page, import a PDF URL, or upload a local PDF. Sources and parsing results are written to the import log.",
-    languageLabel: "Interface Language",
-    back: "Back to Dashboard",
-    adminToken: "Admin Token",
-    tokenPlaceholder: "Enter ADMIN_TOKEN",
-    crawlTitle: "Government Page Crawl",
-    crawlDescription: "Sequentially crawls paginated PDF links and stores source URLs and announcement titles.",
-    maxPagesPlaceholder: "Maximum pages, optional",
-    startCrawl: "Start Crawl",
-    urlTitle: "PDF URL Import",
-    urlDescription: "Imports one announcement PDF and deduplicates it by content hash after download.",
-    titlePlaceholder: "Announcement title",
-    urlPlaceholder: "PDF URL",
-    importUrl: "Import URL",
-    fileTitle: "Local PDF Import",
-    fileDescription: "Use this for manually downloaded PDFs when testing parser quality. Records are stored in the same SQLite database.",
-    uploadFile: "Upload and Parse",
-    logsTitle: "Parser Logs",
-    noLogs: "No import logs yet.",
-  },
-} as const;
+import LanguageToggle from "../../src/components/LanguageToggle";
+import { adminCopy, usePersistedLanguage } from "../../src/components/uiLanguage";
 
 export default function AdminPage() {
-  const [language, setLanguage] = useState<Language>("zh");
+  const { language, chooseLanguage } = usePersistedLanguage();
   const [token, setToken] = useState("");
   const [logs, setLogs] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [isRunning, setIsRunning] = useState(false);
-  const t = copy[language];
+  const t = adminCopy[language];
 
   async function loadLogs(adminToken = token) {
     if (!adminToken) {
@@ -148,14 +99,7 @@ export default function AdminPage() {
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]">{t.subtitle}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex border border-[var(--line)] bg-white text-xs font-semibold" aria-label={t.languageLabel}>
-              <button type="button" onClick={() => setLanguage("zh")} className={`focus-ring px-2 py-1 ${language === "zh" ? "bg-[var(--ink)] text-white" : "text-[var(--ink)]"}`} data-testid="admin-language-zh">
-                中文
-              </button>
-              <button type="button" onClick={() => setLanguage("en")} className={`focus-ring px-2 py-1 ${language === "en" ? "bg-[var(--ink)] text-white" : "text-[var(--ink)]"}`} data-testid="admin-language-en">
-                English
-              </button>
-            </div>
+            <LanguageToggle language={language} label={t.languageLabel} onChange={chooseLanguage} testIdPrefix="admin-language" />
             <Link href="/" className="focus-ring inline-flex items-center justify-center gap-2 border border-[var(--ink)] px-4 py-2 text-sm font-medium transition hover:bg-[var(--ink)] hover:text-white">
               <ArrowLeft size={16} />
               {t.back}

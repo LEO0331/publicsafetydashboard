@@ -8,6 +8,7 @@ The app is a local-first educational dashboard for Taipei City Government public
 
 - `app/`: Next.js App Router pages and API route handlers.
 - `src/components/`: reusable client-side UI components.
+- `src/components/uiLanguage.ts`: shared bilingual copy, language persistence, and display formatters for dashboard/admin/map UI.
 - `src/server/`: server-side SQLite query and admin helpers used by API routes.
 - `src/db/`: Drizzle schema and local SQLite client wiring.
 - `scripts/`: Python ingestion, parsing, crawling, geocoding, and maintenance scripts.
@@ -22,6 +23,7 @@ The app is a local-first educational dashboard for Taipei City Government public
 4. Parsed records are stored in SQLite tables defined by `src/db/schema.ts`.
 5. API routes in `app/api/*` read SQLite through `src/server/queries.ts`.
 6. The dashboard calls API routes from client components and renders summaries, filters, table rows, and grouped map data.
+7. The map tab renders geocoded locations as grouped, ranked circles with a searchable side list so users can identify places without overwhelming the map with pins.
 
 ## Database Tables
 

@@ -177,3 +177,31 @@
 ### Remaining risks / gaps
 - Docker is not installed in the local environment, so the Docker image build is covered by CI workflow/config review rather than a local `docker build`.
 - Local e2e and Lighthouse still need localhost binding permission in the sandbox.
+
+## 2026-06-08 (Bilingual UI, cleanup, and map explorer update)
+
+### Completed
+- Added persisted Traditional Chinese / English frontend language switching across dashboard and admin UI.
+- Centralized bilingual copy, localStorage language persistence, date formatting, violation-count formatting, and violation-type labels in `src/components/uiLanguage.ts`.
+- Extracted repeated language-toggle markup into `src/components/LanguageToggle.tsx`.
+- Reworked the map tab into a ranked/searchable grouped-location explorer to avoid overwhelming users with too many pins.
+- Replaced equal-density map pins with scaled grouped circles and a side list showing exact place, incident count, date range, and type breakdown.
+- Tightened map coordinate filtering to check explicit `null` values instead of coordinate truthiness.
+- Updated architecture, design, testing, feature tracker, and session handoff docs for the current implementation.
+
+### Verification evidence
+- `npm run lint` passed.
+- `npm run typecheck` passed.
+- `npm test` passed: 15 Python unit tests and 4 Node integration tests.
+- `npm run test:coverage` passed: Python tracked modules 83.93% line coverage; Node server/integration coverage 97.76% line coverage.
+- `npm run test:e2e` passed with bundled Node runtime: 8 Playwright tests.
+- Production Next build passed as part of `npm run test:e2e`.
+- `npm audit --audit-level=high` completed and reported dependency vulnerabilities requiring a dedicated upgrade pass.
+
+### Remaining risks / gaps
+- `npm audit --audit-level=high` reports high vulnerabilities in `drizzle-orm`, transitive `effect`/Prisma tooling, and `tmp` via Lighthouse tooling. Several suggested fixes are breaking upgrades and were not applied during this cleanup/map pass.
+- `.omx/` runtime state files are modified locally but were intentionally ignored per user instruction.
+- Local production build/E2E may need the bundled Node runtime because the default local Node can be below Next's required version; rebuild `better-sqlite3` afterward for the default runtime.
+
+### Next action
+- If release-blocking dependency hygiene is required, run a dedicated dependency-upgrade pass for Drizzle, Next/PostCSS advisories, and Lighthouse/transitive tooling, then rerun full CI gates.

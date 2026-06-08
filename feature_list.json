@@ -1,6 +1,6 @@
 {
   "project": "Taipei Public Safety Dashboard",
-  "lastUpdated": "2026-05-28",
+  "lastUpdated": "2026-06-08",
   "activeFeatureId": null,
   "features": [
     {
@@ -76,7 +76,7 @@
       ],
       "evidence": [
         "GET /api/records and GET /api/stats implemented",
-        "Dashboard table, filters, summary cards, and advanced-disabled name search implemented",
+        "Dashboard table, filters, summary cards, persisted bilingual UI toggle, and advanced-disabled name search implemented",
    "tests/integration/api_filters.test.mjs passed"
       ]
     },
@@ -92,12 +92,12 @@
       "doneCriteria": [
         "geocode_locations.py caches Nominatim results with UA and rate limit",
         "GET /api/locations implemented",
-        "Map tab lazy-loads clustered location markers with grouped popups"
+        "Map tab lazy-loads grouped location visualization with ranked/searchable location explorer"
       ],
       "evidence": [
         "scripts/geocode_locations.py implemented with cached Nominatim geocoding and location-only queries",
         "GET /api/locations implemented",
-        "Lazy Leaflet map tab implemented",
+        "Lazy Leaflet map tab implemented with scaled grouped circles, top-location folding, and searchable location list",
         "geocoder privacy test passed"
       ]
     },

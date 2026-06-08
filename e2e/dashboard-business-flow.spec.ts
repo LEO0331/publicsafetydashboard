@@ -45,6 +45,9 @@ test.describe("核心業務流程", () => {
     await page.goto("/");
     await page.getByTestId("map-tab").click();
     await expect(page.getByTestId("location-map")).toBeVisible();
+    await expect(page.getByText("地點清單")).toBeVisible();
+    await page.getByTestId("map-location-search").fill("忠孝");
+    await expect(page.getByRole("button", { name: /忠孝東路一段/ })).toBeVisible();
   });
 
   test("匯入管理未提供正確權杖時會拒絕 PDF URL 匯入", async ({ page }) => {

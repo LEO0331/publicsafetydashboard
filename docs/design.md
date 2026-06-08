@@ -2,11 +2,11 @@
 
 ## Direction
 
-The UI uses a Traditional Chinese civic archive style: public-record typography, restrained institutional color, ledger-like panels, and neutral traffic-safety wording.
+The UI uses a civic archive style: public-record typography, restrained institutional color, ledger-like panels, and neutral traffic-safety wording. Traditional Chinese remains the default interface language, with an English toggle for the frontend.
 
 ## Principles
 
-- Use Traditional Chinese labels throughout the dashboard and admin UI.
+- Use Traditional Chinese labels by default and provide English frontend copy without translating public source record values.
 - Keep the product educational, not sensational.
 - Prioritize dense but readable scanning for repeat use.
 - Preserve source attribution and the government-data disclaimer.
@@ -29,4 +29,9 @@ The UI uses a Traditional Chinese civic archive style: public-record typography,
 
 ## Map Design
 
-Map markers represent grouped locations, not individuals. Popups show location, incident count, type breakdown, and date range.
+Map markers represent grouped locations, not individuals. To avoid a dense pin wall, the map tab uses a ranked location explorer:
+
+- A searchable side list shows exact location names, incident counts, date ranges, and type breakdowns.
+- The map defaults to the highest-incident geocoded locations and folds lower-ranked locations behind a show-all control.
+- Map marks are scaled circles, not individual-person pins.
+- Popups show location, incident count, type breakdown, and date range.

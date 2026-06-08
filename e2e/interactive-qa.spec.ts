@@ -42,6 +42,9 @@ test.describe("互動式 QA 檢查", () => {
     await expect(page.getByTestId("visible-record-count")).toHaveText("Showing 3 records");
     await expect(page.getByText("Drunk driving").first()).toBeVisible();
 
+    await page.reload();
+    await expect(page.getByRole("heading", { name: /Taipei Repeat DUI/ })).toBeVisible();
+
     await page.getByTestId("filter-location").fill("不存在路名");
     await page.getByTestId("apply-filters").click();
 
@@ -56,5 +59,8 @@ test.describe("互動式 QA 檢查", () => {
     await expect(page.getByRole("heading", { name: "Import Admin" })).toBeVisible();
     await expect(page.getByText("Government Page Crawl")).toBeVisible();
     await expect(page.getByPlaceholder("Enter ADMIN_TOKEN")).toBeVisible();
+
+    await page.goto("/");
+    await expect(page.getByRole("heading", { name: /Taipei Repeat DUI/ })).toBeVisible();
   });
 });

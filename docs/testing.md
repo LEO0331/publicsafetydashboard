@@ -47,7 +47,8 @@ Node integration/server code: 97.76% line coverage
 - Stats and announcement counts render.
 - Violation type/count/location filters update visible records.
 - Location data is grouped by place.
-- Map tab renders.
+- Map tab renders a ranked/searchable location explorer.
+- English interface toggle persists across reloads and dashboard/admin navigation.
 - Admin import rejects invalid tokens.
 - Desktop and mobile viewport checks guard against horizontal overflow.
 
