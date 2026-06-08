@@ -12,7 +12,7 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1);
 }
 
-const match = output.match(/# all files \|\s*([\d.]+)\s*\|/);
+const match = output.match(/^\s*#?\s*all files\s*\|\s*([\d.]+)\s*\|/m);
 if (!match) {
   console.error("Unable to parse Node coverage summary.");
   process.exit(1);
