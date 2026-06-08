@@ -114,7 +114,9 @@ The Lighthouse command seeds the same deterministic database, builds the app, st
 
 ## Deployment
 
-GitHub Actions publishes a Docker image to GHCR after CI passes on `main`, and it can also be run manually from the Actions tab. See [Deployment](./docs/deployment.md) for the GHCR image flow, required environment variables, persistent volume mounts, and host setup notes.
+GitHub Actions publishes a Docker image to GHCR after CI passes on `main`, and it can also be run manually from the Actions tab. A separate GitHub Pages workflow publishes a static project landing page for repositories configured with Pages source `GitHub Actions`.
+
+GitHub Pages does not run the full dashboard because the app needs API routes, SQLite, Python ingestion, and persistent storage. See [Deployment](./docs/deployment.md) for the Pages preview flow, GHCR image flow, required environment variables, persistent volume mounts, and host setup notes.
 
 ## Known Limitations
 
