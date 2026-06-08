@@ -1,5 +1,7 @@
 # 臺北市酒駕／毒駕／拒測累犯教育儀表板
 
+以 Next.js、SQLite、Python 匯入解析、篩選統計與地圖視覺化建置的臺北市公開交通安全 PDF 公告教育儀表板。
+
 本專案是一個以臺北市政府公開 PDF 公告資料為來源的交通安全教育儀表板。系統可爬取公告頁、匯入 PDF、解析表格資料、寫入 SQLite，並透過 Next.js 儀表板呈現統計、篩選、資料表與地圖。
 
 主要來源：
@@ -105,9 +107,16 @@ GitHub Actions 已包含：
 
 - `.github/workflows/ci.yml`：lint、typecheck、unit/integration test、Playwright e2e、Lighthouse CI。
 - `.github/workflows/deploy.yml`：`main` 分支 CI 通過後建立 Docker image 並推送到 GitHub Container Registry，也可從 Actions 頁面手動執行。
-- `.github/workflows/pages.yml`：當 GitHub Pages Source 設為 `GitHub Actions` 時，發布靜態專案說明頁。
 
-GitHub Pages 只能放靜態頁，不能執行完整儀表板需要的 API routes、SQLite、Python 匯入與管理端點。完整系統請使用 Docker/GHCR 部署。
+線上 Render 部署：
+
+```text
+https://publicsafetydashboard.onrender.com
+```
+
+GitHub Pages 不使用於本專案，因為完整儀表板需要 API routes、SQLite、Python 匯入與管理端點。完整系統請使用 Render 或 Docker/GHCR 部署。
+
+Render 的 `Start Command` 請留空，讓 Dockerfile 執行 `scripts/start-render.sh`。如果部署出現 status `127`，通常是自訂 Start Command 解析失敗，請刪除該欄位後重新部署。
 
 部署說明請看：
 

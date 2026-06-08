@@ -10,7 +10,6 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "pages:build": "node scripts/build-github-pages.mjs",
     "test": "python3 -m unittest discover -s tests/unit -p 'test_*.py' && rm -rf .tmp-test && tsc --ignoreConfig --ignoreDeprecations 6.0 --outDir .tmp-test --module commonjs --moduleResolution node --target ES2022 --esModuleInterop --skipLibCheck src/server/sqlite.ts src/server/queries.ts && node --test tests/integration/*.test.mjs",
     "test:e2e": "node e2e/fixtures/seed-e2e-db.mjs && npm run build && playwright test",
     "lighthouse:ci": "node e2e/fixtures/seed-e2e-db.mjs && npm run build && node scripts/run-lhci.mjs"

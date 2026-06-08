@@ -1,5 +1,7 @@
 # Taipei Public Safety Dashboard
 
+Full-stack educational dashboard for Taipei public traffic-safety PDF announcements, with Next.js, SQLite, Python ingestion, filters, stats, and map visualization.
+
 Educational dashboard for Taipei City Government public drunk/drug driving repeat-offender PDF announcements.
 
 Primary source:
@@ -114,9 +116,13 @@ The Lighthouse command seeds the same deterministic database, builds the app, st
 
 ## Deployment
 
-GitHub Actions publishes a Docker image to GHCR after CI passes on `main`, and it can also be run manually from the Actions tab. A separate GitHub Pages workflow publishes a static project landing page for repositories configured with Pages source `GitHub Actions`.
+Live Render deployment:
 
-GitHub Pages does not run the full dashboard because the app needs API routes, SQLite, Python ingestion, and persistent storage. See [Deployment](./docs/deployment.md) for the Pages preview flow, GHCR image flow, required environment variables, persistent volume mounts, and host setup notes.
+https://publicsafetydashboard.onrender.com
+
+GitHub Actions publishes a Docker image to GHCR after CI passes on `main`, and it can also be run manually from the Actions tab. GitHub Pages is intentionally not used because the app needs API routes, SQLite, Python ingestion, and persistent storage. See [Deployment](./docs/deployment.md) for Render setup, the GHCR image flow, required environment variables, and storage notes.
+
+On Render, leave the service `Start Command` blank so the Dockerfile runs `scripts/start-render.sh`. If Render exits with status `127`, remove any custom Start Command and redeploy.
 
 ## Known Limitations
 
