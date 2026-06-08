@@ -33,4 +33,28 @@ test.describe("互動式 QA 檢查", () => {
     const canScrollX = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(canScrollX).toBe(false);
   });
+
+  test("英文介面切換保留資料與篩選功能", async ({ page }) => {
+    await page.goto("/");
+
+    await page.getByTestId("language-en").click();
+    await expect(page.getByRole("heading", { name: /Taipei Repeat DUI/ })).toBeVisible();
+    await expect(page.getByTestId("visible-record-count")).toHaveText("Showing 3 records");
+    await expect(page.getByText("Drunk driving").first()).toBeVisible();
+
+    await page.getByTestId("filter-location").fill("不存在路名");
+    await page.getByTestId("apply-filters").click();
+
+    await expect(page.getByText("No matching announcement records")).toBeVisible();
+  });
+
+  test("匯入管理頁可切換英文介面", async ({ page }) => {
+    await page.goto("/admin");
+
+    await page.getByTestId("admin-language-en").click();
+
+    await expect(page.getByRole("heading", { name: "Import Admin" })).toBeVisible();
+    await expect(page.getByText("Government Page Crawl")).toBeVisible();
+    await expect(page.getByPlaceholder("Enter ADMIN_TOKEN")).toBeVisible();
+  });
 });
