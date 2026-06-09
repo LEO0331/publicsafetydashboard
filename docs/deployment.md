@@ -81,6 +81,8 @@ That script creates local data directories, runs `npm run db:migrate`, seeds the
 
 After importing PDFs on Render, open `/admin`, enter `ADMIN_TOKEN`, and run **Generate Map Coordinates**. Imported records do not automatically have latitude/longitude; the map uses only cached rows in `geocoded_locations`.
 
+On Render free, Nominatim may return `429 Too many requests` because Render uses shared outbound IPs. The preferred free workflow is to geocode locally, run `npm run export:geocode`, commit `data/seed/geocoded_locations.json`, and redeploy. Startup imports that cache with `scripts/seed_geocode_cache.py`.
+
 If a Render deploy fails with status `127`, check the Render service settings and remove any custom Start Command. A command override bypasses the Dockerfile `CMD` and can fail if Render parses the shell command differently.
 
 For a paid durable deployment, attach persistent storage for:

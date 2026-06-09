@@ -12,6 +12,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import crawl_sources
 import geocode_locations
 import seed_initial_data
+import seed_geocode_cache
+import export_geocode_cache
 from common import content_hash, normalize_space, parse_taiwan_date
 from crawl_sources import extract_pdf_links
 from geocode_locations import geocode, geocode_pending, is_rate_limited, normalized_query, pending_locations
@@ -302,6 +304,66 @@ class IngestionTests(unittest.TestCase):
             self.assertEqual(record_count, 50)
             self.assertEqual(photo_count, 0)
             self.assertEqual(needs_review_count, 0)
+
+    def test_geocode_cache_export_and_seed_round_trip(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source_db = Path(tmp) / "source.db"
+            target_db = Path(tmp) / "target.db"
+            export_path = Path(tmp) / "geocoded_locations.json"
+            schema = """
+                CREATE TABLE geocoded_locations (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  location_text TEXT NOT NULL,
+                  normalized_query TEXT NOT NULL UNIQUE,
+                  lat REAL,
+                  lng REAL,
+                  geocode_provider TEXT NOT NULL DEFAULT 'nominatim',
+                  confidence REAL,
+                  geocoded_at INTEGER,
+                  error TEXT,
+                  created_at INTEGER DEFAULT 0,
+                  updated_at INTEGER DEFAULT 0
+                );
+            """
+            for db_path in (source_db, target_db):
+                conn = sqlite3.connect(db_path)
+                conn.executescript(schema)
+                conn.close()
+
+            source = sqlite3.connect(source_db)
+            source.execute(
+                """
+                INSERT INTO geocoded_locations
+                    (location_text, normalized_query, lat, lng, geocode_provider, confidence, geocoded_at, error)
+                VALUES
+                    ('中央北路三段', '臺北市 中央北路三段', 25.13, 121.49, 'nominatim', 0.8, 111, NULL),
+                    ('中正路', '臺北市 中正路', NULL, NULL, 'nominatim', NULL, 112, 'HTTP Error 429: Too many requests')
+                """
+            )
+            source.commit()
+            source.close()
+
+            def connect_source_db():
+                conn = sqlite3.connect(source_db)
+                conn.row_factory = sqlite3.Row
+                return conn
+
+            def connect_target_db():
+                conn = sqlite3.connect(target_db)
+                conn.row_factory = sqlite3.Row
+                return conn
+
+            with unittest.mock.patch.object(export_geocode_cache, "connect_db", side_effect=connect_source_db), unittest.mock.patch.object(
+                export_geocode_cache, "now_ms", return_value=999
+            ):
+                self.assertEqual(export_geocode_cache.export_geocode_cache(export_path), 1)
+
+            with unittest.mock.patch.object(seed_geocode_cache, "connect_db", side_effect=connect_target_db):
+                self.assertEqual(seed_geocode_cache.seed_geocode_cache(export_path), 1)
+
+            with sqlite3.connect(target_db) as verify:
+                rows = verify.execute("SELECT location_text, normalized_query, lat, lng, error FROM geocoded_locations").fetchall()
+            self.assertEqual(rows, [("中央北路三段", "臺北市 中央北路三段", 25.13, 121.49, None)])
 
 
 if __name__ == "__main__":

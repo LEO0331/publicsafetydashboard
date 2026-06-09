@@ -11,7 +11,9 @@ TARGETS = [
     ROOT / "scripts" / "crawl_sources.py",
     ROOT / "scripts" / "geocode_locations.py",
     ROOT / "scripts" / "pdf_parser.py",
+    ROOT / "scripts" / "export_geocode_cache.py",
     ROOT / "scripts" / "seed_initial_data.py",
+    ROOT / "scripts" / "seed_geocode_cache.py",
 ]
 THRESHOLD = 80.0
 

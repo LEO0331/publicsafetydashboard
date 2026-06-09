@@ -24,14 +24,14 @@ npm run build
 
 `npm run test:coverage` enforces project-focused coverage without adding a third-party test runner:
 
-- Python ingestion modules tracked: `scripts/common.py`, `scripts/crawl_sources.py`, `scripts/geocode_locations.py`, `scripts/pdf_parser.py`, and `scripts/seed_initial_data.py`.
+- Python ingestion modules tracked: `scripts/common.py`, `scripts/crawl_sources.py`, `scripts/geocode_locations.py`, `scripts/pdf_parser.py`, `scripts/export_geocode_cache.py`, `scripts/seed_initial_data.py`, and `scripts/seed_geocode_cache.py`.
 - Python line coverage threshold: 80%.
 - Node server integration coverage threshold: 80%.
 
 Current local baseline:
 
 ```text
-Python tracked modules: 83.93% line coverage
+Python tracked modules: 83.23% line coverage
 Node integration/server code: 97.76% line coverage
 ```
 
