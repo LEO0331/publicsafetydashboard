@@ -210,10 +210,12 @@
         "Harness validator passes with lifecycle and state restart markers"
       ],
       "evidence": [
-        "npm run lint -> pass with supported Node runtime",
-        "npm run typecheck -> pass with supported Node runtime",
-        "npm test -> pass with supported Node runtime",
-        "npm run test:e2e -> pass with supported Node runtime and elevated localhost permission"
+        "harness-creator validate-harness -> 100/100",
+        "PATH=/opt/homebrew/bin:$PATH npm run lint -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm run typecheck -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm test -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm run test:coverage -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm run test:e2e -> pass with elevated localhost permission"
       ]
     }
   ],
