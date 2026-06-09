@@ -134,6 +134,7 @@ Render 啟動時會自動執行 `scripts/seed_geocode_cache.py` 匯入快取座�
 - [Operations](./docs/operations.md)
 - [Deployment](./docs/deployment.md)
 - [Project Structure](./docs/project-structure.md)
+- [繁體中文文件索引](./docs/README.zh-TW.md)
 
 ## API 端點
 

@@ -24,4 +24,3 @@ test-results
 playwright-report
 .playwright-cli
 .lighthouseci
-.omx
