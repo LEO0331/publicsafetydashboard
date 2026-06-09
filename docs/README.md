@@ -9,6 +9,7 @@ Traditional Chinese index: [專案文件](./README.zh-TW.md)
 - [System-Level Tradeoffs](./system-tradeoffs.md): architecture-level decisions, costs, risks, and mitigation strategies.
 - [Production Incident Playbook](./incident-response.md): severity levels, common incidents, recovery steps, and evidence capture.
 - [Resume Deep Dive Briefing](./resume-deep-dive.md): project pitch, resume bullets, architecture talking points, and interview answers.
+- [Agent Harness](./agent-harness.md): restart workflow, state files, verification commands, and handoff rules for future coding-agent sessions.
 - [Design](./design.md): visual direction, accessibility rules, and Traditional Chinese interface principles.
 - [Testing](./testing.md): unit, integration, e2e, Lighthouse, and CI verification strategy.
 - [Operations](./operations.md): setup, import, geocoding, admin, privacy, and known operational risks.

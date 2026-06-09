@@ -9,13 +9,16 @@ test.describe("核心業務流程", () => {
     await expect(page.getByTestId("announcement-count")).toHaveText("2");
     await expect(page.getByText("忠孝東路一段：2 筆")).toBeVisible();
     await expect(page.getByTestId("record-row")).toHaveCount(3);
+    await expect(page.getByTestId("visible-record-count")).toHaveText("目前顯示 3 / 3 筆，第 1 / 1 頁");
+    await expect(page.getByTestId("records-prev-page")).toBeDisabled();
+    await expect(page.getByTestId("records-next-page")).toBeDisabled();
 
     await page.getByTestId("filter-type").selectOption("酒駕");
     await page.getByTestId("filter-violation-count").selectOption("3+");
     await page.getByTestId("filter-location").fill("忠孝");
     await page.getByTestId("apply-filters").click();
 
-    await expect(page.getByTestId("visible-record-count")).toHaveText("目前顯示 1 筆");
+    await expect(page.getByTestId("visible-record-count")).toHaveText("目前顯示 1 / 1 筆，第 1 / 1 頁");
     await expect(page.getByTestId("record-row")).toHaveCount(1);
     const filteredRow = page.getByTestId("record-row").first();
     await expect(filteredRow).toContainText("陳小安");

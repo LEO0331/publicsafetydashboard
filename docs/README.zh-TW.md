@@ -7,6 +7,7 @@
 - [系統層級取捨](./system-tradeoffs.zh-TW.md)：架構層級決策、成本、風險與 mitigations。
 - [Production Incident Playbook](./incident-response.zh-TW.md)：severity levels、常見 incidents、復原步驟與 evidence capture。
 - [Resume Deep Dive 準備](./resume-deep-dive.zh-TW.md)：專案 pitch、resume bullets、架構講解重點與面試回答。
+- [Agent Harness](./agent-harness.zh-TW.md)：未來 coding-agent sessions 的 restart workflow、狀態檔、驗證指令與 handoff 規則。
 - [設計](./design.zh-TW.md)：視覺方向、可近用性規則與雙語介面原則。
 - [測試](./testing.zh-TW.md)：unit、integration、e2e、Lighthouse 與 CI 驗證策略。
 - [維運](./operations.zh-TW.md)：本機設定、匯入、geocoding、admin、隱私與已知風險。

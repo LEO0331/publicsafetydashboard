@@ -7,6 +7,8 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import LanguageToggle from "./LanguageToggle";
 import { dashboardCopy, formatDate, formatViolationCount, formatViolationType, formatViolationTypesJson, Language, usePersistedLanguage } from "./uiLanguage";
 
+const RECORD_PAGE_SIZE = 50;
+
 const LocationMap = dynamic(() => import("./LocationMap"), {
   ssr: false,
   loading: () => <div className="ledger-panel flex h-[520px] items-center justify-center text-sm text-[var(--muted)]">地圖載入中 / Loading map...</div>,
@@ -30,6 +32,13 @@ type RecordRow = {
   alcohol_mg_per_l: number | null;
   source_title: string;
   pdf_url: string;
+};
+
+type RecordsResponse = {
+  rows: RecordRow[];
+  total: number;
+  page: number;
+  pageSize: number;
 };
 
 type LocationItem = {
@@ -56,6 +65,9 @@ export default function Dashboard() {
   const { language, chooseLanguage } = usePersistedLanguage();
   const [stats, setStats] = useState<Stats | null>(null);
   const [records, setRecords] = useState<RecordRow[]>([]);
+  const [recordPage, setRecordPage] = useState(1);
+  const [recordTotal, setRecordTotal] = useState(0);
+  const [recordPageSize, setRecordPageSize] = useState(RECORD_PAGE_SIZE);
   const [locations, setLocations] = useState<LocationItem[]>([]);
   const [activeTab, setActiveTab] = useState<"table" | "map">("table");
   const [filters, setFilters] = useState({ violationCount: "", type: "", location: "", dateFrom: "", dateTo: "" });
@@ -67,9 +79,12 @@ export default function Dashboard() {
     for (const [key, value] of Object.entries(filters)) {
       if (value) params.set(key, value);
     }
-    params.set("pageSize", "50");
+    params.set("page", String(recordPage));
+    params.set("pageSize", String(RECORD_PAGE_SIZE));
     return params.toString();
-  }, [filters]);
+  }, [filters, recordPage]);
+
+  const totalRecordPages = Math.max(Math.ceil(recordTotal / recordPageSize), 1);
 
   useEffect(() => {
     let cancelled = false;
@@ -77,8 +92,12 @@ export default function Dashboard() {
       setIsLoading(true);
       const [statsRes, recordsRes, locationsRes] = await Promise.all([fetch("/api/stats"), fetch(`/api/records?${query}`), fetch("/api/locations")]);
       if (cancelled) return;
+      const recordsBody = (await recordsRes.json()) as RecordsResponse;
       setStats(await statsRes.json());
-      setRecords((await recordsRes.json()).rows);
+      setRecords(recordsBody.rows);
+      setRecordTotal(recordsBody.total);
+      setRecordPage(recordsBody.page);
+      setRecordPageSize(recordsBody.pageSize);
       setLocations(await locationsRes.json());
       setIsLoading(false);
     }
@@ -98,6 +117,7 @@ export default function Dashboard() {
       dateFrom: String(form.get("dateFrom") ?? ""),
       dateTo: String(form.get("dateTo") ?? ""),
     });
+    setRecordPage(1);
   }
 
   return (
@@ -239,8 +259,26 @@ export default function Dashboard() {
               {t.mapTab}
             </button>
           </div>
-          <div className="text-sm text-[var(--muted)]" data-testid="visible-record-count">
-            {t.visibleRecords(records.length)}
+          <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--muted)]">
+            <span data-testid="visible-record-count">{t.visibleRecords(records.length, recordTotal, recordPage, totalRecordPages)}</span>
+            <button
+              type="button"
+              onClick={() => setRecordPage((page) => Math.max(page - 1, 1))}
+              disabled={recordPage <= 1 || isLoading}
+              className="focus-ring border border-[var(--line)] bg-white px-3 py-1 text-xs font-medium text-[var(--ink)] transition hover:border-[var(--civic-green)] disabled:cursor-not-allowed disabled:opacity-40"
+              data-testid="records-prev-page"
+            >
+              {t.previousPage}
+            </button>
+            <button
+              type="button"
+              onClick={() => setRecordPage((page) => Math.min(page + 1, totalRecordPages))}
+              disabled={recordPage >= totalRecordPages || isLoading}
+              className="focus-ring border border-[var(--line)] bg-white px-3 py-1 text-xs font-medium text-[var(--ink)] transition hover:border-[var(--civic-green)] disabled:cursor-not-allowed disabled:opacity-40"
+              data-testid="records-next-page"
+            >
+              {t.nextPage}
+            </button>
           </div>
         </div>
 

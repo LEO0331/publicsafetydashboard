@@ -205,3 +205,37 @@
 
 ### Next action
 - If release-blocking dependency hygiene is required, run a dedicated dependency-upgrade pass for Drizzle, Next/PostCSS advisories, and Lighthouse/transitive tooling, then rerun full CI gates.
+
+## 2026-06-09 (Frontend pagination and harness review)
+
+### Current State
+- Core dashboard remains implemented and deployable on Render.
+- Frontend records pagination is now exposed instead of showing only the first 50 filtered records.
+- Harness lifecycle/state docs were updated after `harness-creator` validation.
+
+### Completed
+- Added fixed-size frontend pagination for dashboard records: bilingual summary, previous/next controls, disabled boundary states, and filter reset to page 1.
+- Added API pagination offset regression coverage in the Node integration tests.
+- Updated Playwright E2E assertions for Traditional Chinese and English pagination summaries.
+- Updated `feature_list.json` with validator-friendly `name`, `description`, and `dependencies` fields plus F08 evidence.
+- Updated `AGENTS.md` startup/end-of-session workflow and `session-handoff.md` restart markers.
+- Added bilingual `docs/agent-harness*` documentation and linked it from the docs index.
+- Fixed `scripts/check-node-coverage.mjs` so it accepts current Node coverage summary output while preserving the 80% gate.
+
+### Verification evidence
+- `node /Users/Leo/.agents/skills/harness-creator/scripts/validate-harness.mjs --target /Users/Leo/Documents/publicsafetydashboard` initially reported `68/100`; lifecycle was the bottleneck.
+- `node /Users/Leo/.agents/skills/harness-creator/scripts/validate-harness.mjs --target /Users/Leo/Documents/publicsafetydashboard` passed after updates: `100/100`.
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 18 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:coverage` passed: Python tracked modules 83.23% line coverage; Node tracked files 97.83% line coverage.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:e2e` passed with elevated localhost permission: 8 Playwright tests.
+
+### Remaining risks / gaps
+- Local `/usr/local/bin/node` is `20.2.0`, below Next.js `>=20.9.0`; use a supported Node runtime for build/E2E.
+- Switching Node runtimes can require `npm rebuild better-sqlite3` because SQLite uses a native module.
+- Dependency audit findings remain deferred to a dedicated dependency-upgrade pass.
+- `.omx/` runtime state files are modified locally but intentionally ignored per user instruction.
+
+### Next action
+- Rerun `./init.sh` with a supported Node runtime before final publish/merge, then commit the scoped app, test, and harness changes.

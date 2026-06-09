@@ -86,6 +86,15 @@ test("records query filters by violation count, type, location, and date", async
   assert.equal(capped.pageSize, 100);
   assert.equal(capped.rows.some((row) => row.name === "隱藏個案"), false);
 
+  const secondPage = getRecords({ page: "2", pageSize: "2" });
+  assert.equal(secondPage.total, 4);
+  assert.equal(secondPage.page, 2);
+  assert.equal(secondPage.pageSize, 2);
+  assert.deepEqual(
+    secondPage.rows.map((row) => row.name),
+    ["李小美", "王小明"]
+  );
+
   const stats = getStats();
   assert.equal(stats.totalRecords, 4);
   assert.equal(stats.announcements, 2);

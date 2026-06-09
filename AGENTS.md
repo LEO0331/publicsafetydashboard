@@ -19,6 +19,12 @@ This repository builds an educational dashboard from Taipei City Government publ
   - Aggressive crawling or bypassing access controls.
 
 ## Working Rules
+- Startup Workflow:
+  1. Read `session-handoff.md` for the current objective, blockers, files, and recommended next step.
+  2. Read `feature_list.json` and select one unfinished or explicitly requested feature.
+  3. Run `./init.sh` or the narrow verification command before claiming completion.
+  4. Keep work restartable by updating `progress.md` after meaningful changes.
+- One feature at a time: keep `feature_list.json.activeFeatureId` aligned with the current feature, or `null` when no feature is active.
 - Follow implementation priority in `feature_list.json`.
 - Keep one active feature at a time unless explicit multi-agent ownership exists.
 - No new dependency unless needed for stated requirements.
@@ -37,6 +43,9 @@ This repository builds an educational dashboard from Taipei City Government publ
 - Relevant tests/checks pass.
 - Risks and gaps documented in `progress.md`.
 - `feature_list.json` status and next action updated.
+- End of Session:
+  - Update `session-handoff.md` with Last Updated, Current Objective, Blockers, Files changed, and Recommended Next Step.
+  - Leave the repository in a clean restartable state, with verification evidence recorded or the exact failed command noted.
 
 ## Verification
 - Run `./init.sh` before final completion claims.

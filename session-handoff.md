@@ -1,5 +1,9 @@
 # Session Handoff
 
+Last Updated: 2026-06-09
+Current Objective: keep the dashboard publish-ready while adding small, verified usability improvements such as frontend record pagination.
+Recommended Next Step: if continuing this branch, review the current git diff, then run `./init.sh` with a Node runtime that satisfies Next.js `>=20.9.0`.
+
 ## Project
 
 - Taipei public drunk/drug driving repeat-offender educational dashboard.
@@ -12,12 +16,13 @@
 - Starter deploy data is bundled in `data/seed/initial_announcements.json` and seeded on Render startup only when the database is empty.
 - Frontend supports Traditional Chinese by default and English via a persisted `localStorage` language toggle.
 - Map view uses a ranked/searchable grouped-location explorer with scaled circles instead of showing every location as equal-density pins.
+- Records API pagination is exposed in the frontend with a fixed page size, previous/next controls, and bilingual page summaries.
 
 ## Start-Here Checklist
 
 1. Run `./init.sh` for the baseline harness check.
 2. Run `npm run lint`, `npm run typecheck`, and `npm test` before making behavioral changes.
-3. For frontend/map changes, run `npm run test:e2e` with the bundled Node runtime if local Node is below Next's required version.
+3. For frontend/map changes, run `npm run test:e2e` with a supported Node runtime if local Node is below Next's required version.
 4. Update `progress.md` with verification evidence and risks after meaningful changes.
 5. Ignore `.omx/` runtime state changes unless the user specifically asks to inspect OMX state.
 
@@ -33,7 +38,27 @@
 
 - `npm audit --audit-level=high` reports high vulnerabilities in dependencies, including `drizzle-orm`, transitive `effect`/Prisma tooling, and `tmp` through Lighthouse tooling. Several suggested fixes are breaking upgrades and need a dedicated dependency-upgrade pass.
 - Local Playwright/Lighthouse runs may need elevated localhost permissions in the Codex sandbox.
-- Local default Node may be older than Next requires; use `/Users/Leo/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin` for production build/E2E if needed, then run `npm rebuild better-sqlite3` afterward to restore the default runtime.
+- Local default Node may be older than Next requires. Use a Node runtime `>=20.9.0`; if switching Node versions locally, run `npm rebuild better-sqlite3` for that runtime before tests that touch SQLite.
+
+## Blockers
+
+- No active functional blocker.
+- Known dependency audit findings remain deferred to a dedicated dependency-upgrade pass.
+
+## Files
+
+- `src/components/Dashboard.tsx`: dashboard records pagination controls and page metadata.
+- `src/components/uiLanguage.ts`: Traditional Chinese and English pagination copy.
+- `tests/integration/api_filters.test.mjs`: direct API pagination offset regression.
+- `e2e/dashboard-business-flow.spec.ts`: Traditional Chinese pagination UI regression.
+- `e2e/interactive-qa.spec.ts`: English pagination UI regression.
+- `AGENTS.md`, `feature_list.json`, `progress.md`, `session-handoff.md`: harness restart and evidence updates.
+
+## Next Session
+
+- Start by checking `git status --short`.
+- Ignore `.omx/` runtime state changes unless explicitly requested.
+- Run `./init.sh` before publishing or merging; run `npm run test:e2e` separately when UI behavior changes.
 
 ## Completion Handoff Format
 
