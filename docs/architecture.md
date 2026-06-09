@@ -15,6 +15,8 @@ The app is a local-first educational dashboard for Taipei City Government public
 - `drizzle/`: SQLite migrations and local database outputs.
 - `e2e/`: Playwright browser tests and fixture database seeding.
 
+For why these technologies were selected, see [Tech Stack Rationale](./tech-stack.md).
+
 ## Data Flow
 
 1. `scripts/crawl_sources.py` discovers PDF URLs from the Taipei DOT listing page.

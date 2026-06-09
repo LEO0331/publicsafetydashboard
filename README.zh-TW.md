@@ -1,27 +1,50 @@
 # 臺北市酒駕／毒駕／拒測累犯教育儀表板
 
-以 Next.js、SQLite、Python 匯入解析、篩選統計與地圖視覺化建置的臺北市公開交通安全 PDF 公告教育儀表板。
+這是一個以臺北市政府公開 PDF 公告為資料來源的雙語交通安全教育儀表板。專案目標是協助學生、教師與一般讀者，以資料視覺化方式理解酒駕、毒駕／藥駕、拒測等累犯公告資料的型態、時間與地點分布。
 
-本專案是一個以臺北市政府公開 PDF 公告資料為來源的交通安全教育儀表板。系統可爬取公告頁、匯入 PDF、解析表格資料、寫入 SQLite，並透過 Next.js 儀表板呈現統計、篩選、資料表與地圖。
+線上示範：
 
-主要來源：
+https://publicsafetydashboard.onrender.com
+
+主要公開來源：
+
 https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170
 
-## 技術架構
+English README:
 
-- 前端：Next.js App Router、TypeScript、Tailwind CSS
-- API：Next.js API Routes
-- 資料庫：SQLite + Drizzle
-- 匯入解析：Python、pdfplumber、PyMuPDF fallback dependency、pandas
-- 地圖：Leaflet + OpenStreetMap
-- 測試：Python unittest、Node test runner、Playwright、Lighthouse CI
+[README.md](./README.md)
 
-## 本機設定
+## 這個專案做什麼
+
+- 從臺北市交通局公告頁、PDF 網址或本機 PDF 匯入公開公告資料。
+- 解析 PDF 表格，將公告列資料寫入本機 SQLite。
+- 顯示公告總筆數、已匯入公告數、累犯次數分布、違規類型分布與高頻地點。
+- 支援依違規類型、累犯次數、日期範圍與地點關鍵字篩選。
+- 前端支援繁體中文與英文切換。
+- 地圖以「地點群組」呈現，不以個人為單位呈現。
+- Geocoding 僅使用快取資料；頁面載入時不呼叫 geocoder。
+
+## 公共安全與隱私聲明
+
+本網站資料來源為臺北市政府公開公告資料，僅供交通安全教育與資料視覺化示範使用。若原始公告修正、移除或更新，請以主管機關最新公告為準。
+
+本專案刻意避免把公開公告做成人名搜尋或個人追蹤工具：
+
+- 不使用其他來源補充個人資料。
+- 不爬取社群媒體。
+- 不做臉部辨識。
+- 預設不顯示照片。
+- Geocoding 只送出地點文字，不送姓名或違規事實。
+- 地圖點位依地點群組呈現。
+- 公開公告中的姓名、地點、PDF 標題與來源內容會依原文保留，不翻譯、不改寫。
+
+## 快速開始
 
 ```bash
 npm install
 python3 -m pip install -r requirements.txt
 npm run db:migrate
+npm run seed:initial
 npm run dev
 ```
 
@@ -31,7 +54,25 @@ npm run dev
 http://localhost:3000
 ```
 
+管理頁：
+
+```text
+http://localhost:3000/admin
+```
+
+使用匯入功能前，請設定非預設管理權杖：
+
+```bash
+ADMIN_TOKEN="<strong-secret>"
+```
+
 ## 匯入資料
+
+匯入內建起始資料，來源為兩份臺北市交通局公開公告：
+
+```bash
+npm run seed:initial
+```
 
 爬取臺北市交通局公告頁：
 
@@ -51,45 +92,61 @@ python3 scripts/import_pdf.py --url "<PDF_URL>"
 python3 scripts/import_pdf.py --file ./path/to/file.pdf
 ```
 
-使用範例 PDF 種子資料：
+## 地圖座標
+
+地圖需要 `geocoded_locations` 中的快取座標。匯入 PDF 後只會產生資料列，不會自動產生經緯度。
+
+本機 geocoding：
 
 ```bash
-python3 scripts/seed_example.py
+python3 scripts/geocode_locations.py --limit 5 --delay 10
 ```
 
-匯入內建起始資料（115.04.22 與 115.05.27 公開公告）：
+Render free 部署建議使用本機 geocoding，然後匯出快取：
 
 ```bash
-npm run seed:initial
+npm run export:geocode
+git add data/seed/geocoded_locations.json
+git commit -m "Seed geocoded map locations"
+git push
 ```
 
-地點快取 geocode：
+Render 啟動時會自動執行 `scripts/seed_geocode_cache.py` 匯入快取座標，避免從 Render shared IP 呼叫 Nominatim。
 
-```bash
-python3 scripts/geocode_locations.py
-```
+## 技術架構
 
-重新建立全部資料：
+- 前端：Next.js App Router、React、TypeScript、Tailwind CSS。
+- 後端/API：Next.js Route Handlers。
+- 資料庫：SQLite + Drizzle migrations。
+- 匯入解析：Python scripts、`pdfplumber`、文字 fallback。
+- 地圖：Leaflet、React Leaflet、OpenStreetMap tiles。
+- 測試：Python `unittest`、Node test runner、Playwright、Lighthouse CI。
+- 部署：GitHub Actions 發布 Docker image，Render-compatible startup script。
 
-```bash
-python3 scripts/rebuild_all.py
-```
+技術選型原因請見：[Tech Stack Rationale](./docs/tech-stack.md)。
 
-## 管理介面
+## 文件
 
-設定 `.env`：
+- [Architecture](./docs/architecture.md)
+- [Tech Stack Rationale](./docs/tech-stack.md)
+- [Design](./docs/design.md)
+- [Testing](./docs/testing.md)
+- [Operations](./docs/operations.md)
+- [Deployment](./docs/deployment.md)
+- [Project Structure](./docs/project-structure.md)
 
-```bash
-ADMIN_TOKEN="<strong-secret>"
-```
+## API 端點
 
-啟動後開啟：
+- `GET /api/stats`
+- `GET /api/records?violationCount=&type=&location=&dateFrom=&dateTo=&page=&pageSize=`
+- `GET /api/locations`
+- `POST /api/import/crawl`
+- `POST /api/import/pdf-url`
+- `POST /api/import/pdf-file`
+- `POST /api/import/geocode`
+- `GET /api/import/logs`
 
-```text
-http://localhost:3000/admin
-```
-
-管理 API 和匯入紀錄都需要 `x-admin-token`。伺服器會拒絕未設定 token 或 `change-me` 這種預設值。
+管理匯入端點需要 `x-admin-token`。
 
 ## 驗證
 
@@ -104,59 +161,20 @@ npm run build
 ./init.sh
 ```
 
-`npm run test:e2e` 會建立 deterministic SQLite 測試資料庫，啟動正式 Next.js build，並用 Playwright 驗證核心功能。
+## 部署注意事項
 
-`npm run test:coverage` 會對 Python 匯入模組與 Node server integration code 執行至少 80% line coverage 門檻。
+完整系統需要 Next.js API routes、SQLite、Python PDF 解析、上傳檔案、log 與管理端點，因此應以 Docker/Node service 部署，不是純靜態網站。
 
-`npm run lighthouse:ci` 會檢查 `/` 與 `/admin` 的 Performance、Accessibility、Best Practices、SEO 分數門檻。
+建議的持久化部署方式：
 
-## CI/CD
+- Render paid web service + persistent disk。
+- Fly.io volume。
+- Railway 或 VPS persistent filesystem。
 
-GitHub Actions 已包含：
-
-- `.github/workflows/ci.yml`：lint、typecheck、unit/integration test、Playwright e2e、Lighthouse CI。
-- `.github/workflows/deploy.yml`：`main` 分支 CI 通過後建立 Docker image 並推送到 GitHub Container Registry，也可從 Actions 頁面手動執行。
-
-線上 Render 部署：
-
-```text
-https://publicsafetydashboard.onrender.com
-```
-
-完整系統請使用 Render 或 Docker/GHCR 部署，因為儀表板需要 API routes、SQLite、Python 匯入與管理端點。
-
-Render 的 `Start Command` 請留空，讓 Dockerfile 執行 `scripts/start-render.sh`。如果部署出現 status `127`，通常是自訂 Start Command 解析失敗，請刪除該欄位後重新部署。
-
-Render 啟動腳本會先執行 migration，並在資料表為空時自動匯入內建起始資料。
-
-部署說明請看：
-
-- [部署指南](./docs/deployment.md)
-
-## 隱私與安全規則
-
-本網站資料來源為臺北市政府公開公告資料，僅供交通安全教育與資料視覺化示範使用。若原始公告修正、移除或更新，請以主管機關最新公告為準。
-
-- 不使用其他來源補充個人資料。
-- 不做臉部辨識。
-- 不爬取社群媒體。
-- 預設不顯示照片。
-- Geocoding 只送出地點文字，不送姓名或違規事實。
-- 地圖標記以地點群組呈現，不以個人為單位。
-- 姓名搜尋不放在預設流程。
-
-## 文件
-
-- [Architecture](./docs/architecture.md)
-- [Design](./docs/design.md)
-- [Testing](./docs/testing.md)
-- [Operations](./docs/operations.md)
-- [Deployment](./docs/deployment.md)
-- [Project Structure](./docs/project-structure.md)
+Render free 可做展示，但 SQLite 資料與上傳檔案可能在重啟或重新部署後消失。
 
 ## 已知限制
 
-- PDF 表格格式可能隨公告不同而變化；解析不完整的列會以 `needsReview=true` 保留。
-- 目前主要解析路徑是 `pdfplumber` 加文字 fallback。
-- Nominatim geocoding 有速率限制，應在匯入或維護時執行，不在頁面載入時呼叫。
-- 第一版以 local-first SQLite 為目標；雲端部署需配置持久化磁碟。
+- PDF 版面可能變動；解析不完整的資料列會以 `needsReview=true` 保留。
+- Nominatim 可能限制雲端服務商 IP；部署時建議使用本機 geocoding 快取。
+- SQLite 是 local-first 選擇；若未來需要多人長期使用，可評估 Postgres 或其他 managed database。

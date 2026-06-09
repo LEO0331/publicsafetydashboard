@@ -1,37 +1,80 @@
-# Taipei Public Safety Dashboard
+# Taipei Repeat DUI / Drug-Impaired / Test-Refusal Education Dashboard
 
-Full-stack educational dashboard for Taipei public traffic-safety PDF announcements, with Next.js, SQLite, Python ingestion, filters, stats, and map visualization.
+A bilingual public-safety education dashboard built from Taipei City Government public PDF announcements. The project helps students and educators explore repeat drunk-driving, drug-impaired driving, and test-refusal announcement data through summaries, filters, tables, and grouped location maps.
 
-Educational dashboard for Taipei City Government public drunk/drug driving repeat-offender PDF announcements.
+Live demo:
 
-Primary source:
+https://publicsafetydashboard.onrender.com
+
+Primary public source:
+
 https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170
 
-## Setup
+Traditional Chinese README:
+
+[README.zh-TW.md](./README.zh-TW.md)
+
+## What This Project Does
+
+- Imports Taipei DOT public announcement PDFs from a crawler, PDF URL, or local PDF upload.
+- Parses repeat-offender table rows into a local SQLite database.
+- Shows total records, imported announcements, repeat-count distribution, violation-type distribution, and frequent locations.
+- Supports filters for violation type, repeat count, date range, and location keyword.
+- Provides a bilingual Traditional Chinese / English frontend.
+- Shows a map by grouped location, not by individual person.
+- Uses cached geocoding only; the dashboard never geocodes on page load.
+
+## Public-Safety And Privacy Notice
+
+本網站資料來源為臺北市政府公開公告資料，僅供交通安全教育與資料視覺化示範使用。若原始公告修正、移除或更新，請以主管機關最新公告為準。
+
+This project intentionally avoids turning public records into a people-search product:
+
+- No enrichment from other sources.
+- No social-media scraping.
+- No face recognition.
+- Photos are not displayed by default.
+- Geocoding sends only location text, never names or violation facts.
+- Map points are grouped by location.
+- Public record values are preserved as published and are not translated or modified.
+
+## Quick Start
 
 ```bash
 npm install
 python3 -m pip install -r requirements.txt
 npm run db:migrate
+npm run seed:initial
 npm run dev
 ```
 
-Local app:
+Open:
+
+```text
 http://localhost:3000
+```
 
-## Documentation
+Admin page:
 
-- [Architecture](./docs/architecture.md)
-- [Design](./docs/design.md)
-- [Testing](./docs/testing.md)
-- [Operations](./docs/operations.md)
-- [Deployment](./docs/deployment.md)
-- [Project Structure](./docs/project-structure.md)
-- [繁體中文 README](./README.zh-TW.md)
+```text
+http://localhost:3000/admin
+```
 
-## Import Data
+Set a non-default admin token before using import actions:
 
-Crawl the Taipei DOT listing page:
+```bash
+ADMIN_TOKEN="<strong-secret>"
+```
+
+## Data Import
+
+Seed bundled starter records from two public Taipei DOT announcements:
+
+```bash
+npm run seed:initial
+```
+
+Crawl Taipei DOT source pages:
 
 ```bash
 python3 scripts/crawl_sources.py
@@ -49,53 +92,50 @@ Import one local PDF:
 python3 scripts/import_pdf.py --file ./path/to/file.pdf
 ```
 
-Seed with the example PDF URL:
+## Map Coordinates
+
+The map needs cached coordinates in `geocoded_locations`. Imported PDF records do not automatically have latitude/longitude.
+
+Local geocoding:
 
 ```bash
-python3 scripts/seed_example.py
+python3 scripts/geocode_locations.py --limit 5 --delay 10
 ```
 
-Seed bundled starter data from the 115.04.22 and 115.05.27 public announcements:
+For Render free deployments, prefer local geocoding and export the cache:
 
 ```bash
-npm run seed:initial
+npm run export:geocode
+git add data/seed/geocoded_locations.json
+git commit -m "Seed geocoded map locations"
+git push
 ```
 
-Geocode cached locations:
+Render startup imports that cache automatically through `scripts/seed_geocode_cache.py`, avoiding Nominatim calls from Render shared IPs.
 
-```bash
-python3 scripts/geocode_locations.py
-```
+## Tech Stack
 
-Rebuild all:
+- Frontend: Next.js App Router, React, TypeScript, Tailwind CSS.
+- Backend/API: Next.js Route Handlers.
+- Database: SQLite with Drizzle migrations.
+- Ingestion: Python scripts using `pdfplumber` plus text fallback.
+- Map: Leaflet, React Leaflet, OpenStreetMap tiles.
+- Testing: Python `unittest`, Node test runner, Playwright, Lighthouse CI.
+- Deployment: Docker image published by GitHub Actions; Render-compatible startup script.
 
-```bash
-python3 scripts/rebuild_all.py
-```
+See [Tech Stack Rationale](./docs/tech-stack.md) for why these choices fit this project.
 
-## Admin Import UI
+## Documentation
 
-Set `ADMIN_TOKEN` in `.env` to a non-default secret value, start the app, then open:
+- [Architecture](./docs/architecture.md)
+- [Tech Stack Rationale](./docs/tech-stack.md)
+- [Design](./docs/design.md)
+- [Testing](./docs/testing.md)
+- [Operations](./docs/operations.md)
+- [Deployment](./docs/deployment.md)
+- [Project Structure](./docs/project-structure.md)
 
-http://localhost:3000/admin
-
-Admin endpoints, including import logs, require the `x-admin-token` header. The server rejects missing tokens and the placeholder value `change-me`.
-
-## Privacy And Safety
-
-本網站資料來源為臺北市政府公開公告資料，僅供交通安全教育與資料視覺化示範使用。若原始公告修正、移除或更新，請以主管機關最新公告為準。
-
-Rules enforced by design:
-
-- No enrichment from non-government sources.
-- No face recognition.
-- No social-media scraping.
-- Photos are not displayed by default.
-- Geocoding sends only location text, prefixed with Taipei City context.
-- Map pins are grouped by location, not by individual person.
-- Name search is not part of the default dashboard flow.
-
-## API
+## API Endpoints
 
 - `GET /api/stats`
 - `GET /api/records?violationCount=&type=&location=&dateFrom=&dateTo=&page=&pageSize=`
@@ -103,7 +143,10 @@ Rules enforced by design:
 - `POST /api/import/crawl`
 - `POST /api/import/pdf-url`
 - `POST /api/import/pdf-file`
+- `POST /api/import/geocode`
 - `GET /api/import/logs`
+
+Admin import endpoints require `x-admin-token`.
 
 ## Verification
 
@@ -118,25 +161,20 @@ npm run build
 ./init.sh
 ```
 
-The e2e command seeds `drizzle/e2e.db`, builds the app, starts it on `http://127.0.0.1:3100`, and runs Playwright against the real Next.js/API/SQLite boundary.
-The coverage command enforces at least 80% line coverage for tracked Python ingestion modules and Node server integration code.
-The Lighthouse command seeds the same deterministic database, builds the app, starts it on `http://127.0.0.1:4173`, and audits `/` plus `/admin` with score gates for Performance, Accessibility, Best Practices, and SEO.
+## Deployment Notes
 
-## Deployment
+The complete app needs Next.js API routes, SQLite, Python PDF parsing, uploads, logs, and admin endpoints. Deploy it as a Docker/Node service rather than a static site.
 
-Live Render deployment:
+Recommended durable deployment:
 
-https://publicsafetydashboard.onrender.com
+- Render paid web service with persistent disk.
+- Fly.io with volume.
+- Railway or VPS with persistent filesystem.
 
-GitHub Actions publishes a Docker image to GHCR after CI passes on `main`, and it can also be run manually from the Actions tab. See [Deployment](./docs/deployment.md) for Render setup, the GHCR image flow, required environment variables, and storage notes.
-
-On Render, leave the service `Start Command` blank so the Dockerfile runs `scripts/start-render.sh`. If Render exits with status `127`, remove any custom Start Command and redeploy.
-
-The Render startup script runs migrations and seeds the bundled starter data only when the records table is empty.
+Render free works for demos, but SQLite data and uploaded files can reset after restarts or redeploys.
 
 ## Known Limitations
 
-- PDF table formats may vary across announcements; incomplete rows are retained with `needsReview=true`.
-- `pdfplumber` is the primary parser. PyMuPDF is listed as a fallback dependency for future parser hardening.
-- Nominatim geocoding is rate-limited and cached; it should be run during import, not on page load.
-- Local SQLite is the target for the first version. Cloud deployment is intentionally optional.
+- PDF layouts may change; incomplete parsed rows are retained with `needsReview=true`.
+- Nominatim can rate-limit cloud providers. Use cached/local geocoding for deployment.
+- SQLite is intentionally local-first. A multi-user production system may eventually need Postgres or another managed database.
