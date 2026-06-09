@@ -34,6 +34,8 @@ ghcr.io/<owner>/<repo>:<commit-sha>
 
 The workflow lowercases `<owner>/<repo>` before publishing because GHCR image names must be lowercase.
 
+The Docker image installs `build-essential` because `better-sqlite3` is a native Node addon. When no prebuilt binary exists for the Node version in the base image, `npm ci` falls back to `node-gyp` compilation and requires `make`, `gcc`, and `g++`. If GitHub Actions fails with `gyp ERR! stack Error: not found: make`, keep the build toolchain in the Dockerfile.
+
 ### GitHub Deployment Flow
 
 1. Push or merge to `main`.

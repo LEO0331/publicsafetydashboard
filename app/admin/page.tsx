@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, FileUp, Globe2, KeyRound, ListRestart, RefreshCw, Upload } from "lucide-react";
+import { ArrowLeft, FileUp, Globe2, KeyRound, ListRestart, MapPinned, RefreshCw, Upload } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import LanguageToggle from "../../src/components/LanguageToggle";
 import { adminCopy, usePersistedLanguage } from "../../src/components/uiLanguage";
@@ -86,6 +86,18 @@ export default function AdminPage() {
     );
   }
 
+  async function geocode(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    await runImport(() =>
+      fetch("/api/import/geocode", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-admin-token": token },
+        body: JSON.stringify({ limit: form.get("limit") || undefined, delay: form.get("delay") || undefined }),
+      })
+    );
+  }
+
   return (
     <main className="min-h-screen text-[var(--ink)]" data-testid="admin-page">
       <header className="border-b border-[var(--line)] bg-[var(--paper-strong)]">
@@ -117,7 +129,7 @@ export default function AdminPage() {
           <input value={token} onChange={(event) => setToken(event.target.value)} className="focus-ring w-full border border-[var(--line)] bg-white p-2 font-normal" type="password" placeholder={t.tokenPlaceholder} data-testid="admin-token" />
         </label>
 
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
+        <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <form onSubmit={crawl} className="ledger-panel p-4">
             <div className="flex items-center justify-between">
               <h2 className="font-medium">{t.crawlTitle}</h2>
@@ -156,6 +168,20 @@ export default function AdminPage() {
             <button disabled={isRunning} className="focus-ring mt-3 inline-flex items-center gap-2 bg-[var(--ink)] px-3 py-2 text-sm text-white transition hover:bg-[var(--civic-green)] disabled:opacity-50">
               <FileUp size={16} />
               {t.uploadFile}
+            </button>
+          </form>
+
+          <form onSubmit={geocode} className="ledger-panel p-4">
+            <div className="flex items-center justify-between">
+              <h2 className="font-medium">{t.geocodeTitle}</h2>
+              <MapPinned className="text-[var(--civic-blue)]" size={18} />
+            </div>
+            <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{t.geocodeDescription}</p>
+            <input name="limit" className="focus-ring mt-4 w-full border border-[var(--line)] bg-white p-2 text-sm" placeholder={t.geocodeLimitPlaceholder} />
+            <input name="delay" className="focus-ring mt-2 w-full border border-[var(--line)] bg-white p-2 text-sm" placeholder={t.geocodeDelayPlaceholder} />
+            <button disabled={isRunning} className="focus-ring mt-3 inline-flex items-center gap-2 bg-[var(--ink)] px-3 py-2 text-sm text-white transition hover:bg-[var(--civic-green)] disabled:opacity-50" data-testid="geocode-button">
+              <MapPinned size={16} />
+              {t.startGeocode}
             </button>
           </form>
         </div>

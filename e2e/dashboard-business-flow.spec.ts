@@ -59,6 +59,10 @@ test.describe("核心業務流程", () => {
     await page.getByTestId("import-url-button").click();
 
     await expect(page.getByTestId("admin-result")).toContainText("Unauthorized");
+
+    await expect(page.getByText("地圖座標產生")).toBeVisible();
+    await page.getByTestId("geocode-button").click();
+    await expect(page.getByTestId("admin-result")).toContainText("Unauthorized");
   });
 
   test("匯入紀錄 API 未授權時不可讀取", async ({ request }) => {
