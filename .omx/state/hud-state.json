@@ -1,5 +1,5 @@
 {
-  "last_turn_at": "2026-06-09T00:30:20.801Z",
-  "turn_count": 29,
-  "last_agent_output": "Use the map like this:\n\n1. Open the dashboard.\n2. Click the `地圖` tab.\n3. The left panel shows groupe"
+  "last_turn_at": "2026-06-09T00:44:49.327Z",
+  "turn_count": 33,
+  "last_agent_output": "The `HTTP Error 429` means Nominatim rate-limited your Render server. This is common on shared/cloud"
 }

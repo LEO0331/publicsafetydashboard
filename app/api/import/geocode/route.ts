@@ -8,8 +8,8 @@ export async function POST(request: NextRequest) {
   if (unauthorized) return unauthorized;
   const body = await request.json().catch(() => ({}));
   const args = ["scripts/geocode_locations.py"];
-  if (body.limit) args.push("--limit", String(body.limit));
-  if (body.delay) args.push("--delay", String(body.delay));
+  args.push("--limit", String(body.limit || 5));
+  args.push("--delay", String(body.delay || 10));
   const result = await runPythonScript(args);
   return Response.json(result);
 }

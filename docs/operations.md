@@ -27,6 +27,10 @@ npm run seed:initial
 
 Start the app, set `ADMIN_TOKEN` to a non-default secret value, then open `/admin`. Admin import routes and import logs require the `x-admin-token` header. Missing tokens and the placeholder value `change-me` are rejected.
 
+After importing PDFs in a deployed environment, run the `/admin` "Generate Map Coordinates" action to populate `geocoded_locations`. The map tab only shows places with cached coordinates. This action calls Nominatim once per ungeocoded or previously failed location, respects the configured delay, and sends only location text.
+
+If logs show `HTTP Error 429: Too many requests`, stop and wait before retrying. Render shared outbound IPs can hit Nominatim limits. Use small batches, for example limit `5` and delay `10` seconds. The geocoder stops the current batch after the first 429 and will retry that failed location on the next run.
+
 ## Geocoding
 
 Use Nominatim only during import/maintenance flows. Queries are normalized as `臺北市 {locationText}` and cached in SQLite. Do not geocode on page load.

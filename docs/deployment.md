@@ -79,6 +79,8 @@ sh scripts/start-render.sh
 
 That script creates local data directories, runs `npm run db:migrate`, seeds the bundled starter dataset if the records table is empty, then starts Next.js on Render's `$PORT`.
 
+After importing PDFs on Render, open `/admin`, enter `ADMIN_TOKEN`, and run **Generate Map Coordinates**. Imported records do not automatically have latitude/longitude; the map uses only cached rows in `geocoded_locations`.
+
 If a Render deploy fails with status `127`, check the Render service settings and remove any custom Start Command. A command override bypasses the Dockerfile `CMD` and can fail if Render parses the shell command differently.
 
 For a paid durable deployment, attach persistent storage for:

@@ -9,6 +9,7 @@ import urllib.request
 from common import USER_AGENT, connect_db, log_import, normalize_space, now_ms
 
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
+DEFAULT_DELAY_SECONDS = 5.0
 
 
 def normalized_query(location_text: str) -> str:
@@ -34,12 +35,16 @@ def geocode(query: str) -> tuple[float | None, float | None, float | None, str |
 
 def pending_locations(limit: int | None = None) -> list[str]:
     sql = """
-        SELECT DISTINCT location_text
-        FROM offender_records
-        WHERE location_text IS NOT NULL
-          AND location_text != ''
-          AND location_text NOT IN (SELECT location_text FROM geocoded_locations)
-        ORDER BY location_text
+        SELECT DISTINCT r.location_text
+        FROM offender_records r
+        LEFT JOIN geocoded_locations g ON g.location_text = r.location_text
+        WHERE r.location_text IS NOT NULL
+          AND r.location_text != ''
+          AND (
+            g.location_text IS NULL
+            OR (g.lat IS NULL AND g.lng IS NULL AND COALESCE(g.error, '') != 'not_found')
+          )
+        ORDER BY r.location_text
     """
     if limit:
         sql += f" LIMIT {int(limit)}"
@@ -47,7 +52,13 @@ def pending_locations(limit: int | None = None) -> list[str]:
         return [row["location_text"] for row in conn.execute(sql).fetchall()]
 
 
-def geocode_pending(limit: int | None = None, delay_seconds: float = 1.1) -> int:
+def is_rate_limited(error: str | None) -> bool:
+    if not error:
+        return False
+    return "429" in error or "too many requests" in error.lower()
+
+
+def geocode_pending(limit: int | None = None, delay_seconds: float = DEFAULT_DELAY_SECONDS) -> int:
     count = 0
     with connect_db() as conn:
         for location in pending_locations(limit):
@@ -66,6 +77,9 @@ def geocode_pending(limit: int | None = None, delay_seconds: float = 1.1) -> int
             )
             log_import(f"geocoded location={location} query={query} error={error or ''}")
             count += 1
+            if is_rate_limited(error):
+                log_import("geocode_rate_limited stop_batch=true")
+                break
             time.sleep(delay_seconds)
     return count
 
@@ -73,7 +87,7 @@ def geocode_pending(limit: int | None = None, delay_seconds: float = 1.1) -> int
 def main() -> None:
     parser = argparse.ArgumentParser(description="Geocode cached violation locations only.")
     parser.add_argument("--limit", type=int)
-    parser.add_argument("--delay", type=float, default=1.1)
+    parser.add_argument("--delay", type=float, default=DEFAULT_DELAY_SECONDS)
     args = parser.parse_args()
     print(f"Geocoded {geocode_pending(args.limit, args.delay)} locations")
 

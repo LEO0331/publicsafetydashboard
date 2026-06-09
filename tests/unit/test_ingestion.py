@@ -14,7 +14,7 @@ import geocode_locations
 import seed_initial_data
 from common import content_hash, normalize_space, parse_taiwan_date
 from crawl_sources import extract_pdf_links
-from geocode_locations import geocode, geocode_pending, normalized_query, pending_locations
+from geocode_locations import geocode, geocode_pending, is_rate_limited, normalized_query, pending_locations
 from pdf_parser import parse_alcohol_mg_per_l, parse_violation_count, parse_violation_types, records_from_rows, rows_from_table, rows_from_text
 
 
@@ -196,6 +196,83 @@ class IngestionTests(unittest.TestCase):
             self.assertEqual(len(rows), 2)
             self.assertEqual(rows[0][0], "南京東路三段")
             self.assertEqual(rows[1][0], "忠孝東路一段")
+
+    def test_geocoder_retries_rate_limit_errors_but_skips_not_found(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path = Path(tmp) / "geocode_retry.db"
+            conn = sqlite3.connect(db_path)
+            conn.row_factory = sqlite3.Row
+            conn.executescript(
+                """
+                CREATE TABLE offender_records (location_text TEXT);
+                CREATE TABLE geocoded_locations (
+                  location_text TEXT,
+                  normalized_query TEXT,
+                  lat REAL,
+                  lng REAL,
+                  geocode_provider TEXT,
+                  confidence REAL,
+                  geocoded_at INTEGER,
+                  error TEXT
+                );
+                INSERT INTO offender_records VALUES ('中央北路三段');
+                INSERT INTO offender_records VALUES ('不存在路段');
+                INSERT INTO geocoded_locations VALUES ('中央北路三段', '臺北市 中央北路三段', NULL, NULL, 'nominatim', NULL, 1, 'HTTP Error 429: Too many requests');
+                INSERT INTO geocoded_locations VALUES ('不存在路段', '臺北市 不存在路段', NULL, NULL, 'nominatim', NULL, 1, 'not_found');
+                """
+            )
+            conn.commit()
+            conn.close()
+
+            def connect_test_db():
+                test_conn = sqlite3.connect(db_path)
+                test_conn.row_factory = sqlite3.Row
+                return test_conn
+
+            with unittest.mock.patch.object(geocode_locations, "connect_db", side_effect=connect_test_db):
+                self.assertEqual(pending_locations(), ["中央北路三段"])
+
+    def test_geocoder_stops_batch_after_rate_limit(self):
+        self.assertTrue(is_rate_limited("HTTP Error 429: Too many requests"))
+        self.assertFalse(is_rate_limited("not_found"))
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path = Path(tmp) / "geocode_stop.db"
+            conn = sqlite3.connect(db_path)
+            conn.row_factory = sqlite3.Row
+            conn.executescript(
+                """
+                CREATE TABLE offender_records (location_text TEXT);
+                CREATE TABLE geocoded_locations (
+                  location_text TEXT,
+                  normalized_query TEXT,
+                  lat REAL,
+                  lng REAL,
+                  geocode_provider TEXT,
+                  confidence REAL,
+                  geocoded_at INTEGER,
+                  error TEXT
+                );
+                INSERT INTO offender_records VALUES ('中央北路三段');
+                INSERT INTO offender_records VALUES ('中正路');
+                """
+            )
+            conn.commit()
+            conn.close()
+
+            def connect_test_db():
+                test_conn = sqlite3.connect(db_path)
+                test_conn.row_factory = sqlite3.Row
+                return test_conn
+
+            with unittest.mock.patch.object(geocode_locations, "connect_db", side_effect=connect_test_db), unittest.mock.patch.object(
+                geocode_locations, "geocode", return_value=(None, None, None, "HTTP Error 429: Too many requests")
+            ) as geocode_mock, unittest.mock.patch.object(geocode_locations, "now_ms", return_value=456), unittest.mock.patch.object(
+                geocode_locations.time, "sleep"
+            ) as sleep_mock, unittest.mock.patch.object(geocode_locations, "log_import"):
+                self.assertEqual(geocode_pending(delay_seconds=0), 1)
+
+            geocode_mock.assert_called_once()
+            sleep_mock.assert_not_called()
 
     def test_initial_seed_inserts_public_pdf_records_without_photos(self):
         with tempfile.TemporaryDirectory() as tmp:
