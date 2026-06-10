@@ -27,11 +27,13 @@ npm run seed:geocode
 
 `npm run seed:initial` 會匯入內建起始資料，來源是 115.04.22 與 115.05.27 臺北市交通局公開 PDF 公告。它只保存解析後資料列，不包含原始 PDF binaries 或照片。
 
+`npm run seed:geocode` 會匯入 `data/seed/geocoded_locations.json`。目前 committed seed 已包含所有 bundled starter locations 的 approximate local-demo coordinates，讓公開 demo 部署後可立即顯示 map。
+
 ## Admin UI
 
 啟動 app 前，將 `ADMIN_TOKEN` 設為非預設 secret，然後開啟 `/admin`。Admin import routes 與 import logs 都需要 `x-admin-token` header。未設定 token 或使用 `change-me` 會被拒絕。
 
-部署環境匯入 PDF 後，請在 `/admin` 執行「Generate Map Coordinates」以填入 `geocoded_locations`。Map tab 只顯示有快取座標的地點。這個動作會對尚未 geocode 或先前失敗的地點逐筆呼叫 Nominatim，遵守 delay 設定，且只送出地點文字。
+部署環境匯入額外 PDF 後，請在 `/admin` 執行「Generate Map Coordinates」以填入新地點的 `geocoded_locations`。Map tab 只顯示有快取座標的地點。這個動作會對尚未 geocode 或先前失敗的地點逐筆呼叫 Nominatim，遵守 delay 設定，且只送出地點文字。
 
 如果 logs 出現 `HTTP Error 429: Too many requests`，請停止並等待後再重試。Render shared outbound IP 可能觸發 Nominatim rate limit。請使用小批次，例如 limit `5`、delay `10` 秒。Geocoder 會在第一個 429 後停止當前 batch，並在下次執行時重試該地點。
 

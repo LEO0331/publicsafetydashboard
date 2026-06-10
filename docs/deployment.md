@@ -77,9 +77,9 @@ The Docker image starts with:
 sh scripts/start-render.sh
 ```
 
-That script creates local data directories, runs `npm run db:migrate`, seeds the bundled starter dataset if the records table is empty, then starts Next.js on Render's `$PORT`.
+That script creates local data directories, runs `npm run db:migrate`, seeds the bundled starter dataset if the records table is empty, imports the committed geocode cache, then starts Next.js on Render's `$PORT`.
 
-After importing PDFs on Render, open `/admin`, enter `ADMIN_TOKEN`, and run **Generate Map Coordinates**. Imported records do not automatically have latitude/longitude; the map uses only cached rows in `geocoded_locations`.
+The committed geocode cache includes approximate demo coordinates for all bundled starter locations, so the public demo map can show grouped locations after startup. After importing additional PDFs on Render, open `/admin`, enter `ADMIN_TOKEN`, and run **Generate Map Coordinates** for new locations. Imported records do not automatically have latitude/longitude; the map uses only cached rows in `geocoded_locations`.
 
 On Render free, Nominatim may return `429 Too many requests` because Render uses shared outbound IPs. The preferred free workflow is to geocode locally, run `npm run export:geocode`, commit `data/seed/geocoded_locations.json`, and redeploy. Startup imports that cache with `scripts/seed_geocode_cache.py`.
 

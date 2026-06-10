@@ -94,7 +94,9 @@ python3 scripts/import_pdf.py --file ./path/to/file.pdf
 
 ## Map Coordinates
 
-The map needs cached coordinates in `geocoded_locations`. Imported PDF records do not automatically have latitude/longitude.
+The bundled starter dataset includes a local demo geocode cache for all starter locations, so the deployed demo map can render grouped location circles without calling Nominatim from Render.
+
+The map uses cached coordinates in `geocoded_locations`. Imported PDF records do not automatically have latitude/longitude.
 
 Local geocoding:
 

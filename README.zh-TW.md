@@ -94,7 +94,9 @@ python3 scripts/import_pdf.py --file ./path/to/file.pdf
 
 ## 地圖座標
 
-地圖需要 `geocoded_locations` 中的快取座標。匯入 PDF 後只會產生資料列，不會自動產生經緯度。
+內建起始資料已包含所有 starter locations 的本機 demo geocode cache，因此部署後的 demo map 可以直接顯示 grouped location circles，不需要從 Render 呼叫 Nominatim。
+
+地圖使用 `geocoded_locations` 中的快取座標。匯入 PDF 後只會產生資料列，不會自動產生經緯度。
 
 本機 geocoding：
 

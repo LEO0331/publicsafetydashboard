@@ -239,3 +239,29 @@
 
 ### Next action
 - Rerun `./init.sh` with a supported Node runtime before final publish/merge, then commit the scoped app, test, and harness changes.
+
+## 2026-06-10 (Demo map geocode seed)
+
+### Current State
+- The bundled 50-record starter dataset now has a committed map coordinate cache for all unique starter locations.
+- The map still displays grouped locations with top-location folding; it does not show one marker per person.
+
+### Completed
+- Added 32 `local-demo-seed` cached coordinates to `data/seed/geocoded_locations.json`, covering every unique `locationText` in the starter records.
+- Added a unit regression that compares starter record locations against the geocode seed and verifies the seed inserts into a migrated SQLite database.
+- Updated public README and deployment/operations docs in English and Traditional Chinese to explain the demo geocode cache and Render behavior.
+
+### Verification evidence
+- `python3 -m json.tool data/seed/geocoded_locations.json` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:coverage` passed: Python tracked modules 83.23% line coverage; Node tracked files 97.83% line coverage.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:e2e` passed with elevated localhost permission: 8 Playwright tests.
+
+### Remaining risks / gaps
+- Demo coordinates are approximate road/landmark centroids for visualization, not authoritative geocoding results.
+- Additional imported PDFs still need `/admin` geocoding or a refreshed committed geocode cache.
+
+### Next action
+- Redeploy Render so startup runs `scripts/seed_geocode_cache.py` and imports the committed demo map cache.

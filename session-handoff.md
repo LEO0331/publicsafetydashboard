@@ -1,8 +1,8 @@
 # Session Handoff
 
-Last Updated: 2026-06-09
-Current Objective: keep the dashboard publish-ready while adding small, verified usability improvements such as frontend record pagination.
-Recommended Next Step: if continuing this branch, review the current git diff, then run `./init.sh` with a Node runtime that satisfies Next.js `>=20.9.0`.
+Last Updated: 2026-06-10
+Current Objective: keep the dashboard publish-ready and ensure the public demo map shows grouped starter locations after Render deployment.
+Recommended Next Step: redeploy Render after committing the current changes so startup imports the committed `data/seed/geocoded_locations.json` cache.
 
 ## Project
 
@@ -17,6 +17,7 @@ Recommended Next Step: if continuing this branch, review the current git diff, t
 - Frontend supports Traditional Chinese by default and English via a persisted `localStorage` language toggle.
 - Map view uses a ranked/searchable grouped-location explorer with scaled circles instead of showing every location as equal-density pins.
 - Records API pagination is exposed in the frontend with a fixed page size, previous/next controls, and bilingual page summaries.
+- The bundled 50-record starter dataset has 32 approximate `local-demo-seed` cached map coordinates so Render can show the demo map without calling Nominatim.
 
 ## Start-Here Checklist
 
@@ -44,6 +45,7 @@ Recommended Next Step: if continuing this branch, review the current git diff, t
 
 - No active functional blocker.
 - Known dependency audit findings remain deferred to a dedicated dependency-upgrade pass.
+- Demo geocode coordinates are approximate visualization centroids, not authoritative location geocoding.
 
 ## Files
 
@@ -53,12 +55,16 @@ Recommended Next Step: if continuing this branch, review the current git diff, t
 - `e2e/dashboard-business-flow.spec.ts`: Traditional Chinese pagination UI regression.
 - `e2e/interactive-qa.spec.ts`: English pagination UI regression.
 - `AGENTS.md`, `feature_list.json`, `progress.md`, `session-handoff.md`: harness restart and evidence updates.
+- `data/seed/geocoded_locations.json`: committed demo geocode cache for bundled starter locations.
+- `README.md`, `README.zh-TW.md`, `docs/deployment*.md`, `docs/operations*.md`: demo map and Render geocode-cache documentation.
+- `tests/unit/test_ingestion.py`: geocode seed coverage and migrated SQLite insert regression.
 
 ## Next Session
 
 - Start by checking `git status --short`.
 - Ignore `.omx/` runtime state changes unless explicitly requested.
 - Run `./init.sh` before publishing or merging; run `npm run test:e2e` separately when UI behavior changes.
+- After deploy, open the Render URL, switch to the map tab, and verify the map shows grouped starter locations without running `/admin` geocoding.
 
 ## Completion Handoff Format
 

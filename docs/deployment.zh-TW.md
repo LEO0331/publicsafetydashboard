@@ -77,9 +77,9 @@ Docker image 啟動指令：
 sh scripts/start-render.sh
 ```
 
-該 script 會建立 local data directories、執行 `npm run db:migrate`、在 records table 為空時 seed bundled starter dataset，然後以 Render 的 `$PORT` 啟動 Next.js。
+該 script 會建立 local data directories、執行 `npm run db:migrate`、在 records table 為空時 seed bundled starter dataset、匯入 committed geocode cache，然後以 Render 的 `$PORT` 啟動 Next.js。
 
-Render 上匯入 PDFs 後，請開啟 `/admin`，輸入 `ADMIN_TOKEN`，執行 **Generate Map Coordinates**。Imported records 不會自動有 latitude/longitude；map 只使用 `geocoded_locations` 中已快取的 rows。
+Committed geocode cache 已包含所有 bundled starter locations 的 approximate demo coordinates，因此 public demo map 在 startup 後即可顯示 grouped locations。Render 上匯入額外 PDFs 後，請開啟 `/admin`，輸入 `ADMIN_TOKEN`，執行 **Generate Map Coordinates** 處理新地點。Imported records 不會自動有 latitude/longitude；map 只使用 `geocoded_locations` 中已快取的 rows。
 
 Render free 可能因 shared outbound IP 收到 Nominatim `429 Too many requests`。建議免費流程是在本機 geocode，執行 `npm run export:geocode`，commit `data/seed/geocoded_locations.json`，再 redeploy。Startup 會用 `scripts/seed_geocode_cache.py` 匯入該 cache。
 

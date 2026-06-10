@@ -27,11 +27,13 @@ npm run seed:geocode
 
 `npm run seed:initial` imports the bundled starter dataset parsed from the 115.04.22 and 115.05.27 Taipei DOT public PDF announcements. It stores parsed rows only; original PDF binaries/photos are not bundled.
 
+`npm run seed:geocode` imports `data/seed/geocoded_locations.json`. The committed seed contains approximate local-demo coordinates for all bundled starter locations so the public demo map is useful immediately after deployment.
+
 ## Admin UI
 
 Start the app, set `ADMIN_TOKEN` to a non-default secret value, then open `/admin`. Admin import routes and import logs require the `x-admin-token` header. Missing tokens and the placeholder value `change-me` are rejected.
 
-After importing PDFs in a deployed environment, run the `/admin` "Generate Map Coordinates" action to populate `geocoded_locations`. The map tab only shows places with cached coordinates. This action calls Nominatim once per ungeocoded or previously failed location, respects the configured delay, and sends only location text.
+After importing additional PDFs in a deployed environment, run the `/admin` "Generate Map Coordinates" action to populate `geocoded_locations` for new locations. The map tab only shows places with cached coordinates. This action calls Nominatim once per ungeocoded or previously failed location, respects the configured delay, and sends only location text.
 
 If logs show `HTTP Error 429: Too many requests`, stop and wait before retrying. Render shared outbound IPs can hit Nominatim limits. Use small batches, for example limit `5` and delay `10` seconds. The geocoder stops the current batch after the first 429 and will retry that failed location on the next run.
 

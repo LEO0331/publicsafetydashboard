@@ -1,6 +1,6 @@
 {
   "project": "Taipei Public Safety Dashboard",
-  "lastUpdated": "2026-06-09",
+  "lastUpdated": "2026-06-10",
   "activeFeatureId": null,
   "features": [
     {
@@ -211,6 +211,36 @@
       ],
       "evidence": [
         "harness-creator validate-harness -> 100/100",
+        "PATH=/opt/homebrew/bin:$PATH npm run lint -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm run typecheck -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm test -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm run test:coverage -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm run test:e2e -> pass with elevated localhost permission"
+      ]
+    },
+    {
+      "id": "F09",
+      "name": "Deployable demo map geocode cache",
+      "title": "Deployable demo map geocode cache",
+      "description": "Seed grouped map coordinates for the bundled 50-record starter dataset so the public Render demo map works without calling Nominatim.",
+      "priority": 9,
+      "status": "completed",
+      "dependsOn": [
+        "F05",
+        "F07"
+      ],
+      "dependencies": [
+        "F05",
+        "F07"
+      ],
+      "doneCriteria": [
+        "Committed geocode cache covers every unique starter record location",
+        "Map remains grouped by location instead of individual people",
+        "Render startup can import cached coordinates without Nominatim calls",
+        "Docs explain demo-cache behavior and approximate-coordinate limitation"
+      ],
+      "evidence": [
+        "python3 -m json.tool data/seed/geocoded_locations.json -> pass",
         "PATH=/opt/homebrew/bin:$PATH npm run lint -> pass",
         "PATH=/opt/homebrew/bin:$PATH npm run typecheck -> pass",
         "PATH=/opt/homebrew/bin:$PATH npm test -> pass",
