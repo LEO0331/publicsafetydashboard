@@ -71,7 +71,7 @@ ADMIN_TOKEN="<strong-secret>"
 
 ## Data Import
 
-Seed bundled starter records from two public Taipei DOT announcements:
+Seed bundled starter records from six public Taipei DOT announcements:
 
 ```bash
 npm run seed:initial
@@ -97,7 +97,7 @@ python3 scripts/import_pdf.py --file ./path/to/file.pdf
 
 ## Map Coordinates
 
-The bundled starter dataset includes a local demo geocode cache for all starter locations, so the deployed demo map can render grouped location circles without calling Nominatim from Render.
+The bundled starter dataset includes a local demo geocode cache for selected starter locations, so the deployed demo map can render grouped location circles without calling Nominatim from Render. Newly imported or newly seeded locations can be geocoded later from `/admin` or with `scripts/geocode_locations.py`.
 
 The map uses cached coordinates in `geocoded_locations`. Imported PDF records do not automatically have latitude/longitude.
 

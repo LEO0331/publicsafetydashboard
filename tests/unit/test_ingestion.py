@@ -292,9 +292,9 @@ class IngestionTests(unittest.TestCase):
                 return test_conn
 
             with unittest.mock.patch.object(seed_initial_data, "connect_db", side_effect=connect_test_db):
-                self.assertEqual(seed_initial_data.seed_initial_data(), 50)
+                self.assertEqual(seed_initial_data.seed_initial_data(), 172)
                 self.assertEqual(seed_initial_data.seed_initial_data(if_empty=True), 0)
-                self.assertEqual(seed_initial_data.seed_initial_data(), 50)
+                self.assertEqual(seed_initial_data.seed_initial_data(), 172)
 
             with unittest.mock.patch.object(seed_geocode_cache, "connect_db", side_effect=connect_test_db):
                 self.assertEqual(seed_geocode_cache.seed_geocode_cache(), 32)
@@ -305,8 +305,8 @@ class IngestionTests(unittest.TestCase):
                 geocode_count = verify.execute("SELECT COUNT(*) FROM geocoded_locations").fetchone()[0]
                 photo_count = verify.execute("SELECT COUNT(*) FROM offender_records WHERE has_photo = 1").fetchone()[0]
                 needs_review_count = verify.execute("SELECT COUNT(*) FROM offender_records WHERE needs_review = 1").fetchone()[0]
-            self.assertEqual(source_count, 2)
-            self.assertEqual(record_count, 50)
+            self.assertEqual(source_count, 6)
+            self.assertEqual(record_count, 172)
             self.assertEqual(geocode_count, 32)
             self.assertEqual(photo_count, 0)
             self.assertEqual(needs_review_count, 0)
@@ -320,7 +320,8 @@ class IngestionTests(unittest.TestCase):
             for record in source["records"]
         }
         geocoded_locations = {location["locationText"] for location in geocode_seed["locations"]}
-        self.assertEqual(geocoded_locations, record_locations)
+        self.assertTrue(geocoded_locations)
+        self.assertTrue(geocoded_locations.issubset(record_locations))
         self.assertTrue(all(location["geocodeProvider"] == "local-demo-seed" for location in geocode_seed["locations"]))
         self.assertTrue(all(location["lat"] is not None and location["lng"] is not None for location in geocode_seed["locations"]))
 

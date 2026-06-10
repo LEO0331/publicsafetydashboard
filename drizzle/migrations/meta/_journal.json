@@ -15,6 +15,13 @@
       "when": 1779953860573,
       "tag": "0001_known_taskmaster",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1781071091071,
+      "tag": "0002_odd_brother_voodoo",
+      "breakpoints": true
     }
   ]
 }

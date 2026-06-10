@@ -19,7 +19,9 @@ export const sources = sqliteTable(
   },
   (t) => ({
     publishedDateIdx: index("sources_published_date_idx").on(t.publishedDate),
-    parseStatusIdx: index("sources_parse_status_idx").on(t.parseStatus)
+    parseStatusIdx: index("sources_parse_status_idx").on(t.parseStatus),
+    hiddenPublishedDateIdx: index("sources_hidden_published_date_idx").on(t.isHidden, t.publishedDate),
+    hiddenDownloadedAtIdx: index("sources_hidden_downloaded_at_idx").on(t.isHidden, t.downloadedAt)
   })
 );
 
@@ -50,7 +52,11 @@ export const offenderRecords = sqliteTable(
     violationDateIdx: index("offender_records_violation_date_idx").on(t.violationDate),
     violationCountIdx: index("offender_records_violation_count_idx").on(t.violationCount),
     needsReviewIdx: index("offender_records_needs_review_idx").on(t.needsReview),
-    locationTextIdx: index("offender_records_location_text_idx").on(t.locationText)
+    locationTextIdx: index("offender_records_location_text_idx").on(t.locationText),
+    hiddenDateIdx: index("offender_records_hidden_date_idx").on(t.isHidden, t.violationDate),
+    hiddenCountIdx: index("offender_records_hidden_count_idx").on(t.isHidden, t.violationCount),
+    hiddenLocationIdx: index("offender_records_hidden_location_idx").on(t.isHidden, t.locationText),
+    hiddenReviewIdx: index("offender_records_hidden_review_idx").on(t.isHidden, t.needsReview, t.parserConfidence)
   })
 );
 

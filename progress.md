@@ -399,3 +399,42 @@
 ### Remaining risks / gaps
 - No dependency upgrades were attempted in this short-loop pass.
 - HTTP helper coverage is enough for current gates, but direct unit tests for `readJsonObject` can be added later if that helper grows.
+
+## 2026-06-10 (Scale indexes and expanded public PDF seed)
+
+### Current State
+- Starter data now covers six dated Taipei DOT public `公布名單` PDF announcements instead of two.
+- SQLite schema has additional composite indexes for common dashboard filters and admin review queues.
+
+### Completed
+- Added parsed records for official listing items:
+  - `115.03.25臺北市酒(毒)駕及拒測累犯公布名單`
+  - `115.02.25臺北市酒(毒)駕及拒測累犯公布名單`
+  - `115.01.28臺北市酒(毒)駕及拒測累犯公布名單`
+  - `114.12.24臺北市酒(毒)駕及拒測累犯公布名單`
+- Expanded `data/seed/initial_announcements.json` to 6 sources and 172 parsed records.
+- Added migration `0002_odd_brother_voodoo.sql` for visible-record/source indexes:
+  - `offender_records_hidden_date_idx`
+  - `offender_records_hidden_count_idx`
+  - `offender_records_hidden_location_idx`
+  - `offender_records_hidden_review_idx`
+  - `sources_hidden_published_date_idx`
+  - `sources_hidden_downloaded_at_idx`
+- Updated `getLocations()` so SQLite groups by `location_text` and aggregates count/date range before Node parses type breakdowns.
+- Updated seed tests, README, and architecture/operations docs for the expanded dataset.
+- Added root `dev.db` ignores and corrected local ignored `.env` to use `./drizzle/dev.db`.
+
+### Verification evidence
+- `PATH=/opt/homebrew/bin:$PATH SQLITE_PATH=./drizzle/dev.db npm run db:migrate` applied the new migration to the app DB.
+- `python3 scripts/seed_initial_data.py` seeded local DB with 6 sources and 172 records.
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:coverage` passed: Python tracked modules 83.23% line coverage; Node tracked files 97.61% line coverage.
+- `PATH=/opt/homebrew/bin:$PATH npm run build` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:e2e` passed: 9 Playwright tests.
+- `PATH=/opt/homebrew/bin:$PATH ./init.sh` passed, including lint, typecheck, test, and coverage gates.
+
+### Remaining risks / gaps
+- New PDF binaries were downloaded only to `/private/tmp` for parsing and were not committed; the project continues to commit parsed seed JSON only.
+- Attempted local Nominatim geocoding for new locations failed because the local Python SSL trust chain rejected the certificate. The committed demo geocode cache remains a selected approximate subset; additional coordinates can be generated later from a host with working CA trust or through `/admin`.

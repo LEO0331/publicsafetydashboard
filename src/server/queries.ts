@@ -197,37 +197,50 @@ export function getLocations() {
   const rows = sqlite
     .prepare(
       `
-      SELECT r.location_text, r.violation_types_json, r.violation_date, g.lat, g.lng
+      SELECT
+        r.location_text,
+        COUNT(*) AS count,
+        MIN(r.violation_date) AS dateMin,
+        MAX(r.violation_date) AS dateMax,
+        geocoded.lat,
+        geocoded.lng,
+        GROUP_CONCAT(COALESCE(r.violation_types_json, '[]'), char(10)) AS violationTypesJson
       FROM offender_records r
       JOIN sources s ON s.id = r.source_id
-      LEFT JOIN geocoded_locations g ON g.location_text = r.location_text
+      LEFT JOIN (
+        SELECT location_text, MAX(lat) AS lat, MAX(lng) AS lng
+        FROM geocoded_locations
+        GROUP BY location_text
+      ) geocoded ON geocoded.location_text = r.location_text
       WHERE r.is_hidden = 0 AND s.is_hidden = 0 AND r.location_text IS NOT NULL AND r.location_text != ''
+      GROUP BY r.location_text
+      ORDER BY count DESC, r.location_text ASC
       `
     )
-    .all() as { location_text: string; violation_types_json: string | null; violation_date: number | null; lat: number | null; lng: number | null }[];
-  const grouped = new Map<string, { location: string; count: number; lat: number | null; lng: number | null; dateMin: number | null; dateMax: number | null; types: Map<string, number> }>();
-  for (const row of rows) {
-    const item = grouped.get(row.location_text) ?? {
+    .all() as {
+    location_text: string;
+    count: number;
+    dateMin: number | null;
+    dateMax: number | null;
+    lat: number | null;
+    lng: number | null;
+    violationTypesJson: string | null;
+  }[];
+  return rows.map((row) => {
+    const types = new Map<string, number>();
+    for (const value of (row.violationTypesJson ?? "").split("\n")) {
+      for (const type of parseViolationTypes(value)) {
+        types.set(type, (types.get(type) ?? 0) + 1);
+      }
+    }
+    return {
       location: row.location_text,
-      count: 0,
+      count: row.count,
       lat: row.lat,
       lng: row.lng,
-      dateMin: null,
-      dateMax: null,
-      types: new Map<string, number>(),
+      dateMin: row.dateMin,
+      dateMax: row.dateMax,
+      types: Array.from(types.entries()).map(([type, count]) => ({ type, count })),
     };
-    item.count += 1;
-    if (row.violation_date) {
-      item.dateMin = item.dateMin ? Math.min(item.dateMin, row.violation_date) : row.violation_date;
-      item.dateMax = item.dateMax ? Math.max(item.dateMax, row.violation_date) : row.violation_date;
-    }
-    for (const type of parseViolationTypes(row.violation_types_json)) {
-      item.types.set(type, (item.types.get(type) ?? 0) + 1);
-    }
-    grouped.set(row.location_text, item);
-  }
-  return Array.from(grouped.values()).map((item) => ({
-    ...item,
-    types: Array.from(item.types.entries()).map(([type, count]) => ({ type, count })),
-  }));
+  });
 }

@@ -109,6 +109,8 @@ Accessibility 與 safety rules：
 系統優先考慮透明、低成本與教育用途，而不是 enterprise scaling。
 
 - SQLite 讓維運簡單，但 production durability 需要 persistent storage。Render free 因 filesystem ephemeral，只適合 demo。
+- 目前 schema 足以支援小型公開資料集與多年 local-first 使用。Dashboard 常用 filters 已針對 visible record date/count/location、source freshness 與 admin review queue 建立 indexes。
+- Location map aggregation 先由 SQLite 依 `location_text` 聚合，再由 Node 計算違規類型 breakdown，避免資料成長時每筆 offender record 都進入記憶體 map loop。
 - Python ingestion 提升解析可靠度，但增加雙語言 codebase；邊界限制在 `scripts/` 並用 tests 覆蓋。
 - Import-time cached geocoding 避免 privacy 與 latency 問題，但地圖需要先 seed 或 generate coordinates。
 - Public record display 需要謹慎 UX；本專案使用中性文字、grouped maps、source attribution、不預設人名搜尋、不顯示照片。

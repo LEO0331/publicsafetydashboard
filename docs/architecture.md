@@ -109,6 +109,8 @@ Map design intentionally avoids a pin wall. The map tab uses a ranked, searchabl
 The system favors transparency, low cost, and educational clarity over enterprise scaling.
 
 - SQLite keeps operations simple, but production durability requires persistent storage. Render free is demo-only because the filesystem is ephemeral.
+- The current schema is sized for small public datasets and multi-year local use. Common dashboard filters use indexes on visible record date/count/location fields, source freshness fields, and admin review queues.
+- Location map aggregation is performed by SQLite per `location_text` before Node computes type breakdowns, avoiding one in-memory map row per offender record as the dataset grows.
 - Python ingestion makes parsing more reliable, but introduces a two-language codebase. The boundary is kept inside `scripts/` and covered by tests.
 - Import-time cached geocoding avoids privacy and latency problems, but maps are empty until coordinates are seeded or generated.
 - Public record display requires careful UX. The app uses neutral wording, grouped maps, source attribution, no default name-search workflow, and no photo display.

@@ -36,9 +36,9 @@ npm run export:geocode
 npm run seed:geocode
 ```
 
-`npm run seed:initial` 會匯入由 115.04.22 與 115.05.27 臺北市交通局公開 PDF 公告解析出的 starter dataset。它只保存 parsed rows，不 bundled 原始 PDF binaries 或照片。
+`npm run seed:initial` 會匯入由六份臺北市交通局公開 PDF 公告解析出的 starter dataset：115.05.27、115.04.22、115.03.25、115.02.25、115.01.28、114.12.24。它只保存 parsed rows，不 bundled 原始 PDF binaries 或照片。
 
-`npm run seed:geocode` 會匯入 `data/seed/geocoded_locations.json`。Committed seed 內含 starter locations 的近似 demo coordinates，讓 public demo map 部署後即可使用。
+`npm run seed:geocode` 會匯入 `data/seed/geocoded_locations.json`。Committed seed 內含部分 starter locations 的近似 demo coordinates，讓 public demo map 部署後即可使用。其他 starter/imported locations 可之後透過 admin maintenance 補 geocode。
 
 ## Admin Operations
 
