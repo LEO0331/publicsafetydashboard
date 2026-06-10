@@ -128,17 +128,14 @@ Render startup imports that cache automatically through `scripts/seed_geocode_ca
 - Testing: Python `unittest`, Node test runner, Playwright, Lighthouse CI.
 - Deployment: Docker image published by GitHub Actions; Render-compatible startup script.
 
-See [Tech Stack Rationale](./docs/tech-stack.md) for why these choices fit this project.
+See [Architecture, Design, And Tradeoffs](./docs/architecture.md) for why these choices fit this project.
 
 ## Documentation
 
-- [Architecture](./docs/architecture.md)
-- [Tech Stack Rationale](./docs/tech-stack.md)
-- [Design](./docs/design.md)
-- [Testing](./docs/testing.md)
-- [Operations](./docs/operations.md)
-- [Deployment](./docs/deployment.md)
-- [Project Structure](./docs/project-structure.md)
+- [Architecture, Design, And Tradeoffs](./docs/architecture.md)
+- [Operations, Deployment, Testing, And Incidents](./docs/operations.md)
+- [Agent Harness](./docs/agent-harness.md)
+- [Resume Deep Dive Briefing](./docs/resume-deep-dive.md)
 - [Traditional Chinese Docs](./docs/README.zh-TW.md)
 
 ## API Endpoints

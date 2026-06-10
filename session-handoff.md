@@ -2,7 +2,7 @@
 
 Last Updated: 2026-06-10
 Current Objective: keep the dashboard publish-ready with data freshness, review summaries, CSV export, reversible admin hide/unhide, and grouped demo map support.
-Recommended Next Step: run `./init.sh` with a supported Node runtime, commit the current changes, then redeploy Render.
+Recommended Next Step: commit the current changes, redeploy Render, then schedule a dedicated dependency-upgrade pass for force-required audit findings.
 
 ## Project
 
@@ -20,6 +20,7 @@ Recommended Next Step: run `./init.sh` with a supported Node runtime, commit the
 - The bundled 50-record starter dataset has 32 approximate `local-demo-seed` cached map coordinates so Render can show the demo map without calling Nominatim.
 - Dashboard shows data freshness and rows needing review, and can export current public filters to CSV.
 - Admin page can inspect review rows and hide/unhide sources or records by toggling `is_hidden`; it never deletes records.
+- Code review fixes hardened CSV export, admin hide validation, source-based data freshness, and admin error handling.
 
 ## Start-Here Checklist
 
@@ -48,6 +49,7 @@ Recommended Next Step: run `./init.sh` with a supported Node runtime, commit the
 - No active functional blocker.
 - Known dependency audit findings remain deferred to a dedicated dependency-upgrade pass.
 - Demo geocode coordinates are approximate visualization centroids, not authoritative location geocoding.
+- `npm audit --audit-level=high` still reports 2 high advisories requiring breaking/force upgrades: `drizzle-orm` and Lighthouse/transitive `tmp`.
 
 ## Files
 
@@ -58,13 +60,14 @@ Recommended Next Step: run `./init.sh` with a supported Node runtime, commit the
 - `e2e/interactive-qa.spec.ts`: English pagination UI regression.
 - `AGENTS.md`, `feature_list.json`, `progress.md`, `session-handoff.md`: harness restart and evidence updates.
 - `data/seed/geocoded_locations.json`: committed demo geocode cache for bundled starter locations.
-- `README.md`, `README.zh-TW.md`, `docs/deployment*.md`, `docs/operations*.md`: demo map and Render geocode-cache documentation.
+- `README.md`, `README.zh-TW.md`, `docs/architecture*.md`, `docs/operations*.md`: consolidated architecture, deployment, testing, incident, and Render geocode-cache documentation.
 - `tests/unit/test_ingestion.py`: geocode seed coverage and migrated SQLite insert regression.
 - `src/server/queries.ts`: stats, export, review, source list, and hide/unhide helpers.
 - `app/api/records/export.csv/route.ts`: filtered CSV export route.
 - `app/api/admin/review/route.ts`, `app/api/admin/hide/route.ts`: token-protected admin review/correction routes.
 - `app/admin/page.tsx`, `src/components/Dashboard.tsx`, `src/components/LocationMap.tsx`, `src/components/uiLanguage.ts`: publish-readiness UI additions.
 - `docs/superpowers/plans/2026-06-10-publish-readiness-features.md`: implementation plan for this feature batch.
+- `package-lock.json`: non-force audit fix updated transitive resolutions and Next resolved patch version to 16.2.9.
 
 ## Next Session
 
@@ -72,6 +75,7 @@ Recommended Next Step: run `./init.sh` with a supported Node runtime, commit the
 - Ignore `.omx/` runtime state changes unless explicitly requested.
 - Run `./init.sh` before publishing or merging; run `npm run test:e2e` separately when UI behavior changes.
 - After deploy, open the Render URL, switch to the map tab, and verify the map shows grouped starter locations without running `/admin` geocoding.
+- Use CI/Docker Node 22 for release confidence. Local Homebrew Node 23 can run tests, but one dev dependency warns that Node 23 is outside its preferred engine range.
 
 ## Completion Handoff Format
 

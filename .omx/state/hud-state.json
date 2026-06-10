@@ -1,5 +1,5 @@
 {
-  "last_turn_at": "2026-06-10T00:49:26.054Z",
-  "turn_count": 48,
-  "last_agent_output": "Implemented the five publish-readiness features.\n\n**Added**\n- Data freshness card on dashboard:\n  - "
+  "last_turn_at": "2026-06-10T01:04:01.971Z",
+  "turn_count": 50,
+  "last_agent_output": "Implemented the cleanup.\n\n**What Changed**\n- Consolidated overlapping docs into:\n  - [docs/architect"
 }

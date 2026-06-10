@@ -295,3 +295,83 @@
 
 ### Next action
 - Run `./init.sh` with a supported Node runtime before committing, then redeploy Render.
+
+## 2026-06-10 (Whole-project code review fixes)
+
+### Current State
+- Whole-project code review completed after the publish-readiness feature batch.
+- No critical application defects remain in the reviewed code paths.
+
+### Completed
+- Hardened CSV export against spreadsheet formula injection by prefixing formula-like cell values before CSV escaping.
+- Tightened `/api/admin/hide` validation so `hidden` must be a real boolean; string values such as `"false"` no longer coerce to `true`.
+- Corrected data freshness so latest source dates are computed from visible sources, including visible sources with zero parsed rows.
+- Made admin action loading state fail-safe with `try/catch/finally`.
+- Ran non-force `npm audit fix`, which updated lockfile resolutions and reduced high advisories from 5 to 2. Next resolved to 16.2.9.
+
+### Verification evidence
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:coverage` passed: Python tracked modules 83.23% line coverage; Node tracked files 98.35% line coverage.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:e2e` passed with elevated localhost permission: 9 Playwright tests.
+- `PATH=/opt/homebrew/bin:$PATH npm audit --audit-level=high` still reports 2 high advisories requiring force/breaking upgrades.
+
+### Remaining risks / gaps
+- `drizzle-orm <0.45.2` high advisory remains; `npm audit` suggests `--force` and a breaking upgrade. Current app uses parameterized raw SQL and does not interpolate user-controlled identifiers, but this should still be handled in a dedicated dependency-upgrade pass.
+- `tmp <=0.2.5` high advisory remains through Lighthouse tooling; `npm audit` suggests force-downgrading `@lhci/cli`, so this also needs a dedicated toolchain upgrade/replacement pass.
+- Moderate advisories remain in dev/build tooling (`@hono/node-server` via Prisma optional tooling, esbuild via drizzle-kit, postcss via Next nested dependency, uuid via Lighthouse tooling).
+
+### Next action
+- Run `./init.sh` with a supported Node runtime, then commit and redeploy. Schedule a dedicated dependency-upgrade pass for Drizzle and Lighthouse tooling.
+
+## 2026-06-10 (Docs and root structure cleanup)
+
+### Current State
+- Docs folder was consolidated to reduce overlapping files while preserving English and Traditional Chinese coverage.
+- Root `.ts`, `.mjs`, `.cjs`, and `.json` config files were reviewed and intentionally left at the repository root because the relevant tools discover them there.
+
+### Completed
+- Merged architecture, design, project structure, tech-stack rationale, alternatives, and system-level tradeoffs into `docs/architecture.md` and `docs/architecture.zh-TW.md`.
+- Merged operations, deployment, testing, CI, geocoding maintenance, and incident response into `docs/operations.md` and `docs/operations.zh-TW.md`.
+- Updated docs indexes and root README links to point to the consolidated docs.
+- Removed redundant split documentation files after consolidation.
+- Updated `session-handoff.md` so future sessions reference the consolidated docs.
+
+### Verification evidence
+- Stale docs link scan passed for removed docs paths.
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run build` passed and produced expected static pages plus dynamic API routes.
+- `PATH=/opt/homebrew/bin:$PATH ./init.sh` passed, including lint, typecheck, test, and coverage gates.
+
+### Remaining risks / gaps
+- No runtime root config files were moved; moving them would require tool-specific config overrides and would increase deployment risk.
+- `.omx/` runtime state remains ignored for project cleanup decisions.
+
+## 2026-06-10 (Whole-project deslop pass)
+
+### Current State
+- Whole-project cleanup ran after docs consolidation and code-review fixes.
+- Existing behavior was locked before edits with lint, typecheck, and unit/integration tests.
+
+### Completed
+- Removed duplicated admin refresh logic in `app/admin/page.tsx` by centralizing log/review/source loading into one typed helper.
+- Kept admin JSON handling defensive so failed or malformed admin responses clear admin lists instead of throwing into the UI.
+- Added an invalid-pagination regression assertion for `/api/records` server query behavior.
+- Centralized positive integer parsing in `src/server/queries.ts` so invalid `page`/`pageSize` strings fall back safely instead of reaching SQLite as `NaN`.
+- Scanned app/source/test/script files for obvious debug leftovers, TODO markers, broad suppressions, and placeholder slop. No additional safe deletion targets were found.
+
+### Verification evidence
+- Regression test failed before the query fix with `SQLITE_MISMATCH`, confirming the pagination gap.
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:coverage` passed: Python tracked modules 83.23% line coverage; Node tracked files 98.39% line coverage.
+- `PATH=/opt/homebrew/bin:$PATH npm run build` passed and produced expected dynamic API routes.
+- `PATH=/opt/homebrew/bin:$PATH ./init.sh` passed, including lint, typecheck, test, and coverage gates.
+
+### Remaining risks / gaps
+- `PATH=/opt/homebrew/bin:$PATH npm audit --audit-level=high` still fails with 2 high advisories (`drizzle-orm`, `tmp` through Lighthouse tooling) plus moderate dev/build advisories. These require a separate dependency/toolchain upgrade pass because suggested fixes are breaking or force downgrades.
+- E2E was not rerun in this deslop pass because the edits are server pagination normalization and admin fetch refactoring already covered by integration tests and prior e2e coverage.

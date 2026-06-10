@@ -6,7 +6,8 @@ const headers = ["name", "violation_date", "violation_count", "violation_types",
 
 function csvCell(value: unknown) {
   const text = value === null || value === undefined ? "" : String(value);
-  return `"${text.replaceAll('"', '""')}"`;
+  const safeText = /^[=+\-@\t\r]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
 }
 
 function formatDateMs(value: unknown) {

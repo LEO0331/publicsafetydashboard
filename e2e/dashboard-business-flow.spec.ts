@@ -95,6 +95,12 @@ test.describe("核心業務流程", () => {
 
     const recordId = body.reviewItems[0].id;
     const sourceId = body.sources[0].id;
+    const invalidHidden = await request.post("/api/admin/hide", {
+      headers: { "x-admin-token": "e2e-secret" },
+      data: { target: "record", id: recordId, hidden: "false" },
+    });
+    expect(invalidHidden.status()).toBe(400);
+
     const hideRecord = await request.post("/api/admin/hide", {
       headers: { "x-admin-token": "e2e-secret" },
       data: { target: "record", id: recordId, hidden: true },

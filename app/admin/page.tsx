@@ -23,6 +23,40 @@ type SourceItem = {
   review_count: number;
 };
 
+type AdminData = {
+  logs: string[];
+  reviewItems: ReviewItem[];
+  sources: SourceItem[];
+};
+
+const emptyAdminData: AdminData = {
+  logs: [],
+  reviewItems: [],
+  sources: [],
+};
+
+async function jsonObject(response: Response): Promise<Record<string, unknown>> {
+  if (!response.ok) return {};
+  const body = await response.json().catch(() => ({}));
+  return body && typeof body === "object" && !Array.isArray(body) ? body : {};
+}
+
+async function loadAdminData(adminToken: string): Promise<AdminData> {
+  if (!adminToken) return emptyAdminData;
+
+  const [logsRes, reviewRes] = await Promise.all([
+    fetch("/api/import/logs", { headers: { "x-admin-token": adminToken } }),
+    fetch("/api/admin/review", { headers: { "x-admin-token": adminToken } }),
+  ]);
+  const [logsBody, reviewBody] = await Promise.all([jsonObject(logsRes), jsonObject(reviewRes)]);
+
+  return {
+    logs: Array.isArray(logsBody.logs) ? logsBody.logs : [],
+    reviewItems: Array.isArray(reviewBody.reviewItems) ? reviewBody.reviewItems : [],
+    sources: Array.isArray(reviewBody.sources) ? reviewBody.sources : [],
+  };
+}
+
 export default function AdminPage() {
   const { language, chooseLanguage } = usePersistedLanguage();
   const [token, setToken] = useState("");
@@ -33,53 +67,17 @@ export default function AdminPage() {
   const [isRunning, setIsRunning] = useState(false);
   const t = adminCopy[language];
 
-  async function loadLogs(adminToken = token) {
-    if (!adminToken) {
-      setLogs([]);
-      return;
-    }
-    const res = await fetch("/api/import/logs", {
-      headers: { "x-admin-token": adminToken },
-    });
-    const body = await res.json();
-    setLogs(Array.isArray(body.logs) ? body.logs : []);
-  }
-
-  async function loadReviewData(adminToken = token) {
-    if (!adminToken) {
-      setReviewItems([]);
-      setSources([]);
-      return;
-    }
-    const res = await fetch("/api/admin/review", {
-      headers: { "x-admin-token": adminToken },
-    });
-    if (!res.ok) {
-      setReviewItems([]);
-      setSources([]);
-      return;
-    }
-    const body = await res.json();
-    setReviewItems(Array.isArray(body.reviewItems) ? body.reviewItems : []);
-    setSources(Array.isArray(body.sources) ? body.sources : []);
+  function setAdminData(data: AdminData) {
+    setLogs(data.logs);
+    setReviewItems(data.reviewItems);
+    setSources(data.sources);
   }
 
   useEffect(() => {
     let cancelled = false;
-    async function load() {
-      if (!token) return;
-      const res = await fetch("/api/import/logs", {
-        headers: { "x-admin-token": token },
-      });
-      const [logsBody, reviewRes] = await Promise.all([res.json(), fetch("/api/admin/review", { headers: { "x-admin-token": token } })]);
-      const reviewBody = reviewRes.ok ? await reviewRes.json() : { reviewItems: [], sources: [] };
-      if (!cancelled) {
-        setLogs(Array.isArray(logsBody.logs) ? logsBody.logs : []);
-        setReviewItems(Array.isArray(reviewBody.reviewItems) ? reviewBody.reviewItems : []);
-        setSources(Array.isArray(reviewBody.sources) ? reviewBody.sources : []);
-      }
-    }
-    void load();
+    void loadAdminData(token).then((data) => {
+      if (!cancelled) setAdminData(data);
+    });
     return () => {
       cancelled = true;
     };
@@ -87,11 +85,15 @@ export default function AdminPage() {
 
   async function runImport(action: () => Promise<Response>) {
     setIsRunning(true);
-    const res = await action();
-    setMessage(await res.text());
-    await loadLogs();
-    await loadReviewData();
-    setIsRunning(false);
+    try {
+      const res = await action();
+      setMessage(await res.text());
+      setAdminData(await loadAdminData(token));
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Request failed");
+    } finally {
+      setIsRunning(false);
+    }
   }
 
   async function setHidden(target: "source" | "record", id: number, hidden: boolean) {

@@ -67,6 +67,9 @@ test("records query filters by violation count, type, location, and date", async
     VALUES (?, '4', '不應顯示', ?, '隱藏路段', '拒測第5次', 5, '["拒測"]', 1, 0)
     `
   ).run(hiddenSource.id, violationDate);
+  const emptyVisibleSource = db
+    .prepare("INSERT INTO sources (title, source_url, pdf_url, published_date, downloaded_at, parse_status) VALUES (?, ?, ?, ?, ?, ?) RETURNING id")
+    .get("剛匯入但無資料列公告", "https://example.test/empty", "https://example.test/empty.pdf", violationDate + 172800000, downloadedAt + 172800000, "parsed");
   db.close();
 
   const { getAdminSources, getExportRecords, getLocations, getRecords, getReviewItems, getStats, setRecordHidden, setSourceHidden } = await import("../../.tmp-test/queries.js");
@@ -87,6 +90,11 @@ test("records query filters by violation count, type, location, and date", async
   assert.equal(capped.pageSize, 100);
   assert.equal(capped.rows.some((row) => row.name === "隱藏個案"), false);
 
+  const invalidPagination = getRecords({ page: "not-a-page", pageSize: "not-a-size" });
+  assert.equal(invalidPagination.page, 1);
+  assert.equal(invalidPagination.pageSize, 25);
+  assert.equal(invalidPagination.rows.length, 4);
+
   const secondPage = getRecords({ page: "2", pageSize: "2" });
   assert.equal(secondPage.total, 4);
   assert.equal(secondPage.page, 2);
@@ -98,10 +106,10 @@ test("records query filters by violation count, type, location, and date", async
 
   const stats = getStats();
   assert.equal(stats.totalRecords, 4);
-  assert.equal(stats.announcements, 2);
+  assert.equal(stats.announcements, 3);
   assert.equal(stats.needsReview, 1);
-  assert.equal(stats.latestPublishedDate, violationDate + 86400000);
-  assert.equal(stats.latestDownloadedAt, downloadedAt + 86400000);
+  assert.equal(stats.latestPublishedDate, violationDate + 172800000);
+  assert.equal(stats.latestDownloadedAt, downloadedAt + 172800000);
   assert.equal(stats.topLocations.some((item) => item.location === "隱藏路段"), false);
   assert.deepEqual(
     stats.byType.sort((a, b) => a.type.localeCompare(b.type)),
@@ -127,8 +135,9 @@ test("records query filters by violation count, type, location, and date", async
   assert.equal(reviewItems[0].name, "格式待查");
 
   const adminSources = getAdminSources();
-  assert.equal(adminSources.length, 3);
+  assert.equal(adminSources.length, 4);
   assert.equal(adminSources.find((item) => item.id === secondSource.id).review_count, 1);
+  assert.equal(adminSources.find((item) => item.id === emptyVisibleSource.id).record_count, 0);
 
   assert.equal(setRecordHidden(reviewItems[0].id, true), 1);
   assert.equal(getReviewItems().length, 0);

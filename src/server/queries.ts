@@ -25,6 +25,11 @@ function parseViolationTypes(value: string | null): string[] {
   }
 }
 
+function positiveInt(value: string | null | undefined, fallback: number) {
+  const parsed = Number(value ?? fallback);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
 function baseRecordWhere(filters: RecordFilters) {
   const where = ["r.is_hidden = 0", "s.is_hidden = 0"];
   const params: Record<string, unknown> = {};
@@ -58,8 +63,8 @@ function baseRecordWhere(filters: RecordFilters) {
 }
 
 export function getRecords(filters: RecordFilters) {
-  const page = Math.max(Number(filters.page ?? 1), 1);
-  const pageSize = Math.min(Math.max(Number(filters.pageSize ?? 25), 1), 100);
+  const page = positiveInt(filters.page, 1);
+  const pageSize = Math.min(positiveInt(filters.pageSize, 25), 100);
   const { where, params } = baseRecordWhere(filters);
   const total = sqlite.prepare(`SELECT COUNT(*) AS count FROM offender_records r JOIN sources s ON s.id = r.source_id WHERE ${where}`).get(params) as { count: number };
   const rows = sqlite
@@ -98,17 +103,25 @@ export function getStats() {
   const totalRecords = (sqlite.prepare(`SELECT COUNT(*) AS count ${visibleJoin}`).get() as { count: number }).count;
   const announcements = (sqlite.prepare("SELECT COUNT(*) AS count FROM sources WHERE is_hidden = 0").get() as { count: number }).count;
   const needsReview = (sqlite.prepare(`SELECT COUNT(*) AS count ${visibleJoin} AND r.needs_review = 1`).get() as { count: number }).count;
-  const freshness = sqlite
+  const sourceFreshness = sqlite
     .prepare(
       `
       SELECT
-        MAX(s.published_date) AS latestPublishedDate,
-        MAX(s.downloaded_at) AS latestDownloadedAt,
-        MAX(r.updated_at) AS latestRecordUpdatedAt
+        MAX(published_date) AS latestPublishedDate,
+        MAX(downloaded_at) AS latestDownloadedAt
+      FROM sources
+      WHERE is_hidden = 0
+      `
+    )
+    .get() as { latestPublishedDate: number | null; latestDownloadedAt: number | null };
+  const recordFreshness = sqlite
+    .prepare(
+      `
+      SELECT MAX(r.updated_at) AS latestRecordUpdatedAt
       ${visibleJoin}
       `
     )
-    .get() as { latestPublishedDate: number | null; latestDownloadedAt: number | null; latestRecordUpdatedAt: number | null };
+    .get() as { latestRecordUpdatedAt: number | null };
   const byCount = sqlite
     .prepare(`SELECT r.violation_count AS value, COUNT(*) AS count ${visibleJoin} GROUP BY r.violation_count ORDER BY r.violation_count`)
     .all();
@@ -128,7 +141,8 @@ export function getStats() {
     totalRecords,
     announcements,
     needsReview,
-    ...freshness,
+    ...sourceFreshness,
+    ...recordFreshness,
     byCount,
     byType: Array.from(byType.entries()).map(([type, count]) => ({ type, count })),
     topLocations,

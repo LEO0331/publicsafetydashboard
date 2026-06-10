@@ -1,4 +1,4 @@
-# 維運
+# 維運、部署、測試與 Incident Response
 
 ## 本機設定
 
@@ -6,16 +6,27 @@
 npm install
 python3 -m pip install -r requirements.txt
 npm run db:migrate
+npm run seed:initial
 npm run dev
 ```
 
-## 匯入指令
+Dashboard 開在 `http://localhost:3000`，管理頁開在 `http://localhost:3000/admin`。
+
+使用匯入功能前，請設定非預設 admin token：
+
+```bash
+ADMIN_TOKEN="<strong-secret>"
+```
+
+`ADMIN_TOKEN=change-me` 會被系統拒絕。
+
+## 匯入與維護指令
 
 ```bash
 python3 scripts/crawl_sources.py
 python3 scripts/import_pdf.py --url "<PDF_URL>"
 python3 scripts/import_pdf.py --file ./path/to/file.pdf
-python3 scripts/geocode_locations.py
+python3 scripts/geocode_locations.py --limit 5 --delay 10
 python3 scripts/export_geocode_cache.py
 python3 scripts/seed_geocode_cache.py
 python3 scripts/rebuild_all.py
@@ -25,43 +36,202 @@ npm run export:geocode
 npm run seed:geocode
 ```
 
-`npm run seed:initial` 會匯入內建起始資料，來源是 115.04.22 與 115.05.27 臺北市交通局公開 PDF 公告。它只保存解析後資料列，不包含原始 PDF binaries 或照片。
+`npm run seed:initial` 會匯入由 115.04.22 與 115.05.27 臺北市交通局公開 PDF 公告解析出的 starter dataset。它只保存 parsed rows，不 bundled 原始 PDF binaries 或照片。
 
-`npm run seed:geocode` 會匯入 `data/seed/geocoded_locations.json`。目前 committed seed 已包含所有 bundled starter locations 的 approximate local-demo coordinates，讓公開 demo 部署後可立即顯示 map。
+`npm run seed:geocode` 會匯入 `data/seed/geocoded_locations.json`。Committed seed 內含 starter locations 的近似 demo coordinates，讓 public demo map 部署後即可使用。
 
-## Admin UI
+## Admin Operations
 
-啟動 app 前，將 `ADMIN_TOKEN` 設為非預設 secret，然後開啟 `/admin`。Admin import routes 與 import logs 都需要 `x-admin-token` header。未設定 token 或使用 `change-me` 會被拒絕。
+`/admin` 頁支援：
 
-管理頁也會顯示需要 parser review 的資料列與近期匯入 sources。Source correction 或移除時請使用 hide/unhide；這只會更新 `is_hidden`，不會刪除資料。
+- 爬取臺北市交通局公告。
+- 匯入 PDF URL。
+- 上傳本機 PDF。
+- 產生 cached map coordinates。
+- 查看 parser/import logs。
+- 查看 `needsReview` rows。
+- 當 source 被修正或移除時，hide/unhide sources 或 records。
 
-部署環境匯入額外 PDF 後，請在 `/admin` 執行「Generate Map Coordinates」以填入新地點的 `geocoded_locations`。Map tab 只顯示有快取座標的地點。這個動作會對尚未 geocode 或先前失敗的地點逐筆呼叫 Nominatim，遵守 delay 設定，且只送出地點文字。
+Hide actions 只更新 flags，不刪除 rows，以保留 auditability。
 
-## CSV Export
+## CSV 匯出
 
-Dashboard 的 CSV export 使用與 `/api/records` 相同的公開 filters，並排除 hidden records/sources。匯出欄位只包含教育 UI 已顯示的 table fields。
+Dashboard CSV export 使用與 `/api/records` 相同的公開 filters，並排除 hidden records/sources。匯出的欄位只包含教育 UI 已顯示的資料。CSV cells 會經過 sanitization，避免在 spreadsheet tools 開啟時觸發 formula execution。
 
-如果 logs 出現 `HTTP Error 429: Too many requests`，請停止並等待後再重試。Render shared outbound IP 可能觸發 Nominatim rate limit。請使用小批次，例如 limit `5`、delay `10` 秒。Geocoder 會在第一個 429 後停止當前 batch，並在下次執行時重試該地點。
+## Geocoding 維運
 
-Render free 建議使用本機 geocoding：
+Geocoding 是 maintenance action，不是 page-load behavior。
+
+規則：
+
+- Query 格式是 `臺北市 {locationText}`。
+- 只送地點文字，不送姓名或違規事實。
+- 每個結果都 cache 到 `geocoded_locations`。
+- Nominatim 回傳 `429 Too many requests` 後，停止當前 batch。
+- Shared cloud hosts 使用小 batch 與長 delay。
+
+Render free 常使用 shared outbound IP，因此 map data 建議流程是：
 
 1. 在本機匯入相同 PDFs。
-2. 執行 `python3 scripts/geocode_locations.py --limit 5 --delay 10`，直到需要的地點都有快取座標。
+2. 執行 `python3 scripts/geocode_locations.py --limit 5 --delay 10`，直到需要的地點都有 cache。
 3. 執行 `npm run export:geocode`。
 4. Commit `data/seed/geocoded_locations.json`。
-5. 部署。Render startup 會執行 `scripts/seed_geocode_cache.py`，不需從 Render 呼叫 Nominatim。
+5. Deploy。Startup 會匯入 cache，不從 Render 呼叫 Nominatim。
 
-## Geocoding
+## Source Politeness
 
-Nominatim 只應在 import/maintenance flows 使用。Queries 會 normalize 成 `臺北市 {locationText}` 並快取在 SQLite。不要在 page load 時 geocode。
+Crawler 使用描述性 User-Agent、sequential requests 與 page delay。不要 bypass access controls，也不要 aggressively parallelize government site access。
 
-## 來源網站禮貌規則
+## 部署總覽
 
-Crawler requests 使用描述性 User-Agent、sequential requests 與頁面間 delay。不要繞過 access controls，也不要 aggressive parallelize 政府網站。
+完整系統應部署成 Docker/Node service，不是 static site。App 需要 Next.js API routes、SQLite、Python PDF parsing、uploads、logs、migrations 與 admin endpoints。
 
-## 已知風險
+建議 durable targets：
 
-- PDF table format 可能變動，需要人工 review。
-- PyMuPDF 可作為未來 fallback，但目前 parser path 是 `pdfplumber` 加 text fallback。
+- Render paid web service + persistent disk。
+- Fly.io volume。
+- Railway 或 VPS persistent filesystem。
+- 學校管理的 server 與 mounted storage。
+
+Render free 可作 demo，但 filesystem 是 ephemeral。SQLite data、uploaded PDFs 與 logs 可能在 restart 或 redeploy 後消失。
+
+## 必要環境變數
+
+```bash
+ADMIN_TOKEN="<strong-random-secret>"
+DATABASE_URL="file:./drizzle/dev.db"
+SQLITE_PATH="./drizzle/dev.db"
+NODE_ENV="production"
+```
+
+## GitHub Actions
+
+Workflows：
+
+- `.github/workflows/ci.yml`：lint、typecheck、unit/integration tests、coverage、Playwright e2e 與 Lighthouse CI。
+- `.github/workflows/deploy.yml`：`main` 通過 CI 後或手動 `workflow_dispatch` 時，build 並發布 Docker image 到 GitHub Container Registry。
+
+Published images：
+
+```text
+ghcr.io/<owner>/<repo>:latest
+ghcr.io/<owner>/<repo>:<commit-sha>
+```
+
+Dockerfile 安裝 build tools，因為 `better-sqlite3` 是 native addon。如果 `npm ci` fallback 到 `node-gyp`，需要 `make`、`gcc` 與 `g++`。
+
+## Render 部署
+
+建議 settings：
+
+```text
+Runtime: Docker
+Branch: main
+Instance type: Free for demo, paid for durable storage
+ADMIN_TOKEN: <strong random secret>
+SQLITE_PATH: ./drizzle/dev.db
+DATABASE_URL: file:./drizzle/dev.db
+NODE_ENV: production
+Start Command: leave blank; use the Dockerfile CMD
+```
+
+Docker image 以 `sh scripts/start-render.sh` 啟動。該 script 會建立 local data directories、跑 migrations、在 database 為空時 seed starter data、匯入 committed geocode cache，然後用 Render `$PORT` 啟動 Next.js。
+
+Durable Render deployment 請 attach persistent storage：
+
+```text
+/app/drizzle
+/app/data
+/app/logs
+```
+
+如果 Render deploy 以 status `127` 失敗，移除 custom Start Command overrides，讓 Render 使用 Dockerfile `CMD`。
+
+## 本機 Docker Run
+
+```bash
+docker build -t public-safety-dashboard .
+docker run --rm -p 3000:3000 \
+  -e ADMIN_TOKEN="<strong-secret>" \
+  -e SQLITE_PATH="./drizzle/dev.db" \
+  -v "$PWD/drizzle:/app/drizzle" \
+  -v "$PWD/data:/app/data" \
+  -v "$PWD/logs:/app/logs" \
+  public-safety-dashboard
+```
+
+## 測試策略
+
+Layers：
+
+- Python unit tests：parser、crawler extraction、violation parsing、geocoder privacy、geocode cache、starter seeding。
+- Node integration tests：SQLite/API query behavior 與 admin token enforcement。
+- Playwright e2e：dashboard、filters、pagination、map、language persistence、admin auth 與 responsive checks。
+- Lighthouse CI：`/` 與 `/admin` 的 performance、accessibility、best practices、SEO gates。
+
+核心指令：
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run test:coverage
+npm run test:e2e
+npm run lighthouse:ci
+npm run build
+./init.sh
+```
+
+`npm run test:coverage` 對 tracked Python ingestion modules 與 Node server integration code 執行 80% coverage gate。E2E 與 Lighthouse 使用 deterministic fixture database，因此 CI 不依賴 live Taipei DOT pages 或 Nominatim。
+
+## Incident Response
+
+優先順序：
+
+1. 保護 privacy 與 public trust。
+2. 停止可能讓 incident 惡化的操作，例如 repeated imports 或 geocoding。
+3. 保留 evidence，但不要暴露 secrets。
+4. Source corrections 診斷期間，優先使用 reversible hiding，而不是 deletion。
+
+Severity guide：
+
+| Severity | Examples | Response |
+| --- | --- | --- |
+| SEV1 | Admin token leaked、unauthorized write、private data accidentally added、corrupted public data | Disable admin actions、rotate token、hide affected data、inspect logs/DB before re-enabling。 |
+| SEV2 | App down、database missing、migrations fail、map cache broken | Restore seed/cache、rerun migrations、redeploy known-good image、document data-loss scope。 |
+| SEV3 | Nominatim 429、parser quality regression、e2e/Lighthouse regression | Pause risky operation、use local cache/manual review、fix parser/UI、rerun tests。 |
+| SEV4 | Documentation typo 或 non-critical copy issue | Normal workflow 修正。 |
+
+First 10 minutes：
+
+1. 判斷 issue 影響 privacy、data integrity、availability 或只是 presentation。
+2. 若 crawler/geocoder/import loops 相關，先停止。
+3. 檢查 Render deploy logs、app logs 與 import logs。
+4. 確認 `ADMIN_TOKEN`、`SQLITE_PATH`、`DATABASE_URL`、`NODE_ENV`。
+5. 若 admin access 可疑，立即 rotate `ADMIN_TOKEN`。
+6. 診斷未完成前，hide affected records/sources，不要刪除。
+
+常見 incidents：
+
+- Render free data reset：重新 seed starter data 與 geocode cache，或移到 persistent storage。
+- Map empty after import：執行 admin geocode generation 或匯入 local geocode cache。
+- Nominatim 429：停止、等待、用更小 batch/delay 重試，或使用 local cache workflow。
+- PDF parser regression：保留 partial rows、為新 table shape 加 parser test、修 fallback logic、重新 import。
+- Admin token issue：設定或 rotate strong token、restart deployment、檢查 import logs。
+- Docker native addon failure：保留 Dockerfile 的 `build-essential`，並測試 Node base image changes。
+
+Evidence to capture：
+
+- Commit SHA 或 Docker image tag。
+- Render deploy/log timestamp。
+- 不含 secrets 的 import log excerpts。
+- Source PDF URL/title。
+- Exact command 或 admin action。
+- 受影響 `sources`、`offender_records`、`geocoded_locations` counts。
+
+## Known Risks
+
+- PDF table formats 可能改變，需要 parser updates/manual review。
 - Live import 與 geocoding 需要 network access，可能獨立於 dashboard 失敗。
-- Sandbox 環境中，本機 Lighthouse/e2e server startup 可能需要 localhost binding permission。
+- Render free 只適合 demo，因為沒有 persistent storage。
+- Multi-admin production version 應將 single admin token 升級成 real authentication 與 audit logs。
