@@ -4,6 +4,7 @@ import { mkdir } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { assertAdmin, runPythonScript } from "../../../../src/server/admin";
+import { jsonNoStore } from "../../../../src/server/http";
 
 export const runtime = "nodejs";
 
@@ -13,7 +14,7 @@ export async function POST(request: NextRequest) {
   const form = await request.formData();
   const file = form.get("file");
   if (!(file instanceof File)) {
-    return Response.json({ error: "file is required" }, { status: 400 });
+    return jsonNoStore({ error: "file is required" }, { status: 400 });
   }
   const uploadDir = path.join(process.cwd(), "data", "uploads");
   await mkdir(uploadDir, { recursive: true });
@@ -21,5 +22,5 @@ export async function POST(request: NextRequest) {
   const target = path.join(uploadDir, `${Date.now()}-${randomUUID()}${extension}`);
   await writeFile(target, Buffer.from(await file.arrayBuffer()));
   const result = await runPythonScript(["scripts/import_pdf.py", "--file", target, "--title", String(form.get("title") ?? "Local PDF import")]);
-  return Response.json(result);
+  return jsonNoStore(result);
 }

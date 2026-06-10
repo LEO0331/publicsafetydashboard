@@ -29,6 +29,7 @@ test.describe("核心業務流程", () => {
 
     const records = await request.get("/api/records?type=酒駕&violationCount=3%2B&location=忠孝&pageSize=10");
     expect(records.ok()).toBeTruthy();
+    expect(records.headers()["cache-control"]).toContain("no-store");
     const body = await records.json();
     expect(body.total).toBe(1);
     expect(body.rows[0].name).toBe("陳小安");
@@ -36,6 +37,7 @@ test.describe("核心業務流程", () => {
     const csv = await request.get("/api/records/export.csv?type=酒駕");
     expect(csv.ok()).toBeTruthy();
     expect(csv.headers()["content-type"]).toContain("text/csv");
+    expect(csv.headers()["cache-control"]).toContain("no-store");
     const csvBody = await csv.text();
     expect(csvBody).toContain('"name","violation_date"');
     expect(csvBody).toContain("王小明");
@@ -44,6 +46,7 @@ test.describe("核心業務流程", () => {
   test("地圖資料以地點群組呈現，不以個人為單位", async ({ page, request }) => {
     const locations = await request.get("/api/locations");
     expect(locations.ok()).toBeTruthy();
+    expect(locations.headers()["cache-control"]).toContain("no-store");
     const body = await locations.json();
     const zhongxiao = body.find((item: { location: string }) => item.location === "忠孝東路一段");
     expect(zhongxiao.count).toBe(2);
@@ -81,6 +84,7 @@ test.describe("核心業務流程", () => {
   test("匯入紀錄 API 未授權時不可讀取", async ({ request }) => {
     const logs = await request.get("/api/import/logs");
     expect(logs.status()).toBe(401);
+    expect(logs.headers()["cache-control"]).toContain("no-store");
   });
 
   test("管理端可讀取待檢查資料並可 reversibly hide record/source", async ({ request }) => {
@@ -89,6 +93,7 @@ test.describe("核心業務流程", () => {
 
     const review = await request.get("/api/admin/review", { headers: { "x-admin-token": "e2e-secret" } });
     expect(review.ok()).toBeTruthy();
+    expect(review.headers()["cache-control"]).toContain("no-store");
     const body = await review.json();
     expect(body.reviewItems.length).toBe(1);
     expect(body.sources.length).toBe(2);
@@ -100,6 +105,14 @@ test.describe("核心業務流程", () => {
       data: { target: "record", id: recordId, hidden: "false" },
     });
     expect(invalidHidden.status()).toBe(400);
+    expect(invalidHidden.headers()["cache-control"]).toContain("no-store");
+
+    const invalidJsonImport = await request.post("/api/import/pdf-url", {
+      headers: { "content-type": "application/json", "x-admin-token": "e2e-secret" },
+      data: "{not-json",
+    });
+    expect(invalidJsonImport.status()).toBe(400);
+    expect(invalidJsonImport.headers()["cache-control"]).toContain("no-store");
 
     const hideRecord = await request.post("/api/admin/hide", {
       headers: { "x-admin-token": "e2e-secret" },

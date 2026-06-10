@@ -1,4 +1,5 @@
 import { getExportRecords } from "../../../../src/server/queries";
+import { noStoreHeaders } from "../../../../src/server/http";
 
 export const runtime = "nodejs";
 
@@ -52,9 +53,9 @@ export function GET(request: Request) {
   ].join("\n");
 
   return new Response(`\uFEFF${body}\n`, {
-    headers: {
+    headers: noStoreHeaders({
       "content-type": "text/csv; charset=utf-8",
       "content-disposition": 'attachment; filename="taipei-public-safety-records.csv"',
-    },
+    }),
   });
 }

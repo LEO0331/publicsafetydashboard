@@ -375,3 +375,27 @@
 ### Remaining risks / gaps
 - `PATH=/opt/homebrew/bin:$PATH npm audit --audit-level=high` still fails with 2 high advisories (`drizzle-orm`, `tmp` through Lighthouse tooling) plus moderate dev/build advisories. These require a separate dependency/toolchain upgrade pass because suggested fixes are breaking or force downgrades.
 - E2E was not rerun in this deslop pass because the edits are server pagination normalization and admin fetch refactoring already covered by integration tests and prior e2e coverage.
+
+## 2026-06-10 (Short-loop reliability upgrades)
+
+### Current State
+- Two bounded improvement loops were run after the project was already passing normal gates.
+- Scope stayed limited to API response hygiene and admin import request robustness.
+
+### Completed
+- Added `src/server/http.ts` with shared `jsonNoStore`, `noStoreHeaders`, and defensive JSON object parsing helpers.
+- Applied explicit `Cache-Control: no-store` to public dashboard APIs, CSV export, admin APIs, import logs, and admin authorization failures.
+- Hardened JSON import routes so malformed JSON or non-object bodies are handled through normal validation paths instead of surfacing as server errors.
+- Tightened `/api/import/pdf-url` validation so URL must be a non-empty string and title falls back only when it is not a usable string.
+- Added Playwright assertions that records, locations, CSV export, admin review, unauthorized logs, invalid hide, and malformed PDF URL import responses include `no-store`.
+
+### Verification evidence
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:e2e` passed: 9 Playwright tests.
+- `PATH=/opt/homebrew/bin:$PATH ./init.sh` passed, including lint, typecheck, test, and coverage gates.
+
+### Remaining risks / gaps
+- No dependency upgrades were attempted in this short-loop pass.
+- HTTP helper coverage is enough for current gates, but direct unit tests for `readJsonObject` can be added later if that helper grows.
