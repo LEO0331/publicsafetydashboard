@@ -26,3 +26,6 @@ test-results
 playwright-report
 .playwright-cli
 .lighthouseci
+.omx/logs/
+.omx/metrics.json
+.omx/state/

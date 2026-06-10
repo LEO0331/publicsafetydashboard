@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { assertAdmin, runPythonScript } from "../../../../src/server/admin";
-import { jsonNoStore, readJsonObject } from "../../../../src/server/http";
+import { boundedNumber, jsonNoStore, readJsonObject } from "../../../../src/server/http";
 
 export const runtime = "nodejs";
 
@@ -9,8 +9,8 @@ export async function POST(request: NextRequest) {
   if (unauthorized) return unauthorized;
   const body = await readJsonObject(request);
   const args = ["scripts/crawl_sources.py"];
-  if (body.maxPages) args.push("--max-pages", String(body.maxPages));
-  if (body.pageSize) args.push("--page-size", String(body.pageSize));
+  if (body.maxPages) args.push("--max-pages", String(Math.trunc(boundedNumber(body.maxPages, 1, 1, 20))));
+  if (body.pageSize) args.push("--page-size", String(Math.trunc(boundedNumber(body.pageSize, 20, 1, 200))));
   const result = await runPythonScript(args);
   return jsonNoStore(result);
 }

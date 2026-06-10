@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 const { assertAdmin } = await import("../../.tmp-test/admin.js");
+const { boundedNumber } = await import("../../.tmp-test/http.js");
 
 function requestWithToken(token) {
   const headers = new Headers();
@@ -36,4 +37,11 @@ test("admin auth accepts exact configured token", () => {
 
   const response = assertAdmin(requestWithToken("test-secret"));
   assert.equal(response, null);
+});
+
+test("bounded number helper clamps admin maintenance inputs", () => {
+  assert.equal(boundedNumber("10", 5, 1, 25), 10);
+  assert.equal(boundedNumber("0", 5, 1, 25), 1);
+  assert.equal(boundedNumber("999", 5, 1, 25), 25);
+  assert.equal(boundedNumber("not-a-number", 5, 1, 25), 5);
 });
