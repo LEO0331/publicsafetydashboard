@@ -470,3 +470,30 @@
 ### Remaining risks / gaps
 - PDF binaries were used only as temporary parser inputs in `/private/tmp/psd-pdfs` and were not committed.
 - Full historical backfill beyond the current first listing page remains a separate import/backfill task.
+
+## 2026-06-10 (PageSize=105 regular PDF seed expansion)
+
+### Current State
+- Starter data now includes all 91 matching regular announcement PDFs from the official `PageSize=105` listing.
+- Seed excludes the separate `三次以上且設籍本市者` subtype and includes regular `臺北市酒(毒)駕及拒測累犯公布名單`, `臺北市酒(毒)及拒測駕累犯公布名單`, and `臺北市酒駕累犯公布名單` files.
+
+### Completed
+- Downloaded the remaining 78 matching official PDFs to `/private/tmp/psd-pdfs-full` for parsing only.
+- Parsed all 78 additional PDFs with zero hard failures.
+- Expanded `data/seed/initial_announcements.json` to 91 sources and 2,357 parsed records.
+- Preserved 34 older-layout partial rows as `needsReview=true` instead of discarding them.
+- Re-seeded local `drizzle/dev.db` to 91 sources and 2,357 records.
+- Updated README, operations docs, and seed tests for the expanded PageSize=105 dataset.
+
+### Verification evidence
+- `python3 scripts/seed_initial_data.py` seeded local DB with 91 sources, 2,357 records, and 34 review rows.
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:coverage` passed: Python tracked modules 83.23% line coverage; Node tracked files 97.61% line coverage.
+- `PATH=/opt/homebrew/bin:$PATH npm run build` passed.
+- `PATH=/opt/homebrew/bin:$PATH ./init.sh` passed, including lint, typecheck, test, and coverage gates.
+
+### Remaining risks / gaps
+- PDF binaries remain temporary parser inputs only and are not committed.
+- 34 rows need manual review because older 111-year PDF layouts are less consistent; this is expected and visible through the existing admin review workflow.

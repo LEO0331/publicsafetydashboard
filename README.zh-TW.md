@@ -71,7 +71,7 @@ ADMIN_TOKEN="<strong-secret>"
 
 ## 匯入資料
 
-匯入內建起始資料，來源為目前列表第一頁 13 份同格式臺北市交通局公開公告：
+匯入內建起始資料，來源為 PageSize=105 列表中 91 份符合格式的臺北市交通局公開公告：
 
 ```bash
 npm run seed:initial
