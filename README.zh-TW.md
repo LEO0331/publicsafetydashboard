@@ -97,7 +97,7 @@ python3 scripts/import_pdf.py --file ./path/to/file.pdf
 
 ## 地圖座標
 
-內建起始資料已包含部分 starter locations 的本機 demo geocode cache，因此部署後的 demo map 可以直接顯示 grouped location circles，不需要從 Render 呼叫 Nominatim。新增匯入或新增 seed 的地點可之後從 `/admin` 或 `scripts/geocode_locations.py` 產生座標。
+內建起始資料已包含 490 個 unique starter locations 中 412 個地點的 geocode cache，因此部署後的 demo map 可以直接顯示 grouped location circles，不需要從 Render 呼叫 Nominatim。其餘 78 個多為較複雜的道路、路口或高架道路描述，Nominatim 未能解析，可之後人工檢視或重新 geocode。
 
 地圖使用 `geocoded_locations` 中的快取座標。匯入 PDF 後只會產生資料列，不會自動產生經緯度。
 
@@ -116,7 +116,7 @@ git commit -m "Seed geocoded map locations"
 git push
 ```
 
-Render 啟動時會自動執行 `scripts/seed_geocode_cache.py` 匯入快取座標，避免從 Render shared IP 呼叫 Nominatim。
+Render 啟動時會自動執行 `scripts/seed_geocode_cache.py` 匯入快取座標，讓 bundled starter map 不必從 Render shared IP 呼叫 Nominatim。
 
 ## 技術架構
 

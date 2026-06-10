@@ -97,7 +97,7 @@ python3 scripts/import_pdf.py --file ./path/to/file.pdf
 
 ## Map Coordinates
 
-The bundled starter dataset includes a local demo geocode cache for selected starter locations, so the deployed demo map can render grouped location circles without calling Nominatim from Render. Newly imported or newly seeded locations can be geocoded later from `/admin` or with `scripts/geocode_locations.py`.
+The bundled starter dataset includes a geocode cache for 412 of 490 unique starter locations, so the deployed demo map can render grouped location circles without calling Nominatim from Render. The remaining 78 locations are mostly complex road/intersection/freeway strings that Nominatim did not resolve and can be reviewed or geocoded later.
 
 The map uses cached coordinates in `geocoded_locations`. Imported PDF records do not automatically have latitude/longitude.
 
@@ -116,7 +116,7 @@ git commit -m "Seed geocoded map locations"
 git push
 ```
 
-Render startup imports that cache automatically through `scripts/seed_geocode_cache.py`, avoiding Nominatim calls from Render shared IPs.
+Render startup imports that cache automatically through `scripts/seed_geocode_cache.py`, avoiding Nominatim calls from Render shared IPs for the bundled starter map.
 
 ## Tech Stack
 

@@ -38,7 +38,7 @@ npm run seed:geocode
 
 `npm run seed:initial` 會匯入官方 `PageSize=105` 列表中 91 份符合格式的臺北市交通局公開 PDF 公告，範圍從 115.05.27 到 111.05.09。它包含一般 `臺北市酒(毒)駕及拒測累犯公布名單`、`臺北市酒(毒)及拒測駕累犯公布名單` 與 `臺北市酒駕累犯公布名單` 檔案，排除另外一種 `三次以上且設籍本市者` subtype，只保存 parsed rows，不 bundled 原始 PDF binaries 或照片。
 
-`npm run seed:geocode` 會匯入 `data/seed/geocoded_locations.json`。Committed seed 內含部分 starter locations 的近似 demo coordinates，讓 public demo map 部署後即可使用。其他 starter/imported locations 可之後透過 admin maintenance 補 geocode。
+`npm run seed:geocode` 會匯入 `data/seed/geocoded_locations.json`。Committed seed 內含 490 個 unique bundled starter locations 中 412 個由 Nominatim 解析出的座標，讓 public demo map 部署後即可使用。其餘 78 個未解析地點不放入 JSON cache，可之後透過 admin maintenance 重新嘗試或人工檢視。
 
 ## Admin Operations
 

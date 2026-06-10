@@ -42,6 +42,8 @@ test.describe("互動式 QA 檢查", () => {
     await expect(page.getByTestId("visible-record-count")).toHaveText("Showing 3 of 3 records, page 1 of 1");
     await expect(page.getByTestId("records-prev-page")).toBeDisabled();
     await expect(page.getByTestId("records-next-page")).toBeDisabled();
+    await expect(page.getByTestId("records-page-jump-input")).toBeDisabled();
+    await expect(page.getByTestId("records-page-jump-submit")).toBeDisabled();
     await expect(page.getByText("Drunk driving").first()).toBeVisible();
 
     await page.reload();

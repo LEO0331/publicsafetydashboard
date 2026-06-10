@@ -14,6 +14,8 @@ test.describe("核心業務流程", () => {
     await expect(page.getByTestId("needs-review-count")).toHaveText("1");
     await expect(page.getByTestId("records-prev-page")).toBeDisabled();
     await expect(page.getByTestId("records-next-page")).toBeDisabled();
+    await expect(page.getByTestId("records-page-jump-input")).toBeDisabled();
+    await expect(page.getByTestId("records-page-jump-submit")).toBeDisabled();
 
     await page.getByTestId("filter-type").selectOption("酒駕");
     await page.getByTestId("filter-violation-count").selectOption("3+");

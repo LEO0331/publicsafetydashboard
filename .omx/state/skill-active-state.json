@@ -3,9 +3,9 @@
   "active": true,
   "skill": "code-review",
   "keyword": "$code-review",
-  "phase": "reviewing",
+  "phase": "executing",
   "activated_at": "2026-06-10T00:56:27.940Z",
-  "updated_at": "2026-06-10T06:42:33.800Z",
+  "updated_at": "2026-06-10T07:10:58.421Z",
   "source": "keyword-detector",
   "input_lock": null
 }

@@ -70,6 +70,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [records, setRecords] = useState<RecordRow[]>([]);
   const [recordPage, setRecordPage] = useState(1);
+  const [pageJump, setPageJump] = useState("1");
   const [recordTotal, setRecordTotal] = useState(0);
   const [recordPageSize, setRecordPageSize] = useState(RECORD_PAGE_SIZE);
   const [locations, setLocations] = useState<LocationItem[]>([]);
@@ -108,6 +109,7 @@ export default function Dashboard() {
       setRecords(recordsBody.rows);
       setRecordTotal(recordsBody.total);
       setRecordPage(recordsBody.page);
+      setPageJump(String(recordsBody.page));
       setRecordPageSize(recordsBody.pageSize);
       setLocations(await locationsRes.json());
       setIsLoading(false);
@@ -129,6 +131,23 @@ export default function Dashboard() {
       dateTo: String(form.get("dateTo") ?? ""),
     });
     setRecordPage(1);
+    setPageJump("1");
+  }
+
+  function goToRecordPage(nextPage: number) {
+    const clampedPage = Math.min(Math.max(Math.trunc(nextPage), 1), totalRecordPages);
+    setRecordPage(clampedPage);
+    setPageJump(String(clampedPage));
+  }
+
+  function submitPageJump(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const requestedPage = Number(pageJump);
+    if (!Number.isFinite(requestedPage)) {
+      setPageJump(String(recordPage));
+      return;
+    }
+    goToRecordPage(requestedPage);
   }
 
   return (
@@ -298,9 +317,36 @@ export default function Dashboard() {
           </div>
           <div className="flex flex-wrap items-center gap-2 text-sm text-[var(--muted)]">
             <span data-testid="visible-record-count">{t.visibleRecords(records.length, recordTotal, recordPage, totalRecordPages)}</span>
+            <form onSubmit={submitPageJump} className="flex items-center gap-2">
+              <label htmlFor="record-page-jump" className="text-xs font-medium text-[var(--muted)]">
+                {t.goToPageLabel}
+              </label>
+              <input
+                id="record-page-jump"
+                type="number"
+                min={1}
+                max={totalRecordPages}
+                inputMode="numeric"
+                value={pageJump}
+                onChange={(event) => setPageJump(event.target.value)}
+                disabled={totalRecordPages <= 1 || isLoading}
+                aria-label={t.pageInputLabel}
+                className="focus-ring h-8 w-16 border border-[var(--line)] bg-white px-2 text-sm text-[var(--ink)] disabled:cursor-not-allowed disabled:opacity-40"
+                data-testid="records-page-jump-input"
+              />
+              {t.pageUnit ? <span className="text-xs font-medium text-[var(--muted)]">{t.pageUnit}</span> : null}
+              <button
+                type="submit"
+                disabled={totalRecordPages <= 1 || isLoading}
+                className="focus-ring border border-[var(--line)] bg-white px-3 py-1 text-xs font-medium text-[var(--ink)] transition hover:border-[var(--civic-green)] disabled:cursor-not-allowed disabled:opacity-40"
+                data-testid="records-page-jump-submit"
+              >
+                {t.goToPageButton}
+              </button>
+            </form>
             <button
               type="button"
-              onClick={() => setRecordPage((page) => Math.max(page - 1, 1))}
+              onClick={() => goToRecordPage(recordPage - 1)}
               disabled={recordPage <= 1 || isLoading}
               className="focus-ring border border-[var(--line)] bg-white px-3 py-1 text-xs font-medium text-[var(--ink)] transition hover:border-[var(--civic-green)] disabled:cursor-not-allowed disabled:opacity-40"
               data-testid="records-prev-page"
@@ -309,7 +355,7 @@ export default function Dashboard() {
             </button>
             <button
               type="button"
-              onClick={() => setRecordPage((page) => Math.min(page + 1, totalRecordPages))}
+              onClick={() => goToRecordPage(recordPage + 1)}
               disabled={recordPage >= totalRecordPages || isLoading}
               className="focus-ring border border-[var(--line)] bg-white px-3 py-1 text-xs font-medium text-[var(--ink)] transition hover:border-[var(--civic-green)] disabled:cursor-not-allowed disabled:opacity-40"
               data-testid="records-next-page"

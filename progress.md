@@ -497,3 +497,28 @@
 ### Remaining risks / gaps
 - PDF binaries remain temporary parser inputs only and are not committed.
 - 34 rows need manual review because older 111-year PDF layouts are less consistent; this is expected and visible through the existing admin review workflow.
+
+## 2026-06-10 (Expanded starter geocode cache)
+
+### Current State
+- Starter map data now includes cached coordinates for 412 of 490 unique starter locations from the 91-source seed dataset.
+- The local SQLite `geocoded_locations` table also records 78 unresolved Nominatim lookups, but the committed JSON cache exports only resolved coordinates with latitude and longitude.
+
+### Completed
+- Filled local `geocoded_locations` using location-only queries in the form `臺北市 {locationText}`.
+- Exported the resolved cache to `data/seed/geocoded_locations.json`.
+- Updated seed tests and public docs to reflect the 412 resolved / 78 unresolved split.
+
+### Verification evidence
+- Geocode fill completed with 490 processed locations, 412 successful coordinates, 78 not found, and 0 errors.
+- `python3 scripts/export_geocode_cache.py` exported 412 geocoded locations to `data/seed/geocoded_locations.json`.
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:coverage` passed: Python tracked modules 83.23% line coverage; Node tracked files 97.61% line coverage.
+- `PATH=/opt/homebrew/bin:$PATH npm run build` passed.
+- `PATH=/opt/homebrew/bin:$PATH ./init.sh` passed, including lint, typecheck, test, and coverage gates.
+
+### Remaining risks / gaps
+- Nominatim could not resolve 78 complex or ambiguous location strings; these should be retried conservatively or reviewed manually later.
+- The committed JSON cache contains only successful geocodes, so unresolved rows are not pre-seeded on new deployments.
