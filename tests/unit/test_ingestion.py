@@ -292,9 +292,9 @@ class IngestionTests(unittest.TestCase):
                 return test_conn
 
             with unittest.mock.patch.object(seed_initial_data, "connect_db", side_effect=connect_test_db):
-                self.assertEqual(seed_initial_data.seed_initial_data(), 172)
+                self.assertEqual(seed_initial_data.seed_initial_data(), 395)
                 self.assertEqual(seed_initial_data.seed_initial_data(if_empty=True), 0)
-                self.assertEqual(seed_initial_data.seed_initial_data(), 172)
+                self.assertEqual(seed_initial_data.seed_initial_data(), 395)
 
             with unittest.mock.patch.object(seed_geocode_cache, "connect_db", side_effect=connect_test_db):
                 self.assertEqual(seed_geocode_cache.seed_geocode_cache(), 32)
@@ -305,8 +305,8 @@ class IngestionTests(unittest.TestCase):
                 geocode_count = verify.execute("SELECT COUNT(*) FROM geocoded_locations").fetchone()[0]
                 photo_count = verify.execute("SELECT COUNT(*) FROM offender_records WHERE has_photo = 1").fetchone()[0]
                 needs_review_count = verify.execute("SELECT COUNT(*) FROM offender_records WHERE needs_review = 1").fetchone()[0]
-            self.assertEqual(source_count, 6)
-            self.assertEqual(record_count, 172)
+            self.assertEqual(source_count, 13)
+            self.assertEqual(record_count, 395)
             self.assertEqual(geocode_count, 32)
             self.assertEqual(photo_count, 0)
             self.assertEqual(needs_review_count, 0)

@@ -438,3 +438,35 @@
 ### Remaining risks / gaps
 - New PDF binaries were downloaded only to `/private/tmp` for parsing and were not committed; the project continues to commit parsed seed JSON only.
 - Attempted local Nominatim geocoding for new locations failed because the local Python SSL trust chain rejected the certificate. The committed demo geocode cache remains a selected approximate subset; additional coordinates can be generated later from a host with working CA trust or through `/admin`.
+
+## 2026-06-10 (Complete first-page same-format PDF seed)
+
+### Current State
+- Starter data now includes every same-format `公布名單` PDF visible on the current first page of the Taipei DOT listing.
+- The seed still excludes the separate `三次以上且設籍本市者` subtype to keep the starter dataset consistent.
+
+### Completed
+- Added parsed records for seven additional official PDFs:
+  - `114.11.26臺北市酒(毒)駕及拒測累犯公布名單`
+  - `114.11.12臺北市酒(毒)駕及拒測累犯公布名單`
+  - `114.10.22臺北市酒(毒)駕及拒測累犯公布名單`
+  - `114.10.08臺北市酒(毒)駕及拒測累犯公布名單`
+  - `114.09.24臺北市酒(毒)駕及拒測累犯公布名單`
+  - `114.09.10臺北市酒(毒)駕及拒測累犯公布名單`
+  - `114.08.27臺北市酒(毒)駕及拒測累犯公布名單`
+- Expanded `data/seed/initial_announcements.json` to 13 sources and 395 parsed records.
+- Re-seeded local `drizzle/dev.db` to 13 sources and 395 records.
+- Updated README, operations docs, and seed tests for the new source/record counts.
+
+### Verification evidence
+- Each added PDF parsed with zero `needsReview` rows.
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:coverage` passed: Python tracked modules 83.23% line coverage; Node tracked files 97.61% line coverage.
+- `PATH=/opt/homebrew/bin:$PATH npm run build` passed.
+- `PATH=/opt/homebrew/bin:$PATH ./init.sh` passed, including lint, typecheck, test, and coverage gates.
+
+### Remaining risks / gaps
+- PDF binaries were used only as temporary parser inputs in `/private/tmp/psd-pdfs` and were not committed.
+- Full historical backfill beyond the current first listing page remains a separate import/backfill task.

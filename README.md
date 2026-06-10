@@ -71,7 +71,7 @@ ADMIN_TOKEN="<strong-secret>"
 
 ## Data Import
 
-Seed bundled starter records from six public Taipei DOT announcements:
+Seed bundled starter records from 13 same-format public Taipei DOT announcements on the current first listing page:
 
 ```bash
 npm run seed:initial

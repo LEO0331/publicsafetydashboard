@@ -36,7 +36,7 @@ npm run export:geocode
 npm run seed:geocode
 ```
 
-`npm run seed:initial` imports the bundled starter dataset parsed from six Taipei DOT public PDF announcements: 115.05.27, 115.04.22, 115.03.25, 115.02.25, 115.01.28, and 114.12.24. It stores parsed rows only; original PDF binaries/photos are not bundled.
+`npm run seed:initial` imports the bundled starter dataset parsed from 13 same-format Taipei DOT public PDF announcements on the current first listing page, from 115.05.27 through 114.08.27. It excludes the separate `三次以上且設籍本市者` subtype and stores parsed rows only; original PDF binaries/photos are not bundled.
 
 `npm run seed:geocode` imports `data/seed/geocoded_locations.json`. The committed seed contains approximate local-demo coordinates for selected bundled starter locations so the public demo map works immediately after deployment. Additional starter/imported locations can be geocoded later through admin maintenance.
 

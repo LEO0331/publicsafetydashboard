@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "generatedFrom": "Taipei DOT public PDF announcements from the official 酒駕及拒測累犯公布專區 listing; seed stores parsed rows only, not PDF binaries or photos.",
+  "version": 3,
+  "generatedFrom": "Taipei DOT public PDF announcements from the official 酒駕及拒測累犯公布專區 first listing page; seed stores parsed rows only, not PDF binaries or photos.",
   "sources": [
     {
       "title": "115.05.27臺北市酒駕及拒測累犯公布名單",
@@ -3038,6 +3038,3867 @@
             "酒駕"
           ],
           "alcoholMgPerL": 0.15,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        }
+      ]
+    },
+    {
+      "title": "114.11.26臺北市酒(毒)駕及拒測累犯公布名單",
+      "sourceUrl": "https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170",
+      "pdfUrl": "https://www-ws.gov.taipei/Download.ashx?u=LzAwMS9VcGxvYWQvMzkwL3JlbGZpbGUvNTgyNDQvOTUwNDUyMy9lNzU5Y2Y5NS1jZjVhLTQ5NzYtOTY4ZS04OTE5YjdiOWExYmEucGRm&n=6Ie65YyX5biC56ysODXmrKHphZIo5q%2bSKemnleWPiuaLkua4rOe0r%2beKr%2bWFrOW4g%2bWQjeWWri5wZGY%3d&icon=.pdf",
+      "publishedDate": 1764115200000,
+      "contentHash": "aa54c6955dd1340e59eb19273a9c00a5de6df6913dd3f9493fb101a7fdcf9ce6",
+      "records": [
+        {
+          "sequenceNo": "1",
+          "name": "連志文",
+          "violationDate": 1741564800000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "塔城街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第3次以上違反第4 項規定（拒測）",
+          "violationCount": 3,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "2",
+          "name": "李許彰",
+          "violationDate": 1743724800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "建國北路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.61mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.61,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "3",
+          "name": "劉瀚文",
+          "violationDate": 1744243200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "洲美街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.46mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.46,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "4",
+          "name": "周鴻淞",
+          "violationDate": 1741478400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "大度路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上（毒駕）",
+          "violationCount": 3,
+          "violationTypes": [
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "5",
+          "name": "劉𦤶佑",
+          "violationDate": 1742601600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "堤頂大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.23mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.23,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "6",
+          "name": "陳柯霖",
+          "violationDate": 1742947200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "環河南路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.19mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "7",
+          "name": "許爾晏",
+          "violationDate": 1742947200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "金龍路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.39mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.39,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "8",
+          "name": "黃國峰",
+          "violationDate": 1743465600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "成功路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.25mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.25,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "9",
+          "name": "許哲瑋",
+          "violationDate": 1743724800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "華江橋機車道",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.39mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.39,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "10",
+          "name": "黃浩瑜",
+          "violationDate": 1743811200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "林森北路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.58mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.58,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "11",
+          "name": "蘇唐文",
+          "violationDate": 1744156800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "和平西路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.15mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.15,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "12",
+          "name": "廖家傑",
+          "violationDate": 1718064000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.28mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.28,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "13",
+          "name": "紀重維",
+          "violationDate": 1741651200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "華江橋機車道",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.69mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.69,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "14",
+          "name": "杜嘉泓",
+          "violationDate": 1741910400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.49mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.49,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "15",
+          "name": "陳首銘",
+          "violationDate": 1742083200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.50mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.5,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "16",
+          "name": "張永華",
+          "violationDate": 1742515200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "林森北路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.30mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.3,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "17",
+          "name": "萬勇龍",
+          "violationDate": 1742860800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "康寧路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.47mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.47,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "18",
+          "name": "龔展榮",
+          "violationDate": 1742947200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "延平北路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.24mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.24,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "19",
+          "name": "黃啓誌",
+          "violationDate": 1743033600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民族東路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.39mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.39,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "20",
+          "name": "劉雨青",
+          "violationDate": 1743033600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.35mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.35,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "21",
+          "name": "范聖章",
+          "violationDate": 1743120000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松仁路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.24mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.24,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "22",
+          "name": "張裕棠",
+          "violationDate": 1743120000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝東路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.81mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.81,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "23",
+          "name": "潘君瑋",
+          "violationDate": 1743206400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重陽路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.19mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "24",
+          "name": "蘇德光",
+          "violationDate": 1743206400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.32mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.32,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "25",
+          "name": "邱建文",
+          "violationDate": 1743552000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "堤頂大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.23mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.23,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "26",
+          "name": "賴秀昌",
+          "violationDate": 1743638400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "環河北路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.30mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.3,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "27",
+          "name": "張凱傑",
+          "violationDate": 1743724800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "潭美街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.25mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.25,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "28",
+          "name": "何俊德",
+          "violationDate": 1743724800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "信義路五段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.22mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.22,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "29",
+          "name": "賴金仁",
+          "violationDate": 1743811200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "健康路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.57mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.57,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "30",
+          "name": "魏詠倫",
+          "violationDate": 1743811200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "大業路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（1.72mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 1.72,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "31",
+          "name": "李雲翔",
+          "violationDate": 1743984000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中山南路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.39mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.39,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "32",
+          "name": "張世欣",
+          "violationDate": 1744070400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "堤頂大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.16mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.16,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "33",
+          "name": "高光寬",
+          "violationDate": 1744156800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "信義路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.33mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.33,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        }
+      ]
+    },
+    {
+      "title": "114.11.12臺北市酒(毒)駕及拒測累犯公布名單",
+      "sourceUrl": "https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170",
+      "pdfUrl": "https://www-ws.gov.taipei/Download.ashx?u=LzAwMS9VcGxvYWQvMzkwL3JlbGZpbGUvNTgyNDQvOTQ5ODc1Mi8yYTc1ZjVmNy04MWFhLTQ2ZDEtYWFlOS1jZmJkYWYwNDJhN2IucGRm&n=MTE0LjExLjEy6Ie65YyX5biC56ysODTmrKHphZIo5q%2bSKemnleWPiuaLkua4rOe0r%2beKr%2bWFrOW4g%2bWQjeWWri5wZGY%3d&icon=.pdf",
+      "publishedDate": 1762905600000,
+      "contentHash": "6490e3b847b7de9f58a77191ac73d34e5ab8a22f4d728aa98c997cbd6ca03b0f",
+      "records": [
+        {
+          "sequenceNo": "1",
+          "name": "孫國哲",
+          "violationDate": 1739232000000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "中華路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第3次以上違反第4 項規定（拒測）",
+          "violationCount": 3,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "2",
+          "name": "辜培原",
+          "violationDate": 1741132800000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "吉林路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第2次違反第4項規 定（拒測）",
+          "violationCount": 2,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "3",
+          "name": "連俊毅",
+          "violationDate": 1741305600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項第2次 （前1次酒駕、後1次毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕",
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "4",
+          "name": "宋大吉",
+          "violationDate": 1738886400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "崇仁路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項第2次 （前1次酒駕、後1次毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕",
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "5",
+          "name": "李尚儒",
+          "violationDate": 1741219200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松壽路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項第2次 （前1次酒駕、後1次毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕",
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "6",
+          "name": "呂哲瑋",
+          "violationDate": 1739923200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "安康路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.28mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.28,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "7",
+          "name": "陳清偉",
+          "violationDate": 1673568000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.19mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "8",
+          "name": "劉財富",
+          "violationDate": 1741651200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.45mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.45,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "9",
+          "name": "江秋驊",
+          "violationDate": 1740441600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中興橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.17mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.17,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "10",
+          "name": "林明德",
+          "violationDate": 1740528000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中正路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.53mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.53,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "11",
+          "name": "葉王德",
+          "violationDate": 1741478400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "金山南路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.29mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.29,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "12",
+          "name": "陳又嘉",
+          "violationDate": 1741392000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.24mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.24,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "13",
+          "name": "胥建彬",
+          "violationDate": 1741651200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民生東路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.20mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.2,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "14",
+          "name": "陳楷文",
+          "violationDate": 1741737600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "延平北路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.16mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.16,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "15",
+          "name": "蕭家宏",
+          "violationDate": 1741824000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "鄭州路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.41mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.41,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "16",
+          "name": "張杰祥",
+          "violationDate": 1740614400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.33mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.33,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "17",
+          "name": "許恭銘",
+          "violationDate": 1740614400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.31mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.31,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "18",
+          "name": "張伊慶",
+          "violationDate": 1741392000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "華江橋機車道",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.39mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.39,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "19",
+          "name": "李憶茹",
+          "violationDate": 1741737600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "萬板大橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.20mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.2,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "20",
+          "name": "李蓮杰",
+          "violationDate": 1740009600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "成功路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.43mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.43,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "21",
+          "name": "邱章平",
+          "violationDate": 1741564800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "南京東路六段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.28mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.28,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "22",
+          "name": "李興國",
+          "violationDate": 1742774400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "安康路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.25mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.25,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "23",
+          "name": "林峻功",
+          "violationDate": 1740355200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "環河北路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.24mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.24,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "24",
+          "name": "涂耀文",
+          "violationDate": 1740960000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "菁山路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.92mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.92,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "25",
+          "name": "戴士彥",
+          "violationDate": 1742428800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中央北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.44mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.44,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "26",
+          "name": "黃炫堯",
+          "violationDate": 1742860800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "銀光巷",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.25mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.25,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "27",
+          "name": "李宗隆",
+          "violationDate": 1741651200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "建國南路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.26mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.26,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "28",
+          "name": "王煥閎",
+          "violationDate": 1742083200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松江路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.32mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.32,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "29",
+          "name": "崔祖峰",
+          "violationDate": 1741478400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.58mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.58,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "30",
+          "name": "許由",
+          "violationDate": 1742774400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "和平東路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.24mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.24,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "31",
+          "name": "林家慶",
+          "violationDate": 1744329600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "新光路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.26mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.26,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "32",
+          "name": "林宏儒",
+          "violationDate": 1741737600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.44mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.44,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        }
+      ]
+    },
+    {
+      "title": "114.10.22臺北市酒(毒)駕及拒測累犯公布名單",
+      "sourceUrl": "https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170",
+      "pdfUrl": "https://www-ws.gov.taipei/Download.ashx?u=LzAwMS9VcGxvYWQvMzkwL3JlbGZpbGUvNTgyNDQvOTQ5MDY4My9mNWVjZjA3My0yOTJhLTQ2NzYtOGYyMi1kYzFhZmJkZmYyNDYucGRm&n=MTE0LjEwLjIy6Ie65YyX5biC6YWSKOavkinpp5Xlj4rmi5LmuKzntK%2fniq%2flhazluIPlkI3llq4ucGRm&icon=.pdf",
+      "publishedDate": 1761091200000,
+      "contentHash": "6242e477a35abbc279760213f8088bc07cbfd2319e53158a9c2508bfb959aae7",
+      "records": [
+        {
+          "sequenceNo": "1",
+          "name": "詹文雄",
+          "violationDate": 1733356800000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "市民大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第3次以上違反第4 項規定（拒測）",
+          "violationCount": 3,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "2",
+          "name": "林建全",
+          "violationDate": 1736121600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.26mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.26,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "3",
+          "name": "曾泉源",
+          "violationDate": 1738627200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.32mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.32,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "4",
+          "name": "鄭凱中",
+          "violationDate": 1740182400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "延平北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.43mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.43,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "5",
+          "name": "李忠耀",
+          "violationDate": 1740009600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.46mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.46,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "6",
+          "name": "林鉑喆",
+          "violationDate": 1740182400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.19mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "7",
+          "name": "陳立軒",
+          "violationDate": 1740700800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "堤外便道/民生- 市民",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.26mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.26,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "8",
+          "name": "吳定朋",
+          "violationDate": 1740787200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.28mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.28,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "9",
+          "name": "施宏達",
+          "violationDate": 1740182400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "成功路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.19mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "10",
+          "name": "呂和遇",
+          "violationDate": 1740700800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "堤頂大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.35mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.35,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "11",
+          "name": "王振賢",
+          "violationDate": 1740787200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "潭美街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.26mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.26,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "12",
+          "name": "吳吉興",
+          "violationDate": 1740787200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "成功路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.36mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.36,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "13",
+          "name": "游智穎",
+          "violationDate": 1731628800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "內湖路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項第2次 （前1次酒駕、後1次毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕",
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "14",
+          "name": "張哲愷",
+          "violationDate": 1742428800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民生東路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上 （第1次毒駕，後3次酒駕）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕",
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "15",
+          "name": "王冠諭",
+          "violationDate": 1739232000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中山北路二段",
+          "factText": "（0.25mg/L） 汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.66mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.25,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "16",
+          "name": "宋富名",
+          "violationDate": 1739923200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民族東路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.27mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.27,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "17",
+          "name": "張家瑜",
+          "violationDate": 1734825600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝東路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項第2次 （前1次酒駕、後1次毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕",
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "18",
+          "name": "盧秉志",
+          "violationDate": 1740009600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "和平東路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.38mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.38,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "19",
+          "name": "盧紀瑋",
+          "violationDate": 1740614400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "新生南路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.16mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.16,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "20",
+          "name": "許家瑜",
+          "violationDate": 1739491200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "大度路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.47mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.47,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "21",
+          "name": "郭振達",
+          "violationDate": 1740268800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "河美街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.96mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.96,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "22",
+          "name": "陳建安",
+          "violationDate": 1741046400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "立賢路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.57mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.57,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "23",
+          "name": "高於宣",
+          "violationDate": 1740700800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝東路五段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.49mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.49,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "24",
+          "name": "莊彥綸",
+          "violationDate": 1740873600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松仁路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.22mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.22,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "25",
+          "name": "陳彥丞",
+          "violationDate": 1740960000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松廉路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.37mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.37,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "26",
+          "name": "吳嘉宏",
+          "violationDate": 1740614400000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "富民路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第2次違反第4項規 定（拒測）",
+          "violationCount": 2,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "27",
+          "name": "邱能宏",
+          "violationDate": 1737763200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中興橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.49mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.49,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "28",
+          "name": "廖奕棋",
+          "violationDate": 1740614400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.21mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.21,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "29",
+          "name": "陳彥翔",
+          "violationDate": 1736208000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.25mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.25,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "30",
+          "name": "方福群",
+          "violationDate": 1736899200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.63mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.63,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "31",
+          "name": "陳金德",
+          "violationDate": 1722470400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中華路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內經測試檢定有吸食 毒品第2次 （毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "32",
+          "name": "侍靖恩",
+          "violationDate": 1739664000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "辛亥路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.25mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.25,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "33",
+          "name": "莊家瑋",
+          "violationDate": 1740960000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "塔悠路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.18mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.18,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        }
+      ]
+    },
+    {
+      "title": "114.10.08臺北市酒(毒)駕及拒測累犯公布名單",
+      "sourceUrl": "https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170",
+      "pdfUrl": "https://www-ws.gov.taipei/Download.ashx?u=LzAwMS9VcGxvYWQvMzkwL3JlbGZpbGUvNTgyNDQvOTQ4Mzc1My8wMWM0M2FlMi1kZDk5LTQ4ZTQtOGUwMS03YmZiZTc4NWNhZWMucGRm&n=MTE0LjEwLjA46Ie65YyX5biC56ysODLmrKHphZIo5q%2bSKemnleWPiuaLkua4rOe0r%2beKr%2bWFrOW4g%2bWQjeWWri5wZGY%3d&icon=.pdf",
+      "publishedDate": 1759881600000,
+      "contentHash": "cbcc4acc02e81f0b555cd07c21ee0240474f284fb2342a9de6b0108de7b1a2a1",
+      "records": [
+        {
+          "sequenceNo": "1",
+          "name": "連哲宏",
+          "violationDate": 1739404800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "承德路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.18mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.18,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "2",
+          "name": "邱春玲",
+          "violationDate": 1739491200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.19mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "3",
+          "name": "張育誠",
+          "violationDate": 1740096000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "鄭州路與西寧北 路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.18mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.18,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "4",
+          "name": "陳俊男",
+          "violationDate": 1740873600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "鄭州路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.16mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.16,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "5",
+          "name": "羅少華",
+          "violationDate": 1739577600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.18mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.18,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "6",
+          "name": "陳亞芝",
+          "violationDate": 1739836800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "鄭州路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.22mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.22,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "7",
+          "name": "莊仲翎",
+          "violationDate": 1739577600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "西昌街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.42mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.42,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "8",
+          "name": "林木發",
+          "violationDate": 1739318400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中興橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.23mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.23,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "9",
+          "name": "劉敏雄",
+          "violationDate": 1739491200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "梧州街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（1.22mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 1.22,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "10",
+          "name": "尤德宜",
+          "violationDate": 1739577600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "桂林路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.16mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.16,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "11",
+          "name": "游閔捷",
+          "violationDate": 1739923200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.22mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.22,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "12",
+          "name": "彭鉅程",
+          "violationDate": 1739664000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "安康路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.21mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.21,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "13",
+          "name": "王天賜",
+          "violationDate": 1741996800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "堤頂大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.41mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.41,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "14",
+          "name": "林俊興",
+          "violationDate": 1739664000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "潭美街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.19mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "15",
+          "name": "龍天文",
+          "violationDate": 1739836800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "南京東路六段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.52mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.52,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "16",
+          "name": "王志榮",
+          "violationDate": 1739664000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.27mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.27,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "17",
+          "name": "鄭凱中",
+          "violationDate": 1739750400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.20mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.2,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "18",
+          "name": "何登宇",
+          "violationDate": 1739923200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "承德路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.82mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.82,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "19",
+          "name": "鄭學鴻",
+          "violationDate": 1740873600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "和平西路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.38mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.38,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "20",
+          "name": "王漢文",
+          "violationDate": 1739664000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "安和路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.20mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.2,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "21",
+          "name": "陳建立",
+          "violationDate": 1739750400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "和平東路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.19mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "22",
+          "name": "莊盛全",
+          "violationDate": 1738454400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "樂群二路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.18mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.18,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "23",
+          "name": "黃洺軒",
+          "violationDate": 1739059200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中山北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.47mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.47,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "24",
+          "name": "塗家誠",
+          "violationDate": 1739750400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶南路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.35mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.35,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "25",
+          "name": "古叡",
+          "violationDate": 1740268800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "思源街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.23mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.23,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "26",
+          "name": "李佳哲",
+          "violationDate": 1738713600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "濱江街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.36mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.36,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "27",
+          "name": "徐勤智",
+          "violationDate": 1739491200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "南京東路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.64mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.64,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "28",
+          "name": "林承信",
+          "violationDate": 1741046400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道六段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項第2次 （前1次酒駕、後1次毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕",
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "29",
+          "name": "王義慶",
+          "violationDate": 1736121600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "信義路六段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.24mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.24,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "30",
+          "name": "連志瑩",
+          "violationDate": 1739491200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "木柵路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.15mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.15,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "31",
+          "name": "蘇楷中",
+          "violationDate": 1737072000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "承德路六段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.89mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.89,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "32",
+          "name": "邱冠群",
+          "violationDate": 1738972800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "研究院路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.51mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.51,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        }
+      ]
+    },
+    {
+      "title": "114.09.24臺北市酒(毒)駕及拒測累犯公布名單",
+      "sourceUrl": "https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170",
+      "pdfUrl": "https://www-ws.gov.taipei/Download.ashx?u=LzAwMS9VcGxvYWQvMzkwL3JlbGZpbGUvNTgyNDQvOTQ3NzMzNi9mNzVkZDkzZi1iZjIxLTRlZTEtOTAyZS1jZGI3NzY4N2Y5YjcucGRm&n=MTE0LjA5LjI06Ie65YyX5biC6YWSKOavkinpp5Xlj4rmi5LmuKzntK%2fniq%2flhazluIPlkI3llq4ucGRm&icon=.pdf",
+      "publishedDate": 1758672000000,
+      "contentHash": "d605ea2a205e3b4f0544266a4ca44375ba6d63301f7667bfeb3034ac442b5dd1",
+      "records": [
+        {
+          "sequenceNo": "1",
+          "name": "林子峰",
+          "violationDate": 1735862400000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "鄭州路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第2次違反第4項規 定（拒測）",
+          "violationCount": 2,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "2",
+          "name": "王興",
+          "violationDate": 1735948800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.23mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.23,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "3",
+          "name": "林銘松",
+          "violationDate": 1735948800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "延平北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.44mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.44,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "4",
+          "name": "陳璋賢",
+          "violationDate": 1736208000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "鄭州路與塔城街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.20mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.2,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "5",
+          "name": "許宏偉",
+          "violationDate": 1736640000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.29mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.29,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "6",
+          "name": "陳宗禧",
+          "violationDate": 1736812800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道一段與 承德路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.15mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.15,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "7",
+          "name": "劉正祥",
+          "violationDate": 1737590400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中興橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.21mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.21,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "8",
+          "name": "詹健賢",
+          "violationDate": 1739232000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "桂林路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.15mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.15,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "9",
+          "name": "樟仕昌",
+          "violationDate": 1736899200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "環河南路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.73mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.73,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "10",
+          "name": "黃承垚",
+          "violationDate": 1736985600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "華江橋機車道",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.26mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.26,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "11",
+          "name": "張鴻鈞",
+          "violationDate": 1737849600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.24mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.24,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "12",
+          "name": "謝其豐",
+          "violationDate": 1737849600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.40mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.4,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "13",
+          "name": "華培元",
+          "violationDate": 1736726400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "通北街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕)（ 0.17mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.17,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "14",
+          "name": "劉爾銘",
+          "violationDate": 1735776000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "長春路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.35mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.35,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "15",
+          "name": "羅祈煌",
+          "violationDate": 1735862400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民族東路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.43mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.43,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "16",
+          "name": "孫建祐",
+          "violationDate": 1736985600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "長安東路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.35mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.35,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "17",
+          "name": "邱國雄",
+          "violationDate": 1734825600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.19mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "18",
+          "name": "宋金翰",
+          "violationDate": 1737158400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中正路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.54mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.54,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "19",
+          "name": "趙家興",
+          "violationDate": 1738627200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.23mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.23,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "20",
+          "name": "陳忠利",
+          "violationDate": 1730505600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "辛亥路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內經測試檢定有吸食 毒品第2次（毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "21",
+          "name": "李建衡",
+          "violationDate": 1735516800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "臥龍街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內經測試檢定有吸食 毒品第2次（毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "22",
+          "name": "吳正一",
+          "violationDate": 1737417600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中華路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.19mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "23",
+          "name": "陳明容",
+          "violationDate": 1739491200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中華路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.21mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.21,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "24",
+          "name": "簡許原",
+          "violationDate": 1735862400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "堤頂大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.18mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.18,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "25",
+          "name": "李永致",
+          "violationDate": 1738454400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "南京東路六段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.52mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.52,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "26",
+          "name": "傅春喜",
+          "violationDate": 1737676800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "木柵路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.67mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.67,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "27",
+          "name": "張睿祐",
+          "violationDate": 1737849600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "木柵路五段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.30mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.3,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "28",
+          "name": "吳國榮",
+          "violationDate": 1735430400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "大度路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.26mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.26,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "29",
+          "name": "吳明樹",
+          "violationDate": 1737158400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "南京東路五段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.24mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.24,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "30",
+          "name": "王福森",
+          "violationDate": 1733270400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道八段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.25mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.25,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        }
+      ]
+    },
+    {
+      "title": "114.09.10臺北市酒(毒)駕及拒測累犯公布名單",
+      "sourceUrl": "https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170",
+      "pdfUrl": "https://www-ws.gov.taipei/Download.ashx?u=LzAwMS9VcGxvYWQvMzkwL3JlbGZpbGUvNTgyNDQvOTQ3MTMzNC84YjQxYjQ2MS03YWE3LTQ1M2ItYjUzOS1iMzYyMzA4MTY4MWIucGRm&n=MTE0LjA5LjEw6Ie65YyX5biC56ysODDmrKHphZIo5q%2bSKemnleWPiuaLkua4rOe0r%2beKr%2bWFrOW4g%2bWQjeWWri5wZGY%3d&icon=.pdf",
+      "publishedDate": 1757462400000,
+      "contentHash": "418f3fbd94c1e90d96cf8a908cb5aa99724d2e97efa120b4b5c44aa20cb86e2b",
+      "records": [
+        {
+          "sequenceNo": "1",
+          "name": "蔡世昌",
+          "violationDate": 1732752000000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "承德路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第2次違反第4項規 定（拒測）",
+          "violationCount": 2,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "2",
+          "name": "吳國輝",
+          "violationDate": 1735776000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "鄭州路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.29mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.29,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "3",
+          "name": "郭朝金",
+          "violationDate": 1731974400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上（酒駕） （0.22mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.22,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "4",
+          "name": "吳俊宏",
+          "violationDate": 1734048000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.27mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.27,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "5",
+          "name": "黃子豪",
+          "violationDate": 1733875200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.16mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.16,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "6",
+          "name": "曾泉源",
+          "violationDate": 1734566400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "鄭州路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.40mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.4,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "7",
+          "name": "李新添",
+          "violationDate": 1735516800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松江路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.19mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "8",
+          "name": "葉王德",
+          "violationDate": 1733961600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "長安東路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.34mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.34,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "9",
+          "name": "曹詠晨",
+          "violationDate": 1733961600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "北安路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.37mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.37,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "10",
+          "name": "劉建杰",
+          "violationDate": 1734134400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.32mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.32,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "11",
+          "name": "洪聖昊",
+          "violationDate": 1735084800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "林森北路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.50mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.5,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "12",
+          "name": "黃孝旭",
+          "violationDate": 1737504000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.19mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "13",
+          "name": "詹富雄",
+          "violationDate": 1726185600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "西藏路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內經測試檢定有吸食 毒品第2次（毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "14",
+          "name": "林柄均",
+          "violationDate": 1733616000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "華江橋機車道",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.21mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.21,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "15",
+          "name": "莊濟民",
+          "violationDate": 1733961600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "華江橋機車道",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.46mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.46,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "16",
+          "name": "黃裕翔",
+          "violationDate": 1729987200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "知行路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內經測試檢定有吸食 毒品第2次（毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "17",
+          "name": "蕭鉑翃",
+          "violationDate": 1734393600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "石牌路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.41mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.41,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "18",
+          "name": "黃世昌",
+          "violationDate": 1735344000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "大度路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.26mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.26,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "19",
+          "name": "盧振豐",
+          "violationDate": 1733616000000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "中正路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第2次違反第4項規 定（拒測）",
+          "violationCount": 2,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "20",
+          "name": "林其民",
+          "violationDate": 1734220800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.23mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.23,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "21",
+          "name": "林育志",
+          "violationDate": 1733875200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "辛亥路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.19mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "22",
+          "name": "洪朝和",
+          "violationDate": 1736294400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "興隆路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.41mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.41,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "23",
+          "name": "陳識景",
+          "violationDate": 1734652800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝東路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.42mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.42,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "24",
+          "name": "張振瑋",
+          "violationDate": 1735862400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "忠孝東路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.75mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.75,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "25",
+          "name": "吳俊發",
+          "violationDate": 1735344000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "堤頂大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.27mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.27,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "26",
+          "name": "陳人豪",
+          "violationDate": 1735603200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "安康路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.19mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "27",
+          "name": "宋岳林",
+          "violationDate": 1734307200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道五段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.50mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.5,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "28",
+          "name": "黃相達",
+          "violationDate": 1735603200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "五分街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.18mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.18,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "29",
+          "name": "廖專銘",
+          "violationDate": 1731801600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "西藏路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上（酒駕） （0.20mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.2,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "30",
+          "name": "連昱豪",
+          "violationDate": 1735344000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松壽路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.34mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.34,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "31",
+          "name": "李定煒",
+          "violationDate": 1734825600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "研究院路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.21mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.21,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        }
+      ]
+    },
+    {
+      "title": "114.08.27臺北市酒(毒)駕及拒測累犯公布名單",
+      "sourceUrl": "https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170",
+      "pdfUrl": "https://www-ws.gov.taipei/Download.ashx?u=LzAwMS9VcGxvYWQvMzkwL3JlbGZpbGUvNTgyNDQvOTQ2MzM2NS9kODIxNDJhMS0zN2RkLTQ3MTYtYjc5Yi1jOWQ5YTZjMzVmMmUucGRm&n=MTE0LjA4LjI36Ie65YyX5biC6YWSKOavkinpp5Xlj4rmi5LmuKzntK%2fniq%2flhazluIPlkI3llq4ucGRm&icon=.pdf",
+      "publishedDate": 1756252800000,
+      "contentHash": "52a2aa1c2a0233a724ed47ced8ce2fc928b72bd023d387a4827502e003b99e39",
+      "records": [
+        {
+          "sequenceNo": "1",
+          "name": "徐蓄寧",
+          "violationDate": 1735084800000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "長安東路一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第2次違反第4項規 定（拒測）",
+          "violationCount": 2,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "2",
+          "name": "張博盛",
+          "violationDate": 1731888000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松江路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上（酒駕） （0.33mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.33,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "3",
+          "name": "唐鎮緯",
+          "violationDate": 1733616000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松江路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.21mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.21,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "4",
+          "name": "洪偉智",
+          "violationDate": 1733702400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "林森北路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.87mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.87,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "5",
+          "name": "王瑞強",
+          "violationDate": 1730246400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "市民大道一段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.56mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.56,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "6",
+          "name": "張景竣",
+          "violationDate": 1732579200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.37mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.37,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "7",
+          "name": "陳朝雄",
+          "violationDate": 1732752000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民族東路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.34mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.34,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "8",
+          "name": "林弘銘",
+          "violationDate": 1733443200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "民權西路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.23mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.23,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "9",
+          "name": "馮恩賜",
+          "violationDate": 1733443200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "鄭州路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.20mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.2,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "10",
+          "name": "何曜勝",
+          "violationDate": 1732665600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "百齡左岸河濱公 園",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.21mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.21,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "11",
+          "name": "游智凱",
+          "violationDate": 1734307200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "重慶北路四段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （1.48mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 1.48,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "12",
+          "name": "林展弘",
+          "violationDate": 1732752000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中正路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.43mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.43,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "13",
+          "name": "黃有福",
+          "violationDate": 1733702400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "中正路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.20mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.2,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "14",
+          "name": "莊峻瑋",
+          "violationDate": 1733097600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "安康路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.23mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.23,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "15",
+          "name": "王尚宇",
+          "violationDate": 1720137600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "新明路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內經測試檢定有吸食 毒品第2次（毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "16",
+          "name": "曾柏諺",
+          "violationDate": 1733270400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "康寧路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.20mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.2,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "17",
+          "name": "許志乾",
+          "violationDate": 1731283200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "大度路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.26mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.26,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "18",
+          "name": "何明輝",
+          "violationDate": 1732924800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "大度路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.35mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.35,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "19",
+          "name": "蕭禾松",
+          "violationDate": 1732924800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松河街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.90mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.9,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "20",
+          "name": "莊仕賢",
+          "violationDate": 1733011200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "港東街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內違反第一項規定第 3次以上(酒駕) （0.46mg/L）",
+          "violationCount": 3,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.46,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "21",
+          "name": "張志能",
+          "violationDate": 1732060800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "南港路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.25mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.25,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "22",
+          "name": "蔡永明",
+          "violationDate": 1733443200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "西藏路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.72mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.72,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "23",
+          "name": "蔡易樹",
+          "violationDate": 1733529600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "環南市場",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.28mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.28,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "24",
+          "name": "林宏駿",
+          "violationDate": 1733616000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "和平西路三段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.28mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.28,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "25",
+          "name": "簡鴻文",
+          "violationDate": 1733011200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "長安東路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.53mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.53,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "26",
+          "name": "周偉俊",
+          "violationDate": 1731542400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "景文街",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.19mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.19,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "27",
+          "name": "林泳翔",
+          "violationDate": 1731715200000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "一壽橋",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.55mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.55,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "28",
+          "name": "鐘伯瑋",
+          "violationDate": 1731196800000,
+          "lawArticle": "第35條第5 項",
+          "locationText": "塔悠路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內第2次違反第4項規 定（拒測）",
+          "violationCount": 2,
+          "violationTypes": [
+            "拒測"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "29",
+          "name": "蔡松穎",
+          "violationDate": 1733184000000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "八德路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.15mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.15,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "30",
+          "name": "陳俊瑋",
+          "violationDate": 1724025600000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松壽路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內經測試檢定有吸食 毒品第2次（毒駕）",
+          "violationCount": 2,
+          "violationTypes": [
+            "毒駕/藥駕"
+          ],
+          "alcoholMgPerL": null,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "31",
+          "name": "黃啟築",
+          "violationDate": 1732406400000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "松高路",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.75mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.75,
+          "unlicensed": false,
+          "hasPhoto": false,
+          "parserConfidence": 1.0,
+          "needsReview": false
+        },
+        {
+          "sequenceNo": "32",
+          "name": "陳建義",
+          "violationDate": 1733356800000,
+          "lawArticle": "第35條第3 項",
+          "locationText": "和平西路二段",
+          "factText": "汽機車駕駛人駕駛汽機車， 於十年內酒精濃度超過規定 標準第2次（0.24mg/L）",
+          "violationCount": 2,
+          "violationTypes": [
+            "酒駕"
+          ],
+          "alcoholMgPerL": 0.24,
           "unlicensed": false,
           "hasPhoto": false,
           "parserConfidence": 1.0,
