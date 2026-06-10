@@ -265,3 +265,33 @@
 
 ### Next action
 - Redeploy Render so startup runs `scripts/seed_geocode_cache.py` and imports the committed demo map cache.
+
+## 2026-06-10 (Publish readiness utilities)
+
+### Current State
+- The dashboard now includes lightweight publish-readiness utilities beyond the original F01-F07 scope.
+- Admin correction behavior remains reversible through `is_hidden`; no delete workflow was added.
+
+### Completed
+- Added data freshness and rows-needing-review summary to `/api/stats` and the dashboard.
+- Added filtered CSV export at `/api/records/export.csv`.
+- Added admin-only `/api/admin/review` and `/api/admin/hide` routes.
+- Added admin UI sections for review rows and source hide/unhide maintenance.
+- Added a map legend explaining grouped circles, size encoding, and approximate demo coordinates.
+- Added `docs/superpowers/plans/2026-06-10-publish-readiness-features.md`.
+- Updated README and operations docs in English and Traditional Chinese.
+
+### Verification evidence
+- `PATH=/opt/homebrew/bin:$PATH npm run lint` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm run typecheck` passed.
+- `PATH=/opt/homebrew/bin:$PATH npm test` passed: 19 Python unit tests and 4 Node integration tests.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:coverage` passed: Python tracked modules 83.23% line coverage; Node tracked files 98.31% line coverage.
+- `PATH=/opt/homebrew/bin:$PATH npm run test:e2e` passed with elevated localhost permission: 9 Playwright tests.
+
+### Remaining risks / gaps
+- Admin hide/unhide is intentionally basic and token-protected; it is suitable for a demo/admin utility, not a full audit workflow.
+- CSV export is public and intentionally limited to table fields already shown in the dashboard.
+- Dependency audit findings remain deferred to a dedicated dependency-upgrade pass.
+
+### Next action
+- Run `./init.sh` with a supported Node runtime before committing, then redeploy Render.

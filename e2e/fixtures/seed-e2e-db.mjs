@@ -28,7 +28,7 @@ const insertRecord = db.prepare(`
      parser_confidence, needs_review)
   VALUES
     (@sourceId, @sequenceNo, @name, @violationDate, @lawArticle, @locationText, @factText,
-     @violationCount, @violationTypesJson, @alcoholMgPerL, @unlicensed, 0, 1, 0)
+     @violationCount, @violationTypesJson, @alcoholMgPerL, @unlicensed, 0, @parserConfidence, @needsReview)
 `);
 
 insertRecord.run({
@@ -43,6 +43,8 @@ insertRecord.run({
   violationTypesJson: '["酒駕"]',
   alcoholMgPerL: 0.2,
   unlicensed: 0,
+  parserConfidence: 1,
+  needsReview: 0,
 });
 
 insertRecord.run({
@@ -57,6 +59,8 @@ insertRecord.run({
   violationTypesJson: '["酒駕","無照"]',
   alcoholMgPerL: null,
   unlicensed: 1,
+  parserConfidence: 1,
+  needsReview: 0,
 });
 
 insertRecord.run({
@@ -71,6 +75,8 @@ insertRecord.run({
   violationTypesJson: '["拒測"]',
   alcoholMgPerL: null,
   unlicensed: 0,
+  parserConfidence: 0.4,
+  needsReview: 1,
 });
 
 db.prepare(

@@ -19,10 +19,13 @@ Traditional Chinese README:
 - Imports Taipei DOT public announcement PDFs from a crawler, PDF URL, or local PDF upload.
 - Parses repeat-offender table rows into a local SQLite database.
 - Shows total records, imported announcements, repeat-count distribution, violation-type distribution, and frequent locations.
+- Shows data freshness and parser rows needing review.
 - Supports filters for violation type, repeat count, date range, and location keyword.
+- Exports filtered public table data as CSV.
 - Provides a bilingual Traditional Chinese / English frontend.
 - Shows a map by grouped location, not by individual person.
 - Uses cached geocoding only; the dashboard never geocodes on page load.
+- Provides admin maintenance tools for import logs, review rows, and reversible source/record hiding.
 
 ## Public-Safety And Privacy Notice
 

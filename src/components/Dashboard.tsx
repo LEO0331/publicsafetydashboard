@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Database, FileText, Filter, MapPinned, RefreshCw, Search, ShieldCheck } from "lucide-react";
+import { AlertTriangle, Clock3, Database, Download, FileText, Filter, MapPinned, RefreshCw, Search, ShieldCheck } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import LanguageToggle from "./LanguageToggle";
 import { dashboardCopy, formatDate, formatViolationCount, formatViolationType, formatViolationTypesJson, Language, usePersistedLanguage } from "./uiLanguage";
@@ -17,6 +17,10 @@ const LocationMap = dynamic(() => import("./LocationMap"), {
 type Stats = {
   totalRecords: number;
   announcements: number;
+  needsReview: number;
+  latestPublishedDate: number | null;
+  latestDownloadedAt: number | null;
+  latestRecordUpdatedAt: number | null;
   byCount: { value: number | null; count: number }[];
   byType: { type: string; count: number }[];
   topLocations: { location: string; count: number }[];
@@ -85,6 +89,13 @@ export default function Dashboard() {
   }, [filters, recordPage]);
 
   const totalRecordPages = Math.max(Math.ceil(recordTotal / recordPageSize), 1);
+  const exportQuery = useMemo(() => {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(filters)) {
+      if (value) params.set(key, value);
+    }
+    return params.toString();
+  }, [filters]);
 
   useEffect(() => {
     let cancelled = false;
@@ -150,7 +161,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <section id="dashboard-content" className="mx-auto grid max-w-7xl gap-3 px-4 py-5 md:grid-cols-4 md:px-8">
+      <section id="dashboard-content" className="mx-auto grid max-w-7xl gap-3 px-4 py-5 md:grid-cols-5 md:px-8">
         <article className="ledger-panel animate-ledger-in p-4">
           <div className="flex items-center justify-between text-sm text-[var(--muted)]">
             <span>{t.totalRecords}</span>
@@ -177,6 +188,24 @@ export default function Dashboard() {
           <div className="text-sm text-[var(--muted)]">{t.byType}</div>
           <div className="mt-3 text-sm leading-6">{statLine(stats?.byType, language)}</div>
         </article>
+        <article className="ledger-panel animate-ledger-in p-4 [animation-delay:240ms]">
+          <div className="flex items-center justify-between text-sm text-[var(--muted)]">
+            <span>{t.dataFreshness}</span>
+            <Clock3 size={18} />
+          </div>
+          <div className="mt-3 space-y-1 text-xs leading-5 text-[var(--muted)]" data-testid="data-freshness">
+            <div>
+              {t.latestAnnouncement}: {formatDate(stats?.latestPublishedDate ?? null, language, t.notProvided)}
+            </div>
+            <div>
+              {t.latestImport}: {formatDate(stats?.latestDownloadedAt ?? stats?.latestRecordUpdatedAt ?? null, language, t.notProvided)}
+            </div>
+            <div className="inline-flex items-center gap-1 font-medium text-[var(--signal-red)]">
+              <AlertTriangle size={14} />
+              {t.needsReview}: <span data-testid="needs-review-count">{stats?.needsReview ?? 0}</span>
+            </div>
+          </div>
+        </article>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pb-5 md:px-8">
@@ -200,7 +229,7 @@ export default function Dashboard() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 md:px-8">
-        <form onSubmit={submit} className="ledger-panel grid gap-3 p-4 md:grid-cols-6">
+        <form onSubmit={submit} className="ledger-panel grid gap-3 p-4 md:grid-cols-7">
           <label className="text-sm font-medium">
             {t.violationCount}
             <select name="violationCount" className="focus-ring mt-2 w-full border border-[var(--line)] bg-white p-2 font-normal" data-testid="filter-violation-count">
@@ -237,6 +266,14 @@ export default function Dashboard() {
             <Filter size={16} />
             {t.applyFilters}
           </button>
+          <a
+            href={`/api/records/export.csv${exportQuery ? `?${exportQuery}` : ""}`}
+            className="focus-ring mt-7 inline-flex h-10 items-center justify-center gap-2 border border-[var(--ink)] bg-white px-3 text-sm font-medium text-[var(--ink)] transition hover:bg-[var(--ink)] hover:text-white"
+            data-testid="export-csv"
+          >
+            <Download size={16} />
+            {t.csvExport}
+          </a>
         </form>
 
         <details className="ledger-panel mt-3 p-4 text-sm text-[var(--muted)]">

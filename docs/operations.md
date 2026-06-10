@@ -33,7 +33,13 @@ npm run seed:geocode
 
 Start the app, set `ADMIN_TOKEN` to a non-default secret value, then open `/admin`. Admin import routes and import logs require the `x-admin-token` header. Missing tokens and the placeholder value `change-me` are rejected.
 
+The admin page also shows rows needing parser review and recently imported sources. Use hide/unhide actions for source corrections or removals; these update `is_hidden` and do not delete records.
+
 After importing additional PDFs in a deployed environment, run the `/admin` "Generate Map Coordinates" action to populate `geocoded_locations` for new locations. The map tab only shows places with cached coordinates. This action calls Nominatim once per ungeocoded or previously failed location, respects the configured delay, and sends only location text.
+
+## CSV Export
+
+The dashboard CSV export uses the same public filters as `/api/records` and excludes hidden records/sources. It exports only table fields already shown in the educational UI.
 
 If logs show `HTTP Error 429: Too many requests`, stop and wait before retrying. Render shared outbound IPs can hit Nominatim limits. Use small batches, for example limit `5` and delay `10` seconds. The geocoder stops the current batch after the first 429 and will retry that failed location on the next run.
 

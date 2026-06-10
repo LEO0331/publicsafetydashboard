@@ -77,10 +77,38 @@ export function getRecords(filters: RecordFilters) {
   return { rows, total: total.count, page, pageSize };
 }
 
+export function getExportRecords(filters: RecordFilters) {
+  const { where, params } = baseRecordWhere(filters);
+  return sqlite
+    .prepare(
+      `
+      SELECT r.name, r.violation_date, r.violation_count, r.violation_types_json,
+             r.location_text, r.alcohol_mg_per_l, s.title AS source_title, s.pdf_url
+      FROM offender_records r
+      JOIN sources s ON s.id = r.source_id
+      WHERE ${where}
+      ORDER BY r.violation_date DESC, r.id DESC
+      `
+    )
+    .all(params);
+}
+
 export function getStats() {
   const visibleJoin = "FROM offender_records r JOIN sources s ON s.id = r.source_id WHERE r.is_hidden = 0 AND s.is_hidden = 0";
   const totalRecords = (sqlite.prepare(`SELECT COUNT(*) AS count ${visibleJoin}`).get() as { count: number }).count;
   const announcements = (sqlite.prepare("SELECT COUNT(*) AS count FROM sources WHERE is_hidden = 0").get() as { count: number }).count;
+  const needsReview = (sqlite.prepare(`SELECT COUNT(*) AS count ${visibleJoin} AND r.needs_review = 1`).get() as { count: number }).count;
+  const freshness = sqlite
+    .prepare(
+      `
+      SELECT
+        MAX(s.published_date) AS latestPublishedDate,
+        MAX(s.downloaded_at) AS latestDownloadedAt,
+        MAX(r.updated_at) AS latestRecordUpdatedAt
+      ${visibleJoin}
+      `
+    )
+    .get() as { latestPublishedDate: number | null; latestDownloadedAt: number | null; latestRecordUpdatedAt: number | null };
   const byCount = sqlite
     .prepare(`SELECT r.violation_count AS value, COUNT(*) AS count ${visibleJoin} GROUP BY r.violation_count ORDER BY r.violation_count`)
     .all();
@@ -99,10 +127,56 @@ export function getStats() {
   return {
     totalRecords,
     announcements,
+    needsReview,
+    ...freshness,
     byCount,
     byType: Array.from(byType.entries()).map(([type, count]) => ({ type, count })),
     topLocations,
   };
+}
+
+export function getReviewItems(limit = 25) {
+  return sqlite
+    .prepare(
+      `
+      SELECT r.id, r.sequence_no, r.name, r.violation_date, r.location_text,
+             r.fact_text, r.parser_confidence, r.needs_review,
+             s.title AS source_title, s.pdf_url
+      FROM offender_records r
+      JOIN sources s ON s.id = r.source_id
+      WHERE r.is_hidden = 0 AND s.is_hidden = 0 AND r.needs_review = 1
+      ORDER BY r.parser_confidence ASC, r.id DESC
+      LIMIT @limit
+      `
+    )
+    .all({ limit });
+}
+
+export function getAdminSources() {
+  return sqlite
+    .prepare(
+      `
+      SELECT s.id, s.title, s.pdf_url, s.published_date, s.parse_status, s.is_hidden,
+             COUNT(r.id) AS record_count,
+             SUM(CASE WHEN r.needs_review = 1 AND r.is_hidden = 0 THEN 1 ELSE 0 END) AS review_count
+      FROM sources s
+      LEFT JOIN offender_records r ON r.source_id = s.id
+      GROUP BY s.id
+      ORDER BY s.published_date DESC, s.id DESC
+      LIMIT 50
+      `
+    )
+    .all();
+}
+
+export function setSourceHidden(id: number, hidden: boolean) {
+  const result = sqlite.prepare("UPDATE sources SET is_hidden = ?, updated_at = unixepoch() * 1000 WHERE id = ?").run(hidden ? 1 : 0, id);
+  return result.changes;
+}
+
+export function setRecordHidden(id: number, hidden: boolean) {
+  const result = sqlite.prepare("UPDATE offender_records SET is_hidden = ?, updated_at = unixepoch() * 1000 WHERE id = ?").run(hidden ? 1 : 0, id);
+  return result.changes;
 }
 
 export function getLocations() {

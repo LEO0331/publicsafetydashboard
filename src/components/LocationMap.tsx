@@ -55,6 +55,13 @@ export default function LocationMap({ locations, language = "zh" }: { locations:
           </button>
         ) : null}
 
+        <div className="mt-4 border border-[var(--line)] bg-white p-3 text-xs leading-5 text-[var(--muted)]" data-testid="map-legend">
+          <div className="font-semibold text-[var(--ink)]">{t.legendTitle}</div>
+          <div>{t.legendGrouped}</div>
+          <div>{t.legendSize}</div>
+          <div>{t.legendApproximate}</div>
+        </div>
+
         <div className="mt-4 space-y-2">
           {!points.length ? <p className="text-sm text-[var(--muted)]">{t.noGeocoded}</p> : null}
           {points.length && !filteredPoints.length ? <p className="text-sm text-[var(--muted)]">{t.noMatches}</p> : null}

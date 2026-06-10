@@ -15,9 +15,10 @@ test("records query filters by violation count, type, location, and date", async
     db.exec(readFileSync(path.join(migrationsDir, file), "utf-8"));
   }
   const violationDate = new Date("2026-05-23T00:00:00Z").getTime();
+  const downloadedAt = new Date("2026-05-28T00:00:00Z").getTime();
   const source = db
-    .prepare("INSERT INTO sources (title, source_url, pdf_url, parse_status) VALUES (?, ?, ?, ?) RETURNING id")
-    .get("公告", "https://example.test/page", "https://example.test/a.pdf", "parsed");
+    .prepare("INSERT INTO sources (title, source_url, pdf_url, published_date, downloaded_at, parse_status) VALUES (?, ?, ?, ?, ?, ?) RETURNING id")
+    .get("公告", "https://example.test/page", "https://example.test/a.pdf", violationDate, downloadedAt, "parsed");
   db.prepare(
     `
     INSERT INTO offender_records
@@ -40,8 +41,8 @@ test("records query filters by violation count, type, location, and date", async
     `
   ).run(source.id, violationDate);
   const secondSource = db
-    .prepare("INSERT INTO sources (title, source_url, pdf_url, parse_status) VALUES (?, ?, ?, ?) RETURNING id")
-    .get("同頁第二份公告", "https://example.test/page", "https://example.test/second.pdf", "parsed");
+    .prepare("INSERT INTO sources (title, source_url, pdf_url, published_date, downloaded_at, parse_status) VALUES (?, ?, ?, ?, ?, ?) RETURNING id")
+    .get("同頁第二份公告", "https://example.test/page", "https://example.test/second.pdf", violationDate + 86400000, downloadedAt + 86400000, "parsed");
   db.prepare(
     `
     INSERT INTO offender_records
@@ -68,7 +69,7 @@ test("records query filters by violation count, type, location, and date", async
   ).run(hiddenSource.id, violationDate);
   db.close();
 
-  const { getLocations, getRecords, getStats } = await import("../../.tmp-test/queries.js");
+  const { getAdminSources, getExportRecords, getLocations, getRecords, getReviewItems, getStats, setRecordHidden, setSourceHidden } = await import("../../.tmp-test/queries.js");
   const filtered = getRecords({
     violationCount: "2",
     type: "酒駕",
@@ -98,6 +99,9 @@ test("records query filters by violation count, type, location, and date", async
   const stats = getStats();
   assert.equal(stats.totalRecords, 4);
   assert.equal(stats.announcements, 2);
+  assert.equal(stats.needsReview, 1);
+  assert.equal(stats.latestPublishedDate, violationDate + 86400000);
+  assert.equal(stats.latestDownloadedAt, downloadedAt + 86400000);
   assert.equal(stats.topLocations.some((item) => item.location === "隱藏路段"), false);
   assert.deepEqual(
     stats.byType.sort((a, b) => a.type.localeCompare(b.type)),
@@ -111,4 +115,26 @@ test("records query filters by violation count, type, location, and date", async
   assert.equal(locations.some((item) => item.location === "隱藏路段"), false);
   assert.equal(locations.some((item) => item.location === "信義路五段"), false);
   assert.equal(locations.some((item) => item.location === "和平東路二段"), true);
+
+  const exportRows = getExportRecords({ type: "酒駕" });
+  assert.deepEqual(
+    exportRows.map((row) => row.name).sort(),
+    ["周小平", "王小明"].sort()
+  );
+
+  const reviewItems = getReviewItems();
+  assert.equal(reviewItems.length, 1);
+  assert.equal(reviewItems[0].name, "格式待查");
+
+  const adminSources = getAdminSources();
+  assert.equal(adminSources.length, 3);
+  assert.equal(adminSources.find((item) => item.id === secondSource.id).review_count, 1);
+
+  assert.equal(setRecordHidden(reviewItems[0].id, true), 1);
+  assert.equal(getReviewItems().length, 0);
+  assert.equal(setRecordHidden(reviewItems[0].id, false), 1);
+  assert.equal(setSourceHidden(secondSource.id, true), 1);
+  assert.equal(getRecords({}).total, 2);
+  assert.equal(setSourceHidden(secondSource.id, false), 1);
+  assert.equal(getRecords({}).total, 4);
 });

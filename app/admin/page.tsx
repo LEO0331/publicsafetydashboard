@@ -6,10 +6,29 @@ import { FormEvent, useEffect, useState } from "react";
 import LanguageToggle from "../../src/components/LanguageToggle";
 import { adminCopy, usePersistedLanguage } from "../../src/components/uiLanguage";
 
+type ReviewItem = {
+  id: number;
+  name: string | null;
+  location_text: string | null;
+  parser_confidence: number | null;
+  source_title: string;
+};
+
+type SourceItem = {
+  id: number;
+  title: string;
+  parse_status: string;
+  is_hidden: number;
+  record_count: number;
+  review_count: number;
+};
+
 export default function AdminPage() {
   const { language, chooseLanguage } = usePersistedLanguage();
   const [token, setToken] = useState("");
   const [logs, setLogs] = useState<string[]>([]);
+  const [reviewItems, setReviewItems] = useState<ReviewItem[]>([]);
+  const [sources, setSources] = useState<SourceItem[]>([]);
   const [message, setMessage] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const t = adminCopy[language];
@@ -26,6 +45,25 @@ export default function AdminPage() {
     setLogs(Array.isArray(body.logs) ? body.logs : []);
   }
 
+  async function loadReviewData(adminToken = token) {
+    if (!adminToken) {
+      setReviewItems([]);
+      setSources([]);
+      return;
+    }
+    const res = await fetch("/api/admin/review", {
+      headers: { "x-admin-token": adminToken },
+    });
+    if (!res.ok) {
+      setReviewItems([]);
+      setSources([]);
+      return;
+    }
+    const body = await res.json();
+    setReviewItems(Array.isArray(body.reviewItems) ? body.reviewItems : []);
+    setSources(Array.isArray(body.sources) ? body.sources : []);
+  }
+
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -33,8 +71,13 @@ export default function AdminPage() {
       const res = await fetch("/api/import/logs", {
         headers: { "x-admin-token": token },
       });
-      const body = await res.json();
-      if (!cancelled) setLogs(Array.isArray(body.logs) ? body.logs : []);
+      const [logsBody, reviewRes] = await Promise.all([res.json(), fetch("/api/admin/review", { headers: { "x-admin-token": token } })]);
+      const reviewBody = reviewRes.ok ? await reviewRes.json() : { reviewItems: [], sources: [] };
+      if (!cancelled) {
+        setLogs(Array.isArray(logsBody.logs) ? logsBody.logs : []);
+        setReviewItems(Array.isArray(reviewBody.reviewItems) ? reviewBody.reviewItems : []);
+        setSources(Array.isArray(reviewBody.sources) ? reviewBody.sources : []);
+      }
     }
     void load();
     return () => {
@@ -47,7 +90,18 @@ export default function AdminPage() {
     const res = await action();
     setMessage(await res.text());
     await loadLogs();
+    await loadReviewData();
     setIsRunning(false);
+  }
+
+  async function setHidden(target: "source" | "record", id: number, hidden: boolean) {
+    await runImport(() =>
+      fetch("/api/admin/hide", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-admin-token": token },
+        body: JSON.stringify({ target, id, hidden }),
+      })
+    );
   }
 
   async function crawl(event: FormEvent<HTMLFormElement>) {
@@ -191,6 +245,48 @@ export default function AdminPage() {
             {message}
           </pre>
         ) : null}
+
+        <section className="mt-5 grid gap-4 lg:grid-cols-2">
+          <div className="ledger-panel p-4">
+            <h2 className="font-medium">{t.reviewTitle}</h2>
+            <div className="mt-3 space-y-2" data-testid="admin-review-rows">
+              {reviewItems.length ? (
+                reviewItems.map((item) => (
+                  <div key={item.id} className="border border-[var(--line)] bg-[#fbf7ee] p-3 text-sm">
+                    <div className="font-medium">{item.name ?? "未載明"} · {item.location_text ?? "未載明"}</div>
+                    <div className="mt-1 text-xs leading-5 text-[var(--muted)]">{item.source_title}</div>
+                    <div className="mt-1 text-xs text-[var(--muted)]">confidence: {item.parser_confidence ?? 0}</div>
+                    <button type="button" disabled={isRunning} onClick={() => setHidden("record", item.id, true)} className="focus-ring mt-2 border border-[var(--signal-red)] px-3 py-1 text-xs font-medium text-[var(--signal-red)] disabled:opacity-50">
+                      {t.hide}
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-[var(--muted)]">{t.noReviewRows}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="ledger-panel p-4">
+            <h2 className="font-medium">{t.sourcesTitle}</h2>
+            <div className="mt-3 max-h-96 space-y-2 overflow-auto" data-testid="admin-source-list">
+              {sources.map((source) => {
+                const hidden = Boolean(source.is_hidden);
+                return (
+                  <div key={source.id} className="border border-[var(--line)] bg-[#fbf7ee] p-3 text-sm">
+                    <div className="font-medium">{source.title}</div>
+                    <div className="mt-1 text-xs leading-5 text-[var(--muted)]">
+                      {source.parse_status} · {source.record_count} records · {source.review_count} review
+                    </div>
+                    <button type="button" disabled={isRunning} onClick={() => setHidden("source", source.id, !hidden)} className="focus-ring mt-2 border border-[var(--ink)] px-3 py-1 text-xs font-medium disabled:opacity-50" data-testid={`source-hide-${source.id}`}>
+                      {hidden ? t.unhide : t.hide}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
 
         <section className="ledger-panel mt-5 p-4">
           <h2 className="font-medium">{t.logsTitle}</h2>

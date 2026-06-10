@@ -247,6 +247,40 @@
         "PATH=/opt/homebrew/bin:$PATH npm run test:coverage -> pass",
         "PATH=/opt/homebrew/bin:$PATH npm run test:e2e -> pass with elevated localhost permission"
       ]
+    },
+    {
+      "id": "F10",
+      "name": "Publish readiness utilities",
+      "title": "Publish readiness utilities",
+      "description": "Add data freshness, review summaries, CSV export, reversible admin hide/unhide, and map legend for public publish readiness.",
+      "priority": 10,
+      "status": "completed",
+      "dependsOn": [
+        "F04",
+        "F05",
+        "F06",
+        "F07"
+      ],
+      "dependencies": [
+        "F04",
+        "F05",
+        "F06",
+        "F07"
+      ],
+      "doneCriteria": [
+        "Dashboard shows data freshness and rows needing review",
+        "Dashboard can export currently filtered public records as CSV",
+        "Admin can inspect review rows and hide/unhide records or sources without deletion",
+        "Map explains grouped circle size and approximate demo coordinates",
+        "Relevant unit, integration, coverage, and E2E checks pass"
+      ],
+      "evidence": [
+        "PATH=/opt/homebrew/bin:$PATH npm run lint -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm run typecheck -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm test -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm run test:coverage -> pass",
+        "PATH=/opt/homebrew/bin:$PATH npm run test:e2e -> pass with elevated localhost permission"
+      ]
     }
   ],
   "workflowPolicy": {

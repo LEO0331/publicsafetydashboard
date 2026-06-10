@@ -1,8 +1,8 @@
 # Session Handoff
 
 Last Updated: 2026-06-10
-Current Objective: keep the dashboard publish-ready and ensure the public demo map shows grouped starter locations after Render deployment.
-Recommended Next Step: redeploy Render after committing the current changes so startup imports the committed `data/seed/geocoded_locations.json` cache.
+Current Objective: keep the dashboard publish-ready with data freshness, review summaries, CSV export, reversible admin hide/unhide, and grouped demo map support.
+Recommended Next Step: run `./init.sh` with a supported Node runtime, commit the current changes, then redeploy Render.
 
 ## Project
 
@@ -18,6 +18,8 @@ Recommended Next Step: redeploy Render after committing the current changes so s
 - Map view uses a ranked/searchable grouped-location explorer with scaled circles instead of showing every location as equal-density pins.
 - Records API pagination is exposed in the frontend with a fixed page size, previous/next controls, and bilingual page summaries.
 - The bundled 50-record starter dataset has 32 approximate `local-demo-seed` cached map coordinates so Render can show the demo map without calling Nominatim.
+- Dashboard shows data freshness and rows needing review, and can export current public filters to CSV.
+- Admin page can inspect review rows and hide/unhide sources or records by toggling `is_hidden`; it never deletes records.
 
 ## Start-Here Checklist
 
@@ -58,6 +60,11 @@ Recommended Next Step: redeploy Render after committing the current changes so s
 - `data/seed/geocoded_locations.json`: committed demo geocode cache for bundled starter locations.
 - `README.md`, `README.zh-TW.md`, `docs/deployment*.md`, `docs/operations*.md`: demo map and Render geocode-cache documentation.
 - `tests/unit/test_ingestion.py`: geocode seed coverage and migrated SQLite insert regression.
+- `src/server/queries.ts`: stats, export, review, source list, and hide/unhide helpers.
+- `app/api/records/export.csv/route.ts`: filtered CSV export route.
+- `app/api/admin/review/route.ts`, `app/api/admin/hide/route.ts`: token-protected admin review/correction routes.
+- `app/admin/page.tsx`, `src/components/Dashboard.tsx`, `src/components/LocationMap.tsx`, `src/components/uiLanguage.ts`: publish-readiness UI additions.
+- `docs/superpowers/plans/2026-06-10-publish-readiness-features.md`: implementation plan for this feature batch.
 
 ## Next Session
 

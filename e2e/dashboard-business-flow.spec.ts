@@ -10,6 +10,8 @@ test.describe("核心業務流程", () => {
     await expect(page.getByText("忠孝東路一段：2 筆")).toBeVisible();
     await expect(page.getByTestId("record-row")).toHaveCount(3);
     await expect(page.getByTestId("visible-record-count")).toHaveText("目前顯示 3 / 3 筆，第 1 / 1 頁");
+    await expect(page.getByTestId("data-freshness")).toContainText("待人工檢查");
+    await expect(page.getByTestId("needs-review-count")).toHaveText("1");
     await expect(page.getByTestId("records-prev-page")).toBeDisabled();
     await expect(page.getByTestId("records-next-page")).toBeDisabled();
 
@@ -30,6 +32,13 @@ test.describe("核心業務流程", () => {
     const body = await records.json();
     expect(body.total).toBe(1);
     expect(body.rows[0].name).toBe("陳小安");
+
+    const csv = await request.get("/api/records/export.csv?type=酒駕");
+    expect(csv.ok()).toBeTruthy();
+    expect(csv.headers()["content-type"]).toContain("text/csv");
+    const csvBody = await csv.text();
+    expect(csvBody).toContain('"name","violation_date"');
+    expect(csvBody).toContain("王小明");
   });
 
   test("地圖資料以地點群組呈現，不以個人為單位", async ({ page, request }) => {
@@ -48,6 +57,7 @@ test.describe("核心業務流程", () => {
     await page.goto("/");
     await page.getByTestId("map-tab").click();
     await expect(page.getByTestId("location-map")).toBeVisible();
+    await expect(page.getByTestId("map-legend")).toContainText("圓點代表地點群組");
     await expect(page.getByText("地點清單")).toBeVisible();
     await page.getByTestId("map-location-search").fill("忠孝");
     await expect(page.getByRole("button", { name: /忠孝東路一段/ })).toBeVisible();
@@ -71,5 +81,43 @@ test.describe("核心業務流程", () => {
   test("匯入紀錄 API 未授權時不可讀取", async ({ request }) => {
     const logs = await request.get("/api/import/logs");
     expect(logs.status()).toBe(401);
+  });
+
+  test("管理端可讀取待檢查資料並可 reversibly hide record/source", async ({ request }) => {
+    const unauthorized = await request.get("/api/admin/review");
+    expect(unauthorized.status()).toBe(401);
+
+    const review = await request.get("/api/admin/review", { headers: { "x-admin-token": "e2e-secret" } });
+    expect(review.ok()).toBeTruthy();
+    const body = await review.json();
+    expect(body.reviewItems.length).toBe(1);
+    expect(body.sources.length).toBe(2);
+
+    const recordId = body.reviewItems[0].id;
+    const sourceId = body.sources[0].id;
+    const hideRecord = await request.post("/api/admin/hide", {
+      headers: { "x-admin-token": "e2e-secret" },
+      data: { target: "record", id: recordId, hidden: true },
+    });
+    expect(hideRecord.ok()).toBeTruthy();
+    const afterRecordHide = await request.get("/api/stats");
+    expect((await afterRecordHide.json()).needsReview).toBe(0);
+
+    const unhideRecord = await request.post("/api/admin/hide", {
+      headers: { "x-admin-token": "e2e-secret" },
+      data: { target: "record", id: recordId, hidden: false },
+    });
+    expect(unhideRecord.ok()).toBeTruthy();
+
+    const hideSource = await request.post("/api/admin/hide", {
+      headers: { "x-admin-token": "e2e-secret" },
+      data: { target: "source", id: sourceId, hidden: true },
+    });
+    expect(hideSource.ok()).toBeTruthy();
+    const unhideSource = await request.post("/api/admin/hide", {
+      headers: { "x-admin-token": "e2e-secret" },
+      data: { target: "source", id: sourceId, hidden: false },
+    });
+    expect(unhideSource.ok()).toBeTruthy();
   });
 });
