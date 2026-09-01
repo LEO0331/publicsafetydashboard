@@ -1,6 +1,6 @@
 {
   "project": "Taipei Public Safety Dashboard",
-  "lastUpdated": "2026-06-10",
+  "lastUpdated": "2026-09-01",
   "activeFeatureId": null,
   "features": [
     {
@@ -309,6 +309,26 @@
         "PATH=/opt/homebrew/bin:$PATH npm run test:coverage -> pass",
         "PATH=/opt/homebrew/bin:$PATH npm run test:e2e -> pass with elevated localhost permission",
         "PATH=/opt/homebrew/bin:$PATH npm audit --audit-level=high -> remaining 2 high advisories require force/breaking upgrades"
+      ]
+    },
+    {
+      "id": "F12",
+      "name": "Official announcement data refresh",
+      "title": "Official announcement data refresh",
+      "description": "Refresh the bundled regular Taipei DOT announcement seed through the latest listing entry, while preserving the existing exclusion of the separate three-or-more Taipei-registered subtype.",
+      "priority": 12,
+      "status": "completed",
+      "dependsOn": ["F07"],
+      "dependencies": ["F07"],
+      "doneCriteria": [
+        "Latest regular official PDF announcements are parsed into the bundled seed",
+        "Source hashes are present for every bundled source",
+        "Seed counts and public documentation are updated"
+      ],
+      "evidence": [
+        "Official listing checked 2026-09-01: latest regular announcement is 115.08.26",
+        "115.06.24, 115.07.22, and 115.08.26 PDFs parsed cleanly: 18, 15, and 17 records",
+        "Seed export verified: 94 sources, 2,407 records, 0 missing content hashes"
       ]
     }
   ],

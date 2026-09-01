@@ -1,8 +1,8 @@
 # Session Handoff
 
-Last Updated: 2026-06-10
-Current Objective: keep the dashboard publish-ready with data freshness, review summaries, CSV export, reversible admin hide/unhide, and grouped demo map support.
-Recommended Next Step: commit the current changes, redeploy Render, then schedule a dedicated dependency-upgrade pass for force-required audit findings.
+Last Updated: 2026-09-01
+Current Objective: keep the dashboard publish-ready with the bundled Taipei DOT regular announcement data refreshed through 115.08.26.
+Recommended Next Step: commit and redeploy so empty Render databases seed the refreshed 94-source dataset; schedule a dedicated dependency-upgrade pass for force-required audit findings.
 
 ## Project
 
@@ -17,7 +17,7 @@ Recommended Next Step: commit the current changes, redeploy Render, then schedul
 - Frontend supports Traditional Chinese by default and English via a persisted `localStorage` language toggle.
 - Map view uses a ranked/searchable grouped-location explorer with scaled circles instead of showing every location as equal-density pins.
 - Records API pagination is exposed in the frontend with a fixed page size, previous/next controls, and bilingual page summaries.
-- The bundled 50-record starter dataset has 32 approximate `local-demo-seed` cached map coordinates so Render can show the demo map without calling Nominatim.
+- The bundled 2,407-record starter dataset has 412 cached map coordinates so Render can show grouped locations without calling Nominatim.
 - Dashboard shows data freshness and rows needing review, and can export current public filters to CSV.
 - Admin page can inspect review rows and hide/unhide sources or records by toggling `is_hidden`; it never deletes records.
 - Code review fixes hardened CSV export, admin hide validation, source-based data freshness, and admin error handling.
@@ -49,6 +49,7 @@ Recommended Next Step: commit the current changes, redeploy Render, then schedul
 - No active functional blocker.
 - Known dependency audit findings remain deferred to a dedicated dependency-upgrade pass.
 - Demo geocode coordinates are approximate visualization centroids, not authoritative location geocoding.
+- The latest three announcement PDFs can introduce locations not covered by the existing 412-location geocode cache; they remain safely unmapped until a location-only geocoding refresh is run.
 - `npm audit --audit-level=high` still reports 2 high advisories requiring breaking/force upgrades: `drizzle-orm` and Lighthouse/transitive `tmp`.
 
 ## Files
@@ -76,6 +77,7 @@ Recommended Next Step: commit the current changes, redeploy Render, then schedul
 - Run `./init.sh` before publishing or merging; run `npm run test:e2e` separately when UI behavior changes.
 - After deploy, open the Render URL, switch to the map tab, and verify the map shows grouped starter locations without running `/admin` geocoding.
 - Use CI/Docker Node 22 for release confidence. Local Homebrew Node 23 can run tests, but one dev dependency warns that Node 23 is outside its preferred engine range.
+- The bundled seed now has 94 regular PDF sources and 2,407 records through 115.08.26; it continues to exclude the separate `三次以上且設籍本市者` subtype.
 
 ## Completion Handoff Format
 

@@ -522,3 +522,26 @@
 ### Remaining risks / gaps
 - Nominatim could not resolve 78 complex or ambiguous location strings; these should be retried conservatively or reviewed manually later.
 - The committed JSON cache contains only successful geocodes, so unresolved rows are not pre-seeded on new deployments.
+
+## 2026-09-01 (Official announcement data refresh)
+
+### Current State
+- Bundled regular Taipei DOT announcement data is current through `115.08.26` (2026-08-26), the latest regular entry in the official listing checked on 2026-09-01.
+- The seed contains 94 sources and 2,407 parsed records, up from 91 sources and 2,357 records.
+
+### Completed
+- Parsed and added the regular official PDFs dated `115.06.24`, `115.07.22`, and `115.08.26` (18, 15, and 17 records respectively).
+- Preserved the existing dataset boundary: the separate `三次以上且設籍本市者` subtype remains excluded.
+- Added a reusable `scripts/export_initial_seed.py` exporter and corrected crawled-source imports to retain their downloaded content hashes.
+- Updated seed assertions and public documentation for the new counts and current-through date.
+
+### Verification evidence
+- Official source listing checked: latest regular announcement `115.08.26臺北市酒駕及拒測累犯公布名單`, published 115-08-26.
+- Export integrity check: 94 sources, 2,407 records, and 0 missing content hashes.
+- `git diff --check` passed.
+- Python unit and coverage test commands were attempted with the bundled Python runtime. They are blocked on Windows because existing tests leave SQLite database handles open while `TemporaryDirectory` removes them; this is an existing cross-platform test-cleanup issue, unrelated to the refreshed data.
+- `./init.sh` could not run in this Windows session because the available Bash service returned `E_ACCESSDENIED`; JavaScript dependencies are not installed locally, so lint/typecheck/integration tests could not run.
+
+### Remaining risks / gaps
+- The geocode cache remains at 412 resolved locations; new location strings from these three announcements will not appear on the map until a compliant location-only geocoding refresh is performed.
+- Redeploy is still required for an empty Render database to receive the refreshed bundled seed.

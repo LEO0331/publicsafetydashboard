@@ -41,7 +41,17 @@ def ensure_source(pdf_url: str, title: str, digest: str) -> int:
             (pdf_url, digest),
         ).fetchone()
         if existing:
-            return int(existing["id"])
+            source_id = int(existing["id"])
+            conn.execute(
+                """
+                UPDATE sources
+                SET title = ?, downloaded_at = ?, content_hash = ?, parse_status = 'downloaded',
+                    parse_error = NULL, updated_at = ?
+                WHERE id = ?
+                """,
+                (title, now_ms(), digest, now_ms(), source_id),
+            )
+            return source_id
         cur = conn.execute(
             """
             INSERT INTO sources
