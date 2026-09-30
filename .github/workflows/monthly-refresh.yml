@@ -1,0 +1,75 @@
+name: Monthly Taipei DOT refresh
+
+on:
+  schedule:
+    - cron: "0 2 5 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: monthly-taipei-dot-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm ci
+      - run: python -m pip install -r requirements.txt
+      - name: Prepare temporary SQLite database
+        env:
+          SQLITE_PATH: ${{ runner.temp }}/monthly-refresh.db
+        run: |
+          npm run db:migrate
+          python scripts/seed_initial_data.py
+          python scripts/seed_geocode_cache.py
+      - name: Refresh announcements and map cache
+        env:
+          SQLITE_PATH: ${{ runner.temp }}/monthly-refresh.db
+          MONTHLY_GEOCODE_LIMIT: "25"
+          GEOCODE_DELAY_SECONDS: "16"
+        run: python scripts/refresh_monthly.py
+      - name: Verify generated data and code
+        run: |
+          python -m json.tool data/seed/initial_announcements.json > /dev/null
+          python -m json.tool data/seed/geocoded_locations.json > /dev/null
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run test:coverage
+          git diff --check
+      - name: Commit changed seed files
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add -- data/seed/initial_announcements.json data/seed/geocoded_locations.json
+          if git diff --cached --quiet; then
+            echo "Announcement seed changed: no" >> "$GITHUB_STEP_SUMMARY"
+            echo "Geocode cache changed: no" >> "$GITHUB_STEP_SUMMARY"
+            echo "Commit created: no" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if git diff --cached --name-only -- data/seed/initial_announcements.json | grep -q .; then announcement_changed=yes; else announcement_changed=no; fi
+          if git diff --cached --name-only -- data/seed/geocoded_locations.json | grep -q .; then geocode_changed=yes; else geocode_changed=no; fi
+          echo "Announcement seed changed: $announcement_changed" >> "$GITHUB_STEP_SUMMARY"
+          echo "Geocode cache changed: $geocode_changed" >> "$GITHUB_STEP_SUMMARY"
+          git diff --cached --stat
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Keep Taipei DOT public data current" -m "Refresh validated announcement rows and independently cached map locations." -m "Constraint: Public Nominatim batches are limited to 25 sequential requests at 16-second spacing." -m "Confidence: high" -m "Scope-risk: narrow" -m "Tested: CI lint, typecheck, unit, integration, coverage, JSON validation, diff check"
+          git push
+          echo "Commit created: yes" >> "$GITHUB_STEP_SUMMARY"
+          gh workflow run ci.yml --ref main

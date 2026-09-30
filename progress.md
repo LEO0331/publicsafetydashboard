@@ -545,3 +545,23 @@
 ### Remaining risks / gaps
 - The geocode cache remains at 412 resolved locations; new location strings from these three announcements will not appear on the map until a compliant location-only geocoding refresh is performed.
 - Redeploy is still required for an empty Render database to receive the refreshed bundled seed.
+
+## 2026-09-30 (Year-agnostic monthly refresh and incremental map maintenance)
+
+### Completed
+- Added semantic regular-announcement title matching across ROC years and punctuation variants. All 94 bundled historical titles still match; the separate `三次以上且設籍本市者` series is excluded.
+- Added a scheduled/manual monthly GitHub Actions workflow that restores both seeds in a temporary database, imports only newly discovered valid PDFs, exports announcement data before geocoding, verifies generated files, and commits only changed seed JSON files. A bot commit explicitly dispatches CI, which feeds the existing deployment workflow.
+- Made geocoding sequential and configurable with a 25-query batch default and 16-second delay. Cached coordinates and permanent `not_found` outcomes avoid repeat lookups; transient failures remain pending and HTTP 429 stops the batch.
+- Added the 78 documented historical not-found locations to the durable geocode seed without coordinates. The map API reuses coordinates by normalized query and leaves unresolved locations as `lat: null`, `lng: null` while retaining all records and counts.
+- Added mocked tests for future ROC years, cache reuse, duplicate locations, not-found, transient errors, rate limiting, deterministic export, and publication during provider failure. Closed SQLite test handles for Windows verification.
+
+### Verification evidence
+- `./init.sh` passed using Git Bash as `NPM_CONFIG_SCRIPT_SHELL`: lint, typecheck, 29 Python unit tests, 5 Node integration tests, Python coverage 84.09%, Node line coverage 96.01%.
+- `npm run build` passed.
+- Temporary database migration plus `seed_initial_data.py` and `seed_geocode_cache.py` restored 94 sources, 2,407 records, and 490 cache rows (412 mapped, 78 known not-found). Re-exporting both seed files matched the committed JSON byte for byte.
+- Both workflow YAML files parsed, and `git diff --check` passed. No automated test contacted public Nominatim.
+
+### Remaining risks / next action
+- The scheduled GitHub Actions run and live Taipei DOT listing/PDF download were not executed in this local verification. Monitor the first run's summary and inspect its generated seed diff before relying on the schedule.
+- The remaining locations introduced by the latest three bundled announcements may still need a bounded location-only geocode batch; no live Nominatim requests were made for this change.
+- Existing dependency audit findings remain outside this feature; local `npm ci` reported 28 advisories (1 critical, 15 high, 9 moderate, 3 low). Next: review this diff, commit and deploy the workflow, then observe its first scheduled or manual run.

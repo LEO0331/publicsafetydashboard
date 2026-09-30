@@ -1,6 +1,6 @@
 {
   "project": "Taipei Public Safety Dashboard",
-  "lastUpdated": "2026-09-01",
+  "lastUpdated": "2026-09-30",
   "activeFeatureId": null,
   "features": [
     {
@@ -329,6 +329,30 @@
         "Official listing checked 2026-09-01: latest regular announcement is 115.08.26",
         "115.06.24, 115.07.22, and 115.08.26 PDFs parsed cleanly: 18, 15, and 17 records",
         "Seed export verified: 94 sources, 2,407 records, 0 missing content hashes"
+      ]
+    },
+    {
+      "id": "F13",
+      "name": "Year-agnostic monthly refresh and incremental map maintenance",
+      "title": "Year-agnostic monthly refresh and incremental map maintenance",
+      "description": "Discover regular announcements across ROC years, publish validated new records, and maintain a bounded durable geocode cache independently.",
+      "priority": 13,
+      "status": "completed",
+      "dependsOn": ["F05", "F12"],
+      "dependencies": ["F05", "F12"],
+      "doneCriteria": [
+        "Future ROC years and historical regular title variants match without hardcoded year; separate three-or-more subtype stays excluded",
+        "Monthly workflow imports only new valid PDFs and publishes data even when geocoding fails",
+        "Geocoding is sequential, cached, bounded, and preserves unresolved records without fake coordinates",
+        "Geocode seed is durable, deterministic, and idempotent",
+        "Relevant verification passes and workflow summary reports data and map coverage"
+      ],
+      "evidence": [
+        "29 Python unit tests passed, including future ROC years, mocked geocoder outcomes, and provider outage publication",
+        "5 Node integration tests passed, including normalized-query map coordinate reuse",
+        "./init.sh passed lint, typecheck, unit/integration, and coverage using Git Bash as npm script shell",
+        "npm run build passed",
+        "Restored seed into temporary migrated SQLite DB: 94 sources, 2,407 records, 490 cache rows; both JSON exports matched committed files byte for byte"
       ]
     }
   ],

@@ -97,14 +97,14 @@ python3 scripts/import_pdf.py --file ./path/to/file.pdf
 
 ## Map Coordinates
 
-The bundled starter dataset includes a geocode cache for 412 of 490 unique starter locations, so the deployed demo map can render grouped location circles without calling Nominatim from Render. The remaining 78 locations are mostly complex road/intersection/freeway strings that Nominatim did not resolve and can be reviewed or geocoded later.
+The original starter dataset has coordinates for 412 of 490 unique locations, so the deployed demo map can render grouped location circles without calling Nominatim from Render. The remaining 78 locations are mostly complex road/intersection/freeway strings that Nominatim did not resolve. Their `not_found` status is cached to prevent routine retries; use `--retry-not-found` for a deliberate manual retry after reviewing the location text.
 
 The map uses cached coordinates in `geocoded_locations`. Imported PDF records do not automatically have latitude/longitude.
 
-Local geocoding:
+Local geocoding (sequential and cached; public Nominatim scheduled requests use a 16-second delay):
 
 ```bash
-python3 scripts/geocode_locations.py --limit 5 --delay 10
+python3 scripts/geocode_locations.py --limit 5 --delay 16
 ```
 
 For Render free deployments, prefer local geocoding and export the cache:
@@ -117,6 +117,8 @@ git push
 ```
 
 Render startup imports that cache automatically through `scripts/seed_geocode_cache.py`, avoiding Nominatim calls from Render shared IPs for the bundled starter map.
+
+The monthly GitHub Actions refresh restores both committed seeds in a temporary database, imports only new eligible PDFs, and updates the announcement seed before attempting a bounded map cache update. Map lookup failures do not hold back valid announcement records. See [operations](docs/operations.md) for the schedule and configuration.
 
 ## Tech Stack
 

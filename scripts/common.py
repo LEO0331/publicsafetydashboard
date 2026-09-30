@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DB_PATH = Path(os.environ.get("SQLITE_PATH", str(ROOT / "drizzle" / "dev.db")))
 DATA_DIR = ROOT / "data"
 LOG_DIR = ROOT / "logs"
-USER_AGENT = "TaipeiTrafficSafetyEducationDashboard/0.1 (local educational importer; contact: local-dev)"
+USER_AGENT = "TaipeiTrafficSafetyEducationDashboard/0.1 (+https://publicsafetydashboard.onrender.com)"
 
 
 def ensure_dirs() -> None:

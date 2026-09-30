@@ -14,14 +14,13 @@ def export_geocode_cache(output_path: Path = DEFAULT_OUTPUT) -> int:
     with connect_db() as conn:
         rows = conn.execute(
             """
-            SELECT location_text, normalized_query, lat, lng, geocode_provider, confidence, geocoded_at
+            SELECT location_text, normalized_query, lat, lng, geocode_provider, confidence, geocoded_at, error
             FROM geocoded_locations
-            WHERE lat IS NOT NULL AND lng IS NOT NULL
-            ORDER BY location_text
+            WHERE (lat IS NOT NULL AND lng IS NOT NULL) OR error = 'not_found'
+            ORDER BY normalized_query
             """
         ).fetchall()
     payload = {
-        "exportedAt": now_ms(),
         "locations": [
             {
                 "locationText": row["location_text"],
@@ -31,6 +30,7 @@ def export_geocode_cache(output_path: Path = DEFAULT_OUTPUT) -> int:
                 "geocodeProvider": row["geocode_provider"],
                 "confidence": row["confidence"],
                 "geocodedAt": row["geocoded_at"],
+                **({"error": "not_found"} if row["error"] == "not_found" else {}),
             }
             for row in rows
         ],
@@ -40,7 +40,7 @@ def export_geocode_cache(output_path: Path = DEFAULT_OUTPUT) -> int:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Export successful geocode cache rows to a deployable JSON seed.")
+    parser = argparse.ArgumentParser(description="Export resolved and permanent not-found geocode rows to a deployable JSON seed.")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
     count = export_geocode_cache(args.output)

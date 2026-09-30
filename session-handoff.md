@@ -1,8 +1,8 @@
 # Session Handoff
 
-Last Updated: 2026-09-01
-Current Objective: keep the dashboard publish-ready with the bundled Taipei DOT regular announcement data refreshed through 115.08.26.
-Recommended Next Step: commit and redeploy so empty Render databases seed the refreshed 94-source dataset; schedule a dedicated dependency-upgrade pass for force-required audit findings.
+Last Updated: 2026-09-30
+Current Objective: keep the Taipei DOT monthly announcement refresh and incremental map cache reliable across future ROC years.
+Recommended Next Step: review and commit the monthly workflow plus durable seed changes, deploy, then inspect the first scheduled or manual GitHub Actions summary and generated seed diff.
 
 ## Project
 
@@ -18,6 +18,8 @@ Recommended Next Step: commit and redeploy so empty Render databases seed the re
 - Map view uses a ranked/searchable grouped-location explorer with scaled circles instead of showing every location as equal-density pins.
 - Records API pagination is exposed in the frontend with a fixed page size, previous/next controls, and bilingual page summaries.
 - The bundled 2,407-record starter dataset has 412 cached map coordinates so Render can show grouped locations without calling Nominatim.
+- Monthly refresh now restores both committed seeds in temporary SQLite, imports only new eligible PDFs, publishes validated announcement data before map enrichment, and uses a bounded 25-query/16-second geocode batch.
+- The geocode seed also preserves 78 documented historical `not_found` results without fake coordinates; exports of both seeds are byte-stable after a restore.
 - Dashboard shows data freshness and rows needing review, and can export current public filters to CSV.
 - Admin page can inspect review rows and hide/unhide sources or records by toggling `is_hidden`; it never deletes records.
 - Code review fixes hardened CSV export, admin hide validation, source-based data freshness, and admin error handling.
@@ -49,10 +51,18 @@ Recommended Next Step: commit and redeploy so empty Render databases seed the re
 - No active functional blocker.
 - Known dependency audit findings remain deferred to a dedicated dependency-upgrade pass.
 - Demo geocode coordinates are approximate visualization centroids, not authoritative location geocoding.
-- The latest three announcement PDFs can introduce locations not covered by the existing 412-location geocode cache; they remain safely unmapped until a location-only geocoding refresh is run.
-- `npm audit --audit-level=high` still reports 2 high advisories requiring breaking/force upgrades: `drizzle-orm` and Lighthouse/transitive `tmp`.
+- The latest three announcement PDFs can introduce locations not covered by the existing 412 mapped coordinates; they remain safely unmapped until a location-only geocoding refresh is run.
+- The new scheduled workflow and live Taipei DOT listing/PDF download have not yet been exercised on GitHub Actions; the first run needs inspection.
+- Local `npm ci` on 2026-09-30 reported 28 dependency advisories (1 critical, 15 high, 9 moderate, 3 low). Dependency upgrades need a dedicated, separately verified pass.
 
 ## Files
+
+- `.github/workflows/monthly-refresh.yml`, `.github/workflows/ci.yml`: scheduled refresh, generated-file commit, and explicit CI dispatch for bot commits.
+- `scripts/refresh_monthly.py`, `scripts/crawl_sources.py`, `scripts/geocode_locations.py`: new-source import flow, year-agnostic semantic title matching, bounded incremental geocoding.
+- `scripts/export_geocode_cache.py`, `scripts/seed_geocode_cache.py`, `data/seed/geocoded_locations.json`: deterministic durable mapped and not-found cache.
+- `src/server/queries.ts`, `app/api/import/geocode/route.ts`, `src/components/uiLanguage.ts`: map cache reuse and safe admin geocode delay.
+- `tests/unit/test_announcement_titles.py`, `tests/unit/test_geocode_incremental.py`, `tests/unit/test_monthly_refresh.py`, `tests/unit/test_ingestion.py`, `tests/integration/api_filters.test.mjs`: regression coverage.
+- `README.md`, `docs/operations.md`, `feature_list.json`, `progress.md`: operating guidance and completion evidence.
 
 - `src/components/Dashboard.tsx`: dashboard records pagination controls and page metadata.
 - `src/components/uiLanguage.ts`: Traditional Chinese and English pagination copy.
@@ -71,6 +81,9 @@ Recommended Next Step: commit and redeploy so empty Render databases seed the re
 - `package-lock.json`: non-force audit fix updated transitive resolutions and Next resolved patch version to 16.2.9.
 
 ## Next Session
+
+- `./init.sh` passed on 2026-09-30 with `NPM_CONFIG_SCRIPT_SHELL` set to Git Bash: 29 Python unit tests, 5 Node integration tests, lint, typecheck, and coverage. `npm run build` passed. Both seed exports matched after temporary DB migration and restore.
+- Review the generated-file diff and first GitHub Actions run before assuming the remote Taipei DOT listing format is unchanged. A geocoder outage should leave announcement export publishable and be reported separately in the workflow summary.
 
 - Start by checking `git status --short`.
 - Ignore `.omx/` runtime state changes unless explicitly requested.

@@ -29,13 +29,14 @@ def seed_geocode_cache(seed_path: Path = DEFAULT_SEED_PATH) -> int:
         for item in locations:
             lat = item.get("lat")
             lng = item.get("lng")
-            if lat is None or lng is None:
+            error = item.get("error")
+            if (lat is None or lng is None) and error != "not_found":
                 continue
             conn.execute(
                 """
                 INSERT INTO geocoded_locations
                     (location_text, normalized_query, lat, lng, geocode_provider, confidence, geocoded_at, error, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, NULL, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(normalized_query) DO UPDATE SET
                     location_text = excluded.location_text,
                     lat = excluded.lat,
@@ -43,8 +44,9 @@ def seed_geocode_cache(seed_path: Path = DEFAULT_SEED_PATH) -> int:
                     geocode_provider = excluded.geocode_provider,
                     confidence = excluded.confidence,
                     geocoded_at = excluded.geocoded_at,
-                    error = NULL,
+                    error = excluded.error,
                     updated_at = excluded.updated_at
+                WHERE excluded.lat IS NOT NULL OR geocoded_locations.lat IS NULL
                 """,
                 (
                     item["locationText"],
@@ -53,7 +55,8 @@ def seed_geocode_cache(seed_path: Path = DEFAULT_SEED_PATH) -> int:
                     lng,
                     item.get("geocodeProvider") or "nominatim-local-seed",
                     item.get("confidence"),
-                    item.get("geocodedAt") or now_ms(),
+                    item.get("geocodedAt"),
+                    error,
                     now_ms(),
                 ),
             )

@@ -26,7 +26,7 @@ ADMIN_TOKEN="<strong-secret>"
 python3 scripts/crawl_sources.py
 python3 scripts/import_pdf.py --url "<PDF_URL>"
 python3 scripts/import_pdf.py --file ./path/to/file.pdf
-python3 scripts/geocode_locations.py --limit 5 --delay 10
+python3 scripts/geocode_locations.py --limit 5 --delay 16
 python3 scripts/export_geocode_cache.py
 python3 scripts/seed_geocode_cache.py
 python3 scripts/rebuild_all.py
@@ -38,7 +38,13 @@ npm run seed:geocode
 
 `npm run seed:initial` imports the bundled starter dataset parsed from 94 matching Taipei DOT public PDF announcements on the official `PageSize=105` listing, from 115.08.26 through 111.05.09. It includes regular `臺北市酒(毒)駕及拒測累犯公布名單`, `臺北市酒(毒)及拒測駕累犯公布名單`, and `臺北市酒駕累犯公布名單` files, excludes the separate `三次以上且設籍本市者` subtype, and stores parsed rows only; original PDF binaries/photos are not bundled.
 
-`npm run seed:geocode` imports `data/seed/geocoded_locations.json`. The committed seed contains Nominatim-resolved coordinates for 412 of 490 unique bundled starter locations so the public demo map works immediately after deployment. The 78 unresolved locations are left out of the JSON cache and can be retried or manually reviewed later through admin maintenance.
+`npm run seed:geocode` imports `data/seed/geocoded_locations.json`. The committed seed contains Nominatim-resolved coordinates for 412 of 490 unique original starter locations so the public demo map works immediately after deployment. Documented `not_found` results are also retained in the cache without coordinates, preventing routine monthly retries. They can be retried manually after reviewing the published location text.
+
+### Monthly refresh
+
+`.github/workflows/monthly-refresh.yml` runs on the fifth day of each month and can be dispatched manually. It migrates a temporary SQLite database, restores both committed seeds, discovers eligible Taipei DOT PDFs, imports only URLs absent from the committed seed, validates parsed rows and source hashes, and exports `initial_announcements.json` before geocoding. It then processes at most `MONTHLY_GEOCODE_LIMIT` pending normalized location queries (default 25), sequentially with a 16-second delay. `GEOCODE_DELAY_SECONDS` and the geocoder provider URL can be configured. A provider failure leaves the announcement export intact; the workflow summary reports data freshness and map coverage separately.
+
+The workflow commits only changed seed JSON files. It dispatches CI after a commit; successful CI follows the normal image deployment workflow. Public Nominatim's [usage policy](https://operations.osmfoundation.org/policies/nominatim/) limits regularly scheduled geocoding to four requests per minute and requires a single thread, cached results, and an identifying User-Agent. Never send names or violation facts to the provider. The map omits unresolved coordinates while records remain in the table, filters, and statistics.
 
 ## Admin Operations
 
@@ -73,7 +79,7 @@ Rules:
 Render free often shares outbound IPs with other users, so prefer this workflow for map data:
 
 1. Import the same PDFs locally.
-2. Run `python3 scripts/geocode_locations.py --limit 5 --delay 10` until needed locations are cached.
+2. Run `python3 scripts/geocode_locations.py --limit 5 --delay 16` until needed locations are cached.
 3. Run `npm run export:geocode`.
 4. Commit `data/seed/geocoded_locations.json`.
 5. Deploy. Startup imports that cache without calling Nominatim.

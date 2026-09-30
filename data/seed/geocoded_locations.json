@@ -1,5 +1,4 @@
 {
-  "exportedAt": 1781075256476,
   "locations": [
     {
       "locationText": "一壽橋",
@@ -236,6 +235,16 @@
       "geocodedAt": 1781074287798
     },
     {
+      "locationText": "五分街８２號",
+      "normalizedQuery": "臺北市 五分街８２號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "仁愛路三段",
       "normalizedQuery": "臺北市 仁愛路三段",
       "lat": 25.0381207,
@@ -405,6 +414,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074333513
+    },
+    {
+      "locationText": "內湖路一段與港墘路",
+      "normalizedQuery": "臺北市 內湖路一段與港墘路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "內湖路二段",
@@ -596,6 +615,16 @@
       "geocodedAt": 1781074379492
     },
     {
+      "locationText": "南湖大橋下",
+      "normalizedQuery": "臺北市 南湖大橋下",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "台北橋機車道",
       "normalizedQuery": "臺北市 台北橋機車道",
       "lat": 25.0304407,
@@ -677,6 +706,16 @@
       "geocodedAt": 1781074399942
     },
     {
+      "locationText": "和平東路３段與 安和路２段口",
+      "normalizedQuery": "臺北市 和平東路３段與 安和路２段口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "和平西路一段",
       "normalizedQuery": "臺北市 和平西路一段",
       "lat": 25.0266515,
@@ -693,6 +732,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074406424
+    },
+    {
+      "locationText": "和平西路三段與環河 南路二段",
+      "normalizedQuery": "臺北市 和平西路三段與環河 南路二段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "和平西路二段",
@@ -749,6 +798,86 @@
       "geocodedAt": 1781074420967
     },
     {
+      "locationText": "國道3甲西向 2.700公里",
+      "normalizedQuery": "臺北市 國道3甲西向 2.700公里",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "國道3號北向25.1 公里",
+      "normalizedQuery": "臺北市 國道3號北向25.1 公里",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "國道3號南向17公 里",
+      "normalizedQuery": "臺北市 國道3號南向17公 里",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "國道１號北向 25.700公里",
+      "normalizedQuery": "臺北市 國道１號北向 25.700公里",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "國道１號南向 15.800公里",
+      "normalizedQuery": "臺北市 國道１號南向 15.800公里",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "國道３號北向",
+      "normalizedQuery": "臺北市 國道３號北向",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "國道３號北向１ ８．１００公里",
+      "normalizedQuery": "臺北市 國道３號北向１ ８．１００公里",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "國道３號南向",
+      "normalizedQuery": "臺北市 國道３號南向",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "基河路",
       "normalizedQuery": "臺北市 基河路",
       "lat": 25.088895,
@@ -803,6 +932,16 @@
       "geocodedAt": 1781074447904
     },
     {
+      "locationText": "基隆路四段與 汀州路四段",
+      "normalizedQuery": "臺北市 基隆路四段與 汀州路四段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "基隆路車行地下道",
       "normalizedQuery": "臺北市 基隆路車行地下道",
       "lat": 25.0422111,
@@ -819,6 +958,76 @@
       "geocodeProvider": "nominatim",
       "confidence": 6.549095902948069e-05,
       "geocodedAt": 1781074455170
+    },
+    {
+      "locationText": "堤外便道/大理- 華中橋",
+      "normalizedQuery": "臺北市 堤外便道/大理- 華中橋",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "堤外便道/市民- 桂林",
+      "normalizedQuery": "臺北市 堤外便道/市民- 桂林",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "堤外便道/民生- 市民",
+      "normalizedQuery": "臺北市 堤外便道/民生- 市民",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "堤外便道/民生- 市民段",
+      "normalizedQuery": "臺北市 堤外便道/民生- 市民段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "堤外便道/環河北 路",
+      "normalizedQuery": "臺北市 堤外便道/環河北 路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "堤外便道/華中 橋-青年路",
+      "normalizedQuery": "臺北市 堤外便道/華中 橋-青年路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "堤外便道/華中橋- 青年路",
+      "normalizedQuery": "臺北市 堤外便道/華中橋- 青年路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "堤頂大道一段",
@@ -893,6 +1102,16 @@
       "geocodedAt": 1781074488451
     },
     {
+      "locationText": "大度路一段與中 央北路",
+      "normalizedQuery": "臺北市 大度路一段與中 央北路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "大度路三段",
       "normalizedQuery": "臺北市 大度路三段",
       "lat": 25.1229627,
@@ -909,6 +1128,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074495513
+    },
+    {
+      "locationText": "大業路與三合街 二段",
+      "normalizedQuery": "臺北市 大業路與三合街 二段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "大湖山莊街",
@@ -945,6 +1174,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074505200
+    },
+    {
+      "locationText": "大直街與大直街３ ３巷",
+      "normalizedQuery": "臺北市 大直街與大直街３ ３巷",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "大興街",
@@ -1091,6 +1330,16 @@
       "geocodedAt": 1781074540762
     },
     {
+      "locationText": "市民大道一段與 承德路一段",
+      "normalizedQuery": "臺北市 市民大道一段與 承德路一段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "市民大道七段",
       "normalizedQuery": "臺北市 市民大道七段",
       "lat": 25.0505386,
@@ -1116,6 +1365,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074548141
+    },
+    {
+      "locationText": "市民大道二段與 金山北路",
+      "normalizedQuery": "臺北市 市民大道二段與 金山北路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "市民大道五段",
@@ -1352,6 +1611,16 @@
       "geocodedAt": 1781074602423
     },
     {
+      "locationText": "建國南路二段與辛 亥路二段口",
+      "normalizedQuery": "臺北市 建國南路二段與辛 亥路二段口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "建國高架橋",
       "normalizedQuery": "臺北市 建國高架橋",
       "lat": 24.9572259,
@@ -1449,6 +1718,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074625533
+    },
+    {
+      "locationText": "忠孝東路五段６１７ 號",
+      "normalizedQuery": "臺北市 忠孝東路五段６１７ 號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "忠孝東路六段",
@@ -1559,6 +1838,16 @@
       "geocodedAt": 1781074650764
     },
     {
+      "locationText": "成功路二段與新 明路",
+      "normalizedQuery": "臺北市 成功路二段與新 明路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "成功路五段",
       "normalizedQuery": "臺北市 成功路五段",
       "lat": 25.0829455,
@@ -1620,6 +1909,26 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074666224
+    },
+    {
+      "locationText": "承德路三段與敦 煌路",
+      "normalizedQuery": "臺北市 承德路三段與敦 煌路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "承德路三段與民 族西路",
+      "normalizedQuery": "臺北市 承德路三段與民 族西路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "承德路二段",
@@ -1712,6 +2021,26 @@
       "geocodedAt": 1781074690592
     },
     {
+      "locationText": "敦煌路與環河北 路二段",
+      "normalizedQuery": "臺北市 敦煌路與環河北 路二段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "敦煌路與環河南路 二段",
+      "normalizedQuery": "臺北市 敦煌路與環河南路 二段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "敬業四路",
       "normalizedQuery": "臺北市 敬業四路",
       "lat": 25.0832731,
@@ -1775,6 +2104,16 @@
       "geocodedAt": 1781074708616
     },
     {
+      "locationText": "新光路與文和橋",
+      "normalizedQuery": "臺北市 新光路與文和橋",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "新明路",
       "normalizedQuery": "臺北市 新明路",
       "lat": 25.0564036,
@@ -1782,6 +2121,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074712712
+    },
+    {
+      "locationText": "新明路與成功路 二段",
+      "normalizedQuery": "臺北市 新明路與成功路 二段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "新民街",
@@ -1838,6 +2187,16 @@
       "geocodedAt": 1781074725512
     },
     {
+      "locationText": "新生北路與長安東 路一段",
+      "normalizedQuery": "臺北市 新生北路與長安東 路一段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "新生南路一段",
       "normalizedQuery": "臺北市 新生南路一段",
       "lat": 25.0433885,
@@ -1874,6 +2233,16 @@
       "geocodedAt": 1781074736236
     },
     {
+      "locationText": "昆陽街８２號",
+      "normalizedQuery": "臺北市 昆陽街８２號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "昌吉街",
       "normalizedQuery": "臺北市 昌吉街",
       "lat": 25.065893,
@@ -1908,6 +2277,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074746402
+    },
+    {
+      "locationText": "景福街１３３號之 １與景福匝道口",
+      "normalizedQuery": "臺北市 景福街１３３號之 １與景福匝道口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "景興路",
@@ -1953,6 +2332,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074758896
+    },
+    {
+      "locationText": "木柵路五段與信 義快速道路往北",
+      "normalizedQuery": "臺北市 木柵路五段與信 義快速道路往北",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "木柵路四段",
@@ -2036,6 +2425,16 @@
       "geocodedAt": 1781074778967
     },
     {
+      "locationText": "松壽路與市府路",
+      "normalizedQuery": "臺北市 松壽路與市府路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "松山路",
       "normalizedQuery": "臺北市 松山路",
       "lat": 25.0296827,
@@ -2061,6 +2460,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074788388
+    },
+    {
+      "locationText": "松廉路與松智路 口",
+      "normalizedQuery": "臺北市 松廉路與松智路 口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "松江路",
@@ -2108,6 +2517,16 @@
       "geocodedAt": 1781074800777
     },
     {
+      "locationText": "林森北路４８０巷口",
+      "normalizedQuery": "臺北市 林森北路４８０巷口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "林森南地下道",
       "normalizedQuery": "臺北市 林森南地下道",
       "lat": 25.0656873,
@@ -2142,6 +2561,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 7.457007705801507e-05,
       "geocodedAt": 1781074811235
+    },
+    {
+      "locationText": "桂林路與環河南 路一段",
+      "normalizedQuery": "臺北市 桂林路與環河南 路一段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "梧州街",
@@ -2214,6 +2643,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074829246
+    },
+    {
+      "locationText": "民族東路４１０ 巷與民族東路口",
+      "normalizedQuery": "臺北市 民族東路４１０ 巷與民族東路口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "民族西路",
@@ -2297,6 +2736,46 @@
       "geocodedAt": 1781074848984
     },
     {
+      "locationText": "民權西路與承德 路二段",
+      "normalizedQuery": "臺北市 民權西路與承德 路二段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "民權西路與重慶 北路三段",
+      "normalizedQuery": "臺北市 民權西路與重慶 北路三段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "民權西路２２６號",
+      "normalizedQuery": "臺北市 民權西路２２６號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "民權西路２２６號 前",
+      "normalizedQuery": "臺北市 民權西路２２６號 前",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "民生東路",
       "normalizedQuery": "臺北市 民生東路",
       "lat": 25.0581208,
@@ -2340,6 +2819,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074866726
+    },
+    {
+      "locationText": "水源怏速道路",
+      "normalizedQuery": "臺北市 水源怏速道路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "水源路",
@@ -2432,6 +2921,16 @@
       "geocodedAt": 1781074889567
     },
     {
+      "locationText": "汀洲路一段１４０巷 １３弄５號",
+      "normalizedQuery": "臺北市 汀洲路一段１４０巷 １３弄５號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "汀洲路３段",
       "normalizedQuery": "臺北市 汀洲路３段",
       "lat": 25.0183584,
@@ -2520,6 +3019,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074912806
+    },
+    {
+      "locationText": "港墘路與堤頂大道一 段口",
+      "normalizedQuery": "臺北市 港墘路與堤頂大道一 段口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "港東街",
@@ -2639,6 +3148,16 @@
       "geocodedAt": 1781074941066
     },
     {
+      "locationText": "環河北路一段與 南京西路",
+      "normalizedQuery": "臺北市 環河北路一段與 南京西路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "環河北路三段",
       "normalizedQuery": "臺北市 環河北路三段",
       "lat": 25.0805607,
@@ -2675,6 +3194,16 @@
       "geocodedAt": 1781074951423
     },
     {
+      "locationText": "環河南路一段５９號 前",
+      "normalizedQuery": "臺北市 環河南路一段５９號 前",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "環河南路三段",
       "normalizedQuery": "臺北市 環河南路三段",
       "lat": 25.0217222,
@@ -2684,6 +3213,16 @@
       "geocodedAt": 1781074955188
     },
     {
+      "locationText": "環河南路三段與萬 大路",
+      "normalizedQuery": "臺北市 環河南路三段與萬 大路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "環河南路二段",
       "normalizedQuery": "臺北市 環河南路二段",
       "lat": 25.0300926,
@@ -2691,6 +3230,36 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074959505
+    },
+    {
+      "locationText": "環河南路二段與桂 林路",
+      "normalizedQuery": "臺北市 環河南路二段與桂 林路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "環河南路２段１７ ３號前",
+      "normalizedQuery": "臺北市 環河南路２段１７ ３號前",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "環河南路３段２３７ 號",
+      "normalizedQuery": "臺北市 環河南路３段２３７ 號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "環河快速道路",
@@ -2898,6 +3467,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781075012650
+    },
+    {
+      "locationText": "經貿一路與經園 街",
+      "normalizedQuery": "臺北市 經貿一路與經園 街",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "經貿二路",
@@ -3134,6 +3713,16 @@
       "geocodedAt": 1781075071123
     },
     {
+      "locationText": "艋舺大道與西藏 路口",
+      "normalizedQuery": "臺北市 艋舺大道與西藏 路口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "芳蘭路",
       "normalizedQuery": "臺北市 芳蘭路",
       "lat": 25.0145738,
@@ -3215,6 +3804,36 @@
       "geocodedAt": 1781075090680
     },
     {
+      "locationText": "萬大路與富民路口",
+      "normalizedQuery": "臺北市 萬大路與富民路口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "萬大路５３３號",
+      "normalizedQuery": "臺北市 萬大路５３３號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "萬大路５３３號旁",
+      "normalizedQuery": "臺北市 萬大路５３３號旁",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "萬板大橋",
       "normalizedQuery": "臺北市 萬板大橋",
       "lat": 25.029613,
@@ -3278,6 +3897,16 @@
       "geocodedAt": 1781075111778
     },
     {
+      "locationText": "裕民ㄧ路",
+      "normalizedQuery": "臺北市 裕民ㄧ路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "裕民二路",
       "normalizedQuery": "臺北市 裕民二路",
       "lat": 25.1152748,
@@ -3305,6 +3934,16 @@
       "geocodedAt": 1781075119459
     },
     {
+      "locationText": "西園路２段與環河南 路３段",
+      "normalizedQuery": "臺北市 西園路２段與環河南 路３段",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "西寧北路",
       "normalizedQuery": "臺北市 西寧北路",
       "lat": 25.0556937,
@@ -3314,6 +3953,26 @@
       "geocodedAt": 1781075124263
     },
     {
+      "locationText": "西寧北路與鄭州 路",
+      "normalizedQuery": "臺北市 西寧北路與鄭州 路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "西寧北路與鄭州路",
+      "normalizedQuery": "臺北市 西寧北路與鄭州路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "西寧南路",
       "normalizedQuery": "臺北市 西寧南路",
       "lat": 25.0442109,
@@ -3321,6 +3980,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781075130912
+    },
+    {
+      "locationText": "西寧南路與成都 路口",
+      "normalizedQuery": "臺北市 西寧南路與成都 路口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "西昌街",
@@ -3431,6 +4100,16 @@
       "geocodedAt": 1781075159205
     },
     {
+      "locationText": "迪化街１段１０３號",
+      "normalizedQuery": "臺北市 迪化街１段１０３號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "通化街",
       "normalizedQuery": "臺北市 通化街",
       "lat": 25.0287281,
@@ -3467,6 +4146,16 @@
       "geocodedAt": 1781075171069
     },
     {
+      "locationText": "通河西街二段２４５ 號",
+      "normalizedQuery": "臺北市 通河西街二段２４５ 號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "鄭州路",
       "normalizedQuery": "臺北市 鄭州路",
       "lat": 25.04977,
@@ -3474,6 +4163,26 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781075175070
+    },
+    {
+      "locationText": "鄭州路與塔城街",
+      "normalizedQuery": "臺北市 鄭州路與塔城街",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "鄭州路與西寧北 路",
+      "normalizedQuery": "臺北市 鄭州路與西寧北 路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "重三路",
@@ -3494,6 +4203,26 @@
       "geocodedAt": 1781075184247
     },
     {
+      "locationText": "重慶北路三段與 敦煌路",
+      "normalizedQuery": "臺北市 重慶北路三段與 敦煌路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "重慶北路三段與敦煌 路",
+      "normalizedQuery": "臺北市 重慶北路三段與敦煌 路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "重慶北路二段",
       "normalizedQuery": "臺北市 重慶北路二段",
       "lat": 25.055049,
@@ -3503,6 +4232,16 @@
       "geocodedAt": 1781075192332
     },
     {
+      "locationText": "重慶北路二段與民 生西路",
+      "normalizedQuery": "臺北市 重慶北路二段與民 生西路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "重慶北路四段",
       "normalizedQuery": "臺北市 重慶北路四段",
       "lat": 25.0823975,
@@ -3510,6 +4249,26 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781075197385
+    },
+    {
+      "locationText": "重慶北路四段２ １７號前",
+      "normalizedQuery": "臺北市 重慶北路四段２ １７號前",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "重慶北路四段２２５ 號",
+      "normalizedQuery": "臺北市 重慶北路四段２２５ 號",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     },
     {
       "locationText": "重慶南路一段",
@@ -3611,6 +4370,16 @@
       "geocodedAt": 1781075222778
     },
     {
+      "locationText": "長安東路一段與 復興北路口",
+      "normalizedQuery": "臺北市 長安東路一段與 復興北路口",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
       "locationText": "長安東路二段",
       "normalizedQuery": "臺北市 長安東路二段",
       "lat": 25.0484276,
@@ -3708,6 +4477,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781075246639
+    },
+    {
+      "locationText": "臺北市承德路２段與 民生西路",
+      "normalizedQuery": "臺北市承德路２段與 民生西路",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": null,
+      "error": "not_found"
     }
   ]
 }

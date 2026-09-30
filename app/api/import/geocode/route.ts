@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   const body = await readJsonObject(request);
   const args = ["scripts/geocode_locations.py"];
   args.push("--limit", String(Math.trunc(boundedNumber(body.limit, 5, 1, 25))));
-  args.push("--delay", String(boundedNumber(body.delay, 10, 1, 60)));
+  args.push("--delay", String(boundedNumber(body.delay, 16, 16, 60)));
   const result = await runPythonScript(args);
   return jsonNoStore(result);
 }

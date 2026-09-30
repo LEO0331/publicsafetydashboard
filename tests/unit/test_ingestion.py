@@ -5,6 +5,7 @@ import sqlite3
 import tempfile
 import urllib.parse
 import json
+from contextlib import closing, contextmanager
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -19,6 +20,17 @@ from common import content_hash, normalize_space, parse_taiwan_date
 from crawl_sources import extract_pdf_links
 from geocode_locations import geocode, geocode_pending, is_rate_limited, normalized_query, pending_locations
 from pdf_parser import parse_alcohol_mg_per_l, parse_violation_count, parse_violation_types, records_from_rows, rows_from_table, rows_from_text
+
+
+@contextmanager
+def closing_test_db(db_path):
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        with conn:
+            yield conn
+    finally:
+        conn.close()
 
 
 class IngestionTests(unittest.TestCase):
@@ -48,7 +60,7 @@ class IngestionTests(unittest.TestCase):
         self.assertEqual(links[0].published_date, parse_taiwan_date("115.05.23"))
 
     def test_crawl_stops_when_page_has_no_new_pdf_links(self):
-        html_with_pdf = '<a href="/Download.ashx?u=/a.pdf&n=115.05.23.pdf">115.05.23.pdf</a>'
+        html_with_pdf = '<a href="/Download.ashx?u=/a.pdf&n=115.05.23.pdf">115.05.23臺北市酒駕及拒測累犯公布名單.pdf</a>'
         with unittest.mock.patch.object(crawl_sources, "fetch_html", side_effect=[html_with_pdf, html_with_pdf]), unittest.mock.patch.object(
             crawl_sources, "upsert_sources", return_value=1
         ) as upsert, unittest.mock.patch.object(crawl_sources.time, "sleep"):
@@ -181,9 +193,7 @@ class IngestionTests(unittest.TestCase):
             conn.close()
 
             def connect_test_db():
-                test_conn = sqlite3.connect(db_path)
-                test_conn.row_factory = sqlite3.Row
-                return test_conn
+                return closing_test_db(db_path)
 
             with unittest.mock.patch.object(geocode_locations, "connect_db", side_effect=connect_test_db), unittest.mock.patch.object(
                 geocode_locations, "geocode", return_value=(25.1, 121.6, 0.9, None)
@@ -194,7 +204,7 @@ class IngestionTests(unittest.TestCase):
                 self.assertEqual(geocode_pending(delay_seconds=0), 1)
 
             geocode_mock.assert_called_once_with("臺北市 忠孝東路一段")
-            with sqlite3.connect(db_path) as verify:
+            with closing(sqlite3.connect(db_path)) as verify:
                 rows = verify.execute("SELECT location_text, normalized_query, lat, lng FROM geocoded_locations ORDER BY location_text").fetchall()
             self.assertEqual(len(rows), 2)
             self.assertEqual(rows[0][0], "南京東路三段")
@@ -228,9 +238,7 @@ class IngestionTests(unittest.TestCase):
             conn.close()
 
             def connect_test_db():
-                test_conn = sqlite3.connect(db_path)
-                test_conn.row_factory = sqlite3.Row
-                return test_conn
+                return closing_test_db(db_path)
 
             with unittest.mock.patch.object(geocode_locations, "connect_db", side_effect=connect_test_db):
                 self.assertEqual(pending_locations(), ["中央北路三段"])
@@ -263,9 +271,7 @@ class IngestionTests(unittest.TestCase):
             conn.close()
 
             def connect_test_db():
-                test_conn = sqlite3.connect(db_path)
-                test_conn.row_factory = sqlite3.Row
-                return test_conn
+                return closing_test_db(db_path)
 
             with unittest.mock.patch.object(geocode_locations, "connect_db", side_effect=connect_test_db), unittest.mock.patch.object(
                 geocode_locations, "geocode", return_value=(None, None, None, "HTTP Error 429: Too many requests")
@@ -287,9 +293,7 @@ class IngestionTests(unittest.TestCase):
             conn.close()
 
             def connect_test_db():
-                test_conn = sqlite3.connect(db_path)
-                test_conn.row_factory = sqlite3.Row
-                return test_conn
+                return closing_test_db(db_path)
 
             with unittest.mock.patch.object(seed_initial_data, "connect_db", side_effect=connect_test_db):
                 self.assertEqual(seed_initial_data.seed_initial_data(), 2407)
@@ -297,9 +301,9 @@ class IngestionTests(unittest.TestCase):
                 self.assertEqual(seed_initial_data.seed_initial_data(), 2407)
 
             with unittest.mock.patch.object(seed_geocode_cache, "connect_db", side_effect=connect_test_db):
-                self.assertEqual(seed_geocode_cache.seed_geocode_cache(), 412)
+                self.assertEqual(seed_geocode_cache.seed_geocode_cache(), 490)
 
-            with sqlite3.connect(db_path) as verify:
+            with closing(sqlite3.connect(db_path)) as verify:
                 source_count = verify.execute("SELECT COUNT(*) FROM sources").fetchone()[0]
                 record_count = verify.execute("SELECT COUNT(*) FROM offender_records").fetchone()[0]
                 geocode_count = verify.execute("SELECT COUNT(*) FROM geocoded_locations").fetchone()[0]
@@ -307,7 +311,7 @@ class IngestionTests(unittest.TestCase):
                 needs_review_count = verify.execute("SELECT COUNT(*) FROM offender_records WHERE needs_review = 1").fetchone()[0]
             self.assertEqual(source_count, 94)
             self.assertEqual(record_count, 2407)
-            self.assertEqual(geocode_count, 412)
+            self.assertEqual(geocode_count, 490)
             self.assertEqual(photo_count, 0)
             self.assertEqual(needs_review_count, 34)
 
@@ -321,10 +325,14 @@ class IngestionTests(unittest.TestCase):
         }
         geocoded_locations = {location["locationText"] for location in geocode_seed["locations"]}
         self.assertTrue(geocoded_locations)
-        self.assertEqual(len(geocoded_locations), 412)
+        self.assertEqual(len(geocoded_locations), 490)
         self.assertTrue(geocoded_locations.issubset(record_locations))
         self.assertTrue(all(location["geocodeProvider"] == "nominatim" for location in geocode_seed["locations"]))
-        self.assertTrue(all(location["lat"] is not None and location["lng"] is not None for location in geocode_seed["locations"]))
+        mapped = [location for location in geocode_seed["locations"] if location["lat"] is not None and location["lng"] is not None]
+        unresolved = [location for location in geocode_seed["locations"] if location.get("error") == "not_found"]
+        self.assertEqual(len(mapped), 412)
+        self.assertEqual(len(unresolved), 78)
+        self.assertTrue(all(location["lat"] is None and location["lng"] is None for location in unresolved))
 
     def test_geocode_cache_export_and_seed_round_trip(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -365,14 +373,10 @@ class IngestionTests(unittest.TestCase):
             source.close()
 
             def connect_source_db():
-                conn = sqlite3.connect(source_db)
-                conn.row_factory = sqlite3.Row
-                return conn
+                return closing_test_db(source_db)
 
             def connect_target_db():
-                conn = sqlite3.connect(target_db)
-                conn.row_factory = sqlite3.Row
-                return conn
+                return closing_test_db(target_db)
 
             with unittest.mock.patch.object(export_geocode_cache, "connect_db", side_effect=connect_source_db), unittest.mock.patch.object(
                 export_geocode_cache, "now_ms", return_value=999
@@ -382,7 +386,7 @@ class IngestionTests(unittest.TestCase):
             with unittest.mock.patch.object(seed_geocode_cache, "connect_db", side_effect=connect_target_db):
                 self.assertEqual(seed_geocode_cache.seed_geocode_cache(export_path), 1)
 
-            with sqlite3.connect(target_db) as verify:
+            with closing(sqlite3.connect(target_db)) as verify:
                 rows = verify.execute("SELECT location_text, normalized_query, lat, lng, error FROM geocoded_locations").fetchall()
             self.assertEqual(rows, [("中央北路三段", "臺北市 中央北路三段", 25.13, 121.49, None)])
 

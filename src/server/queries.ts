@@ -194,6 +194,13 @@ export function setRecordHidden(id: number, hidden: boolean) {
 }
 
 export function getLocations() {
+  const coordinates = new Map(
+    (sqlite.prepare("SELECT normalized_query, lat, lng FROM geocoded_locations WHERE lat IS NOT NULL AND lng IS NOT NULL").all() as {
+      normalized_query: string;
+      lat: number;
+      lng: number;
+    }[]).map((row) => [row.normalized_query, { lat: row.lat, lng: row.lng }] as const)
+  );
   const rows = sqlite
     .prepare(
       `
@@ -202,16 +209,9 @@ export function getLocations() {
         COUNT(*) AS count,
         MIN(r.violation_date) AS dateMin,
         MAX(r.violation_date) AS dateMax,
-        geocoded.lat,
-        geocoded.lng,
         GROUP_CONCAT(COALESCE(r.violation_types_json, '[]'), char(10)) AS violationTypesJson
       FROM offender_records r
       JOIN sources s ON s.id = r.source_id
-      LEFT JOIN (
-        SELECT location_text, MAX(lat) AS lat, MAX(lng) AS lng
-        FROM geocoded_locations
-        GROUP BY location_text
-      ) geocoded ON geocoded.location_text = r.location_text
       WHERE r.is_hidden = 0 AND s.is_hidden = 0 AND r.location_text IS NOT NULL AND r.location_text != ''
       GROUP BY r.location_text
       ORDER BY count DESC, r.location_text ASC
@@ -222,11 +222,12 @@ export function getLocations() {
     count: number;
     dateMin: number | null;
     dateMax: number | null;
-    lat: number | null;
-    lng: number | null;
     violationTypesJson: string | null;
   }[];
   return rows.map((row) => {
+    const location = row.location_text.replace(/\s+/g, " ").trim();
+    const query = location.startsWith("臺北市") || location.startsWith("台北市") ? location : `臺北市 ${location}`;
+    const coordinate = coordinates.get(query);
     const types = new Map<string, number>();
     for (const value of (row.violationTypesJson ?? "").split("\n")) {
       for (const type of parseViolationTypes(value)) {
@@ -236,8 +237,8 @@ export function getLocations() {
     return {
       location: row.location_text,
       count: row.count,
-      lat: row.lat,
-      lng: row.lng,
+      lat: coordinate?.lat ?? null,
+      lng: coordinate?.lng ?? null,
       dateMin: row.dateMin,
       dateMax: row.dateMax,
       types: Array.from(types.entries()).map(([type, count]) => ({ type, count })),

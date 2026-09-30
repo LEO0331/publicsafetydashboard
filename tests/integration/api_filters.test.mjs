@@ -27,6 +27,9 @@ test("records query filters by violation count, type, location, and date", async
     `
   ).run(source.id, violationDate);
   db.prepare(
+    "INSERT INTO geocoded_locations (location_text, normalized_query, lat, lng) VALUES (?, ?, ?, ?)"
+  ).run("臺北市 忠孝東路一段", "臺北市 忠孝東路一段", 25.04, 121.55);
+  db.prepare(
     `
     INSERT INTO offender_records
       (source_id, sequence_no, name, violation_date, location_text, fact_text, violation_count, violation_types_json, parser_confidence, needs_review)
@@ -120,6 +123,7 @@ test("records query filters by violation count, type, location, and date", async
   );
 
   const locations = getLocations();
+  assert.equal(locations.find((item) => item.location === "忠孝東路一段")?.lat, 25.04);
   assert.equal(locations.some((item) => item.location === "隱藏路段"), false);
   assert.equal(locations.some((item) => item.location === "信義路五段"), false);
   assert.equal(locations.some((item) => item.location === "和平東路二段"), true);

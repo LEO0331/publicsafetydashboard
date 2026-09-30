@@ -1,15 +1,18 @@
 from __future__ import annotations
 
 import argparse
+import re
 import time
 import urllib.parse
 import urllib.request
+import unicodedata
 from dataclasses import dataclass
 from html.parser import HTMLParser
 
 from common import USER_AGENT, connect_db, log_import, normalize_space, parse_taiwan_date
 
 BASE_URL = "https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170"
+ROC_DATE = re.compile(r"(?<!\d)(?P<year>\d{2,3})\s*(?:[./-]|年)\s*(?P<month>\d{1,2})\s*(?:[./-]|月)\s*(?P<day>\d{1,2})\s*日?(?!\d)")
 
 
 @dataclass(frozen=True)
@@ -45,6 +48,24 @@ class TaipeiDotParser(HTMLParser):
             self.anchors.append((self._href, normalize_space("".join(self._text))))
             self._href = None
             self._text = []
+
+
+def is_regular_repeat_offender_announcement(title: str) -> bool:
+    """Recognize regular Taipei DOT releases across ROC years and historical wording."""
+    normalized = unicodedata.normalize("NFKC", title or "").replace("台北市", "臺北市")
+    date = ROC_DATE.search(normalized)
+    if not date or int(date.group("year")) == 0 or parse_taiwan_date(date.group()) is None:
+        return False
+
+    wording = re.sub(r"[^\w\u4e00-\u9fff]", "", normalized[date.end():])
+    if "三次以上且設籍本市者" in wording:
+        return False
+    if not all(part in wording for part in ("臺北市", "累犯", "公布名單")):
+        return False
+    if "拒測" in wording:
+        return bool(re.search(r"酒(?:毒)?駕|酒(?:毒)?及拒測駕", wording))
+    # The earliest regular releases used this exact shorter series name.
+    return bool(re.fullmatch(r"臺北市(?:第\d+次)?酒駕累犯公布名單(?:pdf)?", wording))
 
 
 def page_url(page: int, page_size: int) -> str:
@@ -112,7 +133,9 @@ def crawl(page_size: int = 20, delay_seconds: float = 1.0, max_pages: int | None
             seen.add(link.pdf_url)
         if not new_links:
             break
-        total_inserted += upsert_sources(new_links)
+        eligible_links = [link for link in new_links if is_regular_repeat_offender_announcement(link.title)]
+        if eligible_links:
+            total_inserted += upsert_sources(eligible_links)
         page += 1
         time.sleep(delay_seconds)
     return total_inserted

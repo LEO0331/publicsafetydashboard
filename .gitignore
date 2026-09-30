@@ -9,6 +9,7 @@ yarn-error.log*
 pnpm-debug.log*
 coverage
 .tmp-test
+.tmp-tests
 __pycache__
 *.pyc
 .DS_Store
