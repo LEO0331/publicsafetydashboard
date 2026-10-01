@@ -29,8 +29,6 @@ Traditional Chinese README:
 
 ## Public-Safety And Privacy Notice
 
-本網站資料來源為臺北市政府公開公告資料，僅供交通安全教育與資料視覺化示範使用。若原始公告修正、移除或更新，請以主管機關最新公告為準。
-
 This project intentionally avoids turning public records into a people-search product:
 
 - No enrichment from other sources.
