@@ -1,6 +1,6 @@
 {
   "project": "Taipei Public Safety Dashboard",
-  "lastUpdated": "2026-09-30",
+  "lastUpdated": "2026-10-06",
   "activeFeatureId": null,
   "features": [
     {
@@ -353,6 +353,27 @@
         "./init.sh passed lint, typecheck, unit/integration, and coverage using Git Bash as npm script shell",
         "npm run build passed",
         "Restored seed into temporary migrated SQLite DB: 94 sources, 2,407 records, 490 cache rows; both JSON exports matched committed files byte for byte"
+      ]
+    },
+    {
+      "id": "F14",
+      "name": "Monthly refresh verification accepts growing seeds",
+      "title": "Monthly refresh verification accepts growing seeds",
+      "description": "Remove frozen dataset totals from seed tests so new monthly records and map cache entries can pass the workflow publication gate.",
+      "priority": 14,
+      "status": "completed",
+      "dependsOn": ["F13"],
+      "dependencies": ["F13"],
+      "doneCriteria": [
+        "Seed insertion counts and review totals match current JSON payloads",
+        "Privacy, idempotency, cache uniqueness, and mapped/not-found validation remain enforced",
+        "Regression covers an additional 15 records and 7 cache rows",
+        "Full harness verification passes"
+      ],
+      "evidence": [
+        "./init.sh passed on 2026-10-06 using Git Bash and bundled Python 3.12: lint, typecheck, 30 Python tests, 5 Node integration tests",
+        "Python coverage 85.59%; Node line coverage 96.01%",
+        "Monthly growth regression validates an expanded temporary seed without modifying committed data"
       ]
     }
   ],

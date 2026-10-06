@@ -1,5 +1,14 @@
 # Progress Log
 
+## 2026-10-06 (Monthly refresh verification fix)
+
+- Root cause: the monthly workflow exports new seeds before `npm test`. Seed tests froze September totals (2,407 records, 94 sources, 490 cache rows, 412 mapped, 78 unresolved, 34 review rows); the supplied run added 15 records and seven cache rows and failed before committing.
+- Changed `tests/unit/test_ingestion.py` to compare actual database counts against current seed contents instead of historical totals. Kept nonempty data, photo exclusion, review flag preservation, idempotency, cache uniqueness, published-location membership, and mapped/not-found checks.
+- Added a regression with 15 additional synthetic records and seven synthetic cache rows in temporary files; no committed data or public services were changed.
+- Updated F14 in `feature_list.json` and the session handoff; no active feature remains.
+- Verification: `./init.sh` passed lint, typecheck, 30 Python unit tests, five Node integration tests, Python coverage 85.59%, and Node line coverage 96.01%. Used Git Bash with `NPM_CONFIG_SCRIPT_SHELL` and bundled Python 3.12 via a local ignored wrapper; TMP/TEMP pointed to `.tmp-tests` for sandbox-compatible SQLite tests. Git Bash required execution outside the sandbox.
+- Risks/gaps: the remote scheduled workflow and live fetch were not rerun here. Existing dependency audit findings remain outside this fix. Next action: commit the fix to main and rerun Monthly Taipei DOT refresh to publish the newly fetched seeds.
+
 ## 2026-05-28
 
 ### Current focus

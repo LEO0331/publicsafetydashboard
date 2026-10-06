@@ -284,6 +284,43 @@ class IngestionTests(unittest.TestCase):
             sleep_mock.assert_not_called()
 
     def test_initial_seed_inserts_public_pdf_records_without_photos(self):
+        self.assert_seed_import(seed_initial_data.SEED_PATH, seed_geocode_cache.DEFAULT_SEED_PATH)
+
+    def test_seed_import_accepts_monthly_growth(self):
+        initial_seed = json.loads(seed_initial_data.SEED_PATH.read_text(encoding="utf-8"))
+        geocode_seed = json.loads(seed_geocode_cache.DEFAULT_SEED_PATH.read_text(encoding="utf-8"))
+        source = dict(initial_seed["sources"][0])
+        source.update(pdfUrl="https://example.invalid/monthly.pdf", contentHash=content_hash(b"monthly regression"))
+        source["records"] = []
+        # Reproduce the reported growth: 15 new records and 7 new cache rows.
+        for index in range(15):
+            record = dict(initial_seed["sources"][0]["records"][0])
+            record.update(sequenceNo=index + 1, locationText=f"Monthly test location {index % 7}")
+            source["records"].append(record)
+        initial_seed["sources"].append(source)
+        for index in range(7):
+            location = dict(geocode_seed["locations"][0])
+            location.update(locationText=f"Monthly test location {index}", normalizedQuery=f"Monthly test query {index}")
+            geocode_seed["locations"].append(location)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            initial_path = Path(tmp) / "announcements.json"
+            geocode_path = Path(tmp) / "geocode.json"
+            initial_path.write_text(json.dumps(initial_seed), encoding="utf-8")
+            geocode_path.write_text(json.dumps(geocode_seed), encoding="utf-8")
+            self.assert_seed_import(initial_path, geocode_path)
+
+    def assert_seed_import(self, initial_path, geocode_path):
+        initial_seed = json.loads(initial_path.read_text(encoding="utf-8"))
+        geocode_seed = json.loads(geocode_path.read_text(encoding="utf-8"))
+        records = [record for source in initial_seed["sources"] for record in source["records"]]
+        # Monthly refresh adds rows before running this suite; validate the current
+        # payload rather than freezing the dataset at a particular month's totals.
+        expected_records = len(records)
+        expected_locations = len(geocode_seed["locations"])
+        self.assertGreater(expected_records, 0)
+        self.assertGreater(expected_locations, 0)
+        self.assertTrue(all(not record["hasPhoto"] for record in records))
         with tempfile.TemporaryDirectory() as tmp:
             db_path = Path(tmp) / "seed.db"
             conn = sqlite3.connect(db_path)
@@ -295,13 +332,16 @@ class IngestionTests(unittest.TestCase):
             def connect_test_db():
                 return closing_test_db(db_path)
 
-            with unittest.mock.patch.object(seed_initial_data, "connect_db", side_effect=connect_test_db):
-                self.assertEqual(seed_initial_data.seed_initial_data(), 2407)
+            with unittest.mock.patch.object(seed_initial_data, "connect_db", side_effect=connect_test_db), unittest.mock.patch.object(
+                seed_initial_data, "SEED_PATH", initial_path
+            ):
+                self.assertEqual(seed_initial_data.seed_initial_data(), expected_records)
                 self.assertEqual(seed_initial_data.seed_initial_data(if_empty=True), 0)
-                self.assertEqual(seed_initial_data.seed_initial_data(), 2407)
+                self.assertEqual(seed_initial_data.seed_initial_data(), expected_records)
 
             with unittest.mock.patch.object(seed_geocode_cache, "connect_db", side_effect=connect_test_db):
-                self.assertEqual(seed_geocode_cache.seed_geocode_cache(), 490)
+                self.assertEqual(seed_geocode_cache.seed_geocode_cache(geocode_path), expected_locations)
+                self.assertEqual(seed_geocode_cache.seed_geocode_cache(geocode_path), expected_locations)
 
             with closing(sqlite3.connect(db_path)) as verify:
                 source_count = verify.execute("SELECT COUNT(*) FROM sources").fetchone()[0]
@@ -309,11 +349,11 @@ class IngestionTests(unittest.TestCase):
                 geocode_count = verify.execute("SELECT COUNT(*) FROM geocoded_locations").fetchone()[0]
                 photo_count = verify.execute("SELECT COUNT(*) FROM offender_records WHERE has_photo = 1").fetchone()[0]
                 needs_review_count = verify.execute("SELECT COUNT(*) FROM offender_records WHERE needs_review = 1").fetchone()[0]
-            self.assertEqual(source_count, 94)
-            self.assertEqual(record_count, 2407)
-            self.assertEqual(geocode_count, 490)
+            self.assertEqual(source_count, len(initial_seed["sources"]))
+            self.assertEqual(record_count, expected_records)
+            self.assertEqual(geocode_count, expected_locations)
             self.assertEqual(photo_count, 0)
-            self.assertEqual(needs_review_count, 34)
+            self.assertEqual(needs_review_count, sum(bool(record["needsReview"]) for record in records))
 
     def test_geocode_seed_covers_resolved_initial_record_locations(self):
         initial_seed = json.loads((ROOT / "data" / "seed" / "initial_announcements.json").read_text(encoding="utf-8"))
@@ -325,13 +365,18 @@ class IngestionTests(unittest.TestCase):
         }
         geocoded_locations = {location["locationText"] for location in geocode_seed["locations"]}
         self.assertTrue(geocoded_locations)
-        self.assertEqual(len(geocoded_locations), 490)
+        self.assertEqual(len(geocoded_locations), len(geocode_seed["locations"]))
+        self.assertEqual(
+            len({location["normalizedQuery"] for location in geocode_seed["locations"]}),
+            len(geocode_seed["locations"]),
+        )
         self.assertTrue(geocoded_locations.issubset(record_locations))
         self.assertTrue(all(location["geocodeProvider"] == "nominatim" for location in geocode_seed["locations"]))
         mapped = [location for location in geocode_seed["locations"] if location["lat"] is not None and location["lng"] is not None]
         unresolved = [location for location in geocode_seed["locations"] if location.get("error") == "not_found"]
-        self.assertEqual(len(mapped), 412)
-        self.assertEqual(len(unresolved), 78)
+        self.assertTrue(mapped)
+        self.assertTrue(all(not location.get("error") for location in mapped))
+        self.assertEqual(len(mapped) + len(unresolved), len(geocode_seed["locations"]))
         self.assertTrue(all(location["lat"] is None and location["lng"] is None for location in unresolved))
 
     def test_geocode_cache_export_and_seed_round_trip(self):

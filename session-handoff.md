@@ -1,8 +1,17 @@
 # Session Handoff
 
-Last Updated: 2026-09-30
-Current Objective: keep the Taipei DOT monthly announcement refresh and incremental map cache reliable across future ROC years.
-Recommended Next Step: review and commit the monthly workflow plus durable seed changes, deploy, then inspect the first scheduled or manual GitHub Actions summary and generated seed diff.
+Last Updated: 2026-10-06
+Current Objective: fixed monthly refresh verification failing when announcement and geocode seeds grow.
+Recommended Next Step: commit the seed-test fix to main, rerun Monthly Taipei DOT refresh, and inspect its generated seed commit and dispatched CI/deployment.
+
+## Latest Fix
+
+- The supplied GitHub Actions log shows that fetching/exporting reached verification: generated seeds had 2,422 records and 497 cache rows, while tests required 2,407 and 490. These frozen totals prevented publication of valid new data.
+- `tests/unit/test_ingestion.py` now compares SQLite imports with the current payload and validates privacy, repeated-import idempotency, cache uniqueness, location membership, and mapped/not-found classification.
+- Added a synthetic monthly-growth regression with 15 additional records and seven cache rows. Committed seed data and workflow behavior remain unchanged.
+- `./init.sh` passed on 2026-10-06 with Git Bash as npm script shell and bundled Python 3.12: lint, typecheck, 30 Python tests, five Node integration tests, Python coverage 85.59%, Node line coverage 96.01%.
+- Files changed: `tests/unit/test_ingestion.py`, `feature_list.json`, `progress.md`, `session-handoff.md`.
+- No blocker for the local fix. The remote workflow has not been rerun from this session; existing dependency audit findings remain deferred.
 
 ## Project
 
