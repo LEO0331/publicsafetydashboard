@@ -263,6 +263,15 @@
       "geocodedAt": 1781074294353
     },
     {
+      "locationText": "仙岩路",
+      "normalizedQuery": "臺北市 仙岩路",
+      "lat": 24.9994089,
+      "lng": 121.5492909,
+      "geocodeProvider": "nominatim",
+      "confidence": 0.05340790341039136,
+      "geocodedAt": 1791248056162
+    },
+    {
       "locationText": "仰德大道一段",
       "normalizedQuery": "臺北市 仰德大道一段",
       "lat": 25.1070948,
@@ -838,6 +847,16 @@
       "error": "not_found"
     },
     {
+      "locationText": "國道１號北向１ ５．９公里處",
+      "normalizedQuery": "臺北市 國道１號北向１ ５．９公里處",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": 1791248072466,
+      "error": "not_found"
+    },
+    {
       "locationText": "國道１號南向 15.800公里",
       "normalizedQuery": "臺北市 國道１號南向 15.800公里",
       "lat": null,
@@ -949,6 +968,15 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074452096
+    },
+    {
+      "locationText": "基隆路高架道",
+      "normalizedQuery": "臺北市 基隆路高架道",
+      "lat": 25.0735139,
+      "lng": 121.4813086,
+      "geocodeProvider": "nominatim",
+      "confidence": 0.053400489051651755,
+      "geocodedAt": 1791248089238
     },
     {
       "locationText": "堤外便道",
@@ -1438,6 +1466,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781074564023
+    },
+    {
+      "locationText": "康寧交流道",
+      "normalizedQuery": "臺北市 康寧交流道",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": 1791248107104,
+      "error": "not_found"
     },
     {
       "locationText": "康寧路",
@@ -2316,6 +2354,15 @@
       "geocodedAt": 1781074754741
     },
     {
+      "locationText": "木新路三段",
+      "normalizedQuery": "臺北市 木新路三段",
+      "lat": 24.9815013,
+      "lng": 121.5598486,
+      "geocodeProvider": "nominatim",
+      "confidence": 0.05340790341039136,
+      "geocodedAt": 1791248123445
+    },
+    {
       "locationText": "木柵路一段",
       "normalizedQuery": "臺北市 木柵路一段",
       "lat": 24.9884563,
@@ -2341,6 +2388,16 @@
       "geocodeProvider": "nominatim",
       "confidence": null,
       "geocodedAt": null,
+      "error": "not_found"
+    },
+    {
+      "locationText": "木柵路五段與文 和橋",
+      "normalizedQuery": "臺北市 木柵路五段與文 和橋",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": 1791248139972,
       "error": "not_found"
     },
     {
@@ -3850,6 +3907,16 @@
       "geocodeProvider": "nominatim",
       "confidence": 0.05340790341039136,
       "geocodedAt": 1781075101240
+    },
+    {
+      "locationText": "萬芳路１１１號 前",
+      "normalizedQuery": "臺北市 萬芳路１１１號 前",
+      "lat": null,
+      "lng": null,
+      "geocodeProvider": "nominatim",
+      "confidence": null,
+      "geocodedAt": 1791248156540,
+      "error": "not_found"
     },
     {
       "locationText": "萬青街",
