@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^12.4.6",
-    "drizzle-orm": "^0.44.7",
+    "drizzle-orm": "^0.45.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.16.0",
     "next": "^16.4.2",
