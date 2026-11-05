@@ -2,15 +2,16 @@
 
 Last Updated: 2026-11-05
 Current Objective: repair CI production build for E2E/Lighthouse after Tailwind CSS 4 removed the direct PostCSS plugin.
-Recommended Next Step: review PR #14, verify GitHub Actions CI (including the E2E production build and Lighthouse), and merge only after checks pass.
+Recommended Next Step: review PR #14 (all CI checks have passed), then merge if approved; observe the post-merge CI/deployment workflows.
 
 ## 2026-11-05 — Tailwind PostCSS CI fix
 
 - Source failure: CI run 39183485868, job 117840989954; lint, typecheck, unit/integration tests and coverage passed, but E2E failed during Next.js webpack compilation of CSS because Tailwind 4 was used as a direct PostCSS plugin.
 - Changed: `postcss.config.js`, `app/globals.css`, `package.json`, `package-lock.json`, and this handoff plus `progress.md`.
 - Installed `@tailwindcss/postcss` version 4.3.3, configured Tailwind v4 CSS imports, preserved the existing Tailwind configuration, and regenerated the lockfile without upgrading any previously locked package.
-- Verification: a temporary GitHub Actions job for npm lockfile generation passed (run 41990250929); PR #14 CI is pending. `./init.sh` was not run locally because the npm registry is inaccessible from the current environment; remote CI is the integration gate.
-- Risk: any residual E2E/Lighthouse failures require separate diagnosis; data and business rules are unchanged.
+- Verification: a temporary GitHub Actions job for npm lockfile generation passed (run 41990250929); full PR #14 CI run 41990856174 passed install, lint, typecheck, unit/integration tests, coverage, E2E and Lighthouse. `./init.sh` was not run locally because the npm registry is inaccessible from the current environment; remote CI provides integration evidence.
+- Runner compatibility: `ubuntu-latest` now resolves to Ubuntu 26.04, which cannot install Chromium with Playwright 1.60.0; `.github/workflows/ci.yml` is pinned to Ubuntu 24.04. E2E and Lighthouse passed afterward.
+- Risk: data and business rules are unchanged; independent dependency-audit advisories remain separate work.
 
 ## Latest Fix
 
