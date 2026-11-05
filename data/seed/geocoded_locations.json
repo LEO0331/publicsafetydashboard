@@ -3142,6 +3142,15 @@
       "geocodedAt": 1781074926529
     },
     {
+      "locationText": "玉門街",
+      "normalizedQuery": "臺北市 玉門街",
+      "lat": 25.0702722,
+      "lng": 121.5202159,
+      "geocodeProvider": "nominatim",
+      "confidence": 0.05340790341039136,
+      "geocodedAt": 1793866538823
+    },
+    {
       "locationText": "瑞光路",
       "normalizedQuery": "臺北市 瑞光路",
       "lat": 25.0757568,
