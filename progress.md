@@ -1,5 +1,13 @@
 # Progress Log
 
+## 2026-11-05 (CI fix: Tailwind CSS v4 PostCSS integration)
+
+- Failed workflow: [CI run 39183485868, job 117840989954](https://github.com/LEO0331/publicsafetydashboard/actions/runs/39183485868/job/117840989954). Lint, TypeScript checks, unit/integration tests and coverage succeeded. Playwright E2E failed while `npm run build` compiled `app/globals.css` and Leaflet CSS with the incompatible Tailwind 4 PostCSS plugin; Lighthouse was skipped.
+- Fix: use `@tailwindcss/postcss@4.3.3` in `postcss.config.js`, replace legacy global `@tailwind` directives with Tailwind v4 `@import` and explicit `@config`, and update `package.json` plus the npm lockfile.
+- Dependency scope: the lockfile was regenerated via a temporary GitHub Actions workflow, [run 41990250929](https://github.com/LEO0331/publicsafetydashboard/actions/runs/41990250929), successfully; 824 pre-existing dependency versions were preserved and 38 packages were added to support the plugin. The temporary workflow was removed afterward.
+- Verification: the existing GitHub Actions CI workflow runs on [PR #14](https://github.com/LEO0331/publicsafetydashboard/pull/14); pending confirmation of `npm ci`, lint, typecheck, tests, coverage, E2E production build and Lighthouse. Local `npm ci`/full `./init.sh` not run because this execution environment cannot resolve the npm registry; rely on the remote Actions check for execution evidence.
+- Risk/next step: review PR #14 and inspect any remaining CI errors before merging; no public records, coordinates, or ingestion logic were modified. Other dependency audit findings remain separate work.
+
 ## 2026-10-06 (Monthly refresh verification fix)
 
 - Root cause: the monthly workflow exports new seeds before `npm test`. Seed tests froze September totals (2,407 records, 94 sources, 490 cache rows, 412 mapped, 78 unresolved, 34 review rows); the supplied run added 15 records and seven cache rows and failed before committing.

@@ -1,8 +1,16 @@
 # Session Handoff
 
-Last Updated: 2026-10-06
-Current Objective: fixed monthly refresh verification failing when announcement and geocode seeds grow.
-Recommended Next Step: commit the seed-test fix to main, rerun Monthly Taipei DOT refresh, and inspect its generated seed commit and dispatched CI/deployment.
+Last Updated: 2026-11-05
+Current Objective: repair CI production build for E2E/Lighthouse after Tailwind CSS 4 removed the direct PostCSS plugin.
+Recommended Next Step: review PR #14, verify GitHub Actions CI (including the E2E production build and Lighthouse), and merge only after checks pass.
+
+## 2026-11-05 — Tailwind PostCSS CI fix
+
+- Source failure: CI run 39183485868, job 117840989954; lint, typecheck, unit/integration tests and coverage passed, but E2E failed during Next.js webpack compilation of CSS because Tailwind 4 was used as a direct PostCSS plugin.
+- Changed: `postcss.config.js`, `app/globals.css`, `package.json`, `package-lock.json`, and this handoff plus `progress.md`.
+- Installed `@tailwindcss/postcss` version 4.3.3, configured Tailwind v4 CSS imports, preserved the existing Tailwind configuration, and regenerated the lockfile without upgrading any previously locked package.
+- Verification: a temporary GitHub Actions job for npm lockfile generation passed (run 41990250929); PR #14 CI is pending. `./init.sh` was not run locally because the npm registry is inaccessible from the current environment; remote CI is the integration gate.
+- Risk: any residual E2E/Lighthouse failures require separate diagnosis; data and business rules are unchanged.
 
 ## Latest Fix
 
