@@ -172,7 +172,11 @@ class IngestionTests(unittest.TestCase):
             conn.row_factory = sqlite3.Row
             conn.executescript(
                 """
-                CREATE TABLE offender_records (location_text TEXT);
+                CREATE TABLE sources (id INTEGER PRIMARY KEY, is_hidden INTEGER DEFAULT 0);
+                INSERT INTO sources (id) VALUES (1);
+                CREATE TABLE offender_records (
+                  location_text TEXT, source_id INTEGER DEFAULT 1, is_hidden INTEGER DEFAULT 0
+                );
                 CREATE TABLE geocoded_locations (
                   location_text TEXT,
                   normalized_query TEXT,
@@ -183,9 +187,9 @@ class IngestionTests(unittest.TestCase):
                   geocoded_at INTEGER,
                   error TEXT
                 );
-                INSERT INTO offender_records VALUES ('忠孝東路一段');
-                INSERT INTO offender_records VALUES ('忠孝東路一段');
-                INSERT INTO offender_records VALUES ('南京東路三段');
+                INSERT INTO offender_records (location_text) VALUES ('忠孝東路一段');
+                INSERT INTO offender_records (location_text) VALUES ('忠孝東路一段');
+                INSERT INTO offender_records (location_text) VALUES ('南京東路三段');
                 INSERT INTO geocoded_locations VALUES ('南京東路三段', '臺北市 南京東路三段', 25.0, 121.5, 'nominatim', 0.8, 1, NULL);
                 """
             )
@@ -217,7 +221,11 @@ class IngestionTests(unittest.TestCase):
             conn.row_factory = sqlite3.Row
             conn.executescript(
                 """
-                CREATE TABLE offender_records (location_text TEXT);
+                CREATE TABLE sources (id INTEGER PRIMARY KEY, is_hidden INTEGER DEFAULT 0);
+                INSERT INTO sources (id) VALUES (1);
+                CREATE TABLE offender_records (
+                  location_text TEXT, source_id INTEGER DEFAULT 1, is_hidden INTEGER DEFAULT 0
+                );
                 CREATE TABLE geocoded_locations (
                   location_text TEXT,
                   normalized_query TEXT,
@@ -228,8 +236,8 @@ class IngestionTests(unittest.TestCase):
                   geocoded_at INTEGER,
                   error TEXT
                 );
-                INSERT INTO offender_records VALUES ('中央北路三段');
-                INSERT INTO offender_records VALUES ('不存在路段');
+                INSERT INTO offender_records (location_text) VALUES ('中央北路三段');
+                INSERT INTO offender_records (location_text) VALUES ('不存在路段');
                 INSERT INTO geocoded_locations VALUES ('中央北路三段', '臺北市 中央北路三段', NULL, NULL, 'nominatim', NULL, 1, 'HTTP Error 429: Too many requests');
                 INSERT INTO geocoded_locations VALUES ('不存在路段', '臺北市 不存在路段', NULL, NULL, 'nominatim', NULL, 1, 'not_found');
                 """
@@ -252,7 +260,11 @@ class IngestionTests(unittest.TestCase):
             conn.row_factory = sqlite3.Row
             conn.executescript(
                 """
-                CREATE TABLE offender_records (location_text TEXT);
+                CREATE TABLE sources (id INTEGER PRIMARY KEY, is_hidden INTEGER DEFAULT 0);
+                INSERT INTO sources (id) VALUES (1);
+                CREATE TABLE offender_records (
+                  location_text TEXT, source_id INTEGER DEFAULT 1, is_hidden INTEGER DEFAULT 0
+                );
                 CREATE TABLE geocoded_locations (
                   location_text TEXT,
                   normalized_query TEXT,
@@ -263,8 +275,8 @@ class IngestionTests(unittest.TestCase):
                   geocoded_at INTEGER,
                   error TEXT
                 );
-                INSERT INTO offender_records VALUES ('中央北路三段');
-                INSERT INTO offender_records VALUES ('中正路');
+                INSERT INTO offender_records (location_text) VALUES ('中央北路三段');
+                INSERT INTO offender_records (location_text) VALUES ('中正路');
                 """
             )
             conn.commit()

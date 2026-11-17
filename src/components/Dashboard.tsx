@@ -35,7 +35,7 @@ type RecordRow = {
   location_text: string | null;
   alcohol_mg_per_l: number | null;
   source_title: string;
-  pdf_url: string;
+  pdf_url: string | null;
 };
 
 type RecordsResponse = {
@@ -394,9 +394,11 @@ export default function Dashboard() {
                       <td className="p-3">{record.location_text ?? t.notProvided}</td>
                       <td className="p-3">{record.alcohol_mg_per_l ? `${record.alcohol_mg_per_l} mg/L` : t.notProvided}</td>
                       <td className="p-3">
-                        <a href={record.pdf_url} className="focus-ring text-[var(--civic-blue)] underline decoration-[var(--line)] underline-offset-4 hover:text-[var(--signal-red)]" target="_blank" rel="noreferrer">
-                          {record.source_title}
-                        </a>
+                        {record.pdf_url ? (
+                          <a href={record.pdf_url} className="focus-ring text-[var(--civic-blue)] underline decoration-[var(--line)] underline-offset-4 hover:text-[var(--signal-red)]" target="_blank" rel="noreferrer">
+                            {record.source_title}
+                          </a>
+                        ) : record.source_title}
                       </td>
                     </tr>
                   ))

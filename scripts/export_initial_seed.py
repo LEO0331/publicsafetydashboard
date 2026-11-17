@@ -4,6 +4,7 @@ import json
 import sqlite3
 from pathlib import Path
 
+from announcement_reviews import is_public_announcement_pdf, load_reviews, withdrawn_or_superseded
 from common import ROOT
 
 OUTPUT_PATH = ROOT / "data" / "seed" / "initial_announcements.json"
@@ -16,6 +17,7 @@ GENERATED_FROM = (
 
 
 def export_initial_seed(db_path: Path, output_path: Path = OUTPUT_PATH) -> tuple[int, int]:
+    reviews = load_reviews()
     connection = sqlite3.connect(db_path)
     connection.row_factory = sqlite3.Row
     try:
@@ -24,6 +26,7 @@ def export_initial_seed(db_path: Path, output_path: Path = OUTPUT_PATH) -> tuple
             SELECT id, title, pdf_url, published_date, content_hash
             FROM sources
             WHERE parse_status = 'parsed'
+              AND is_hidden = 0
               AND title NOT LIKE '%三次以上%'
             ORDER BY published_date DESC, id DESC
             """
@@ -31,13 +34,16 @@ def export_initial_seed(db_path: Path, output_path: Path = OUTPUT_PATH) -> tuple
         payload_sources = []
         record_count = 0
         for source in sources:
+            url, digest = source["pdf_url"], source["content_hash"]
+            if not is_public_announcement_pdf(url) or withdrawn_or_superseded(reviews, url, digest):
+                continue
             records = connection.execute(
                 """
                 SELECT sequence_no, name, violation_date, law_article, location_text, fact_text,
                        violation_count, violation_types_json, alcohol_mg_per_l, unlicensed,
                        has_photo, parser_confidence, needs_review
                 FROM offender_records
-                WHERE source_id = ?
+                WHERE source_id = ? AND is_hidden = 0
                 ORDER BY id
                 """,
                 (source["id"],),

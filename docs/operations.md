@@ -42,9 +42,30 @@ npm run seed:geocode
 
 ### Monthly refresh
 
-`.github/workflows/monthly-refresh.yml` runs on the fifth day of each month and can be dispatched manually. It migrates a temporary SQLite database, restores both committed seeds, discovers eligible Taipei DOT PDFs, imports only URLs absent from the committed seed, validates parsed rows and source hashes, and exports `initial_announcements.json` before geocoding. It then processes at most `MONTHLY_GEOCODE_LIMIT` pending normalized location queries (default 25), sequentially with a 16-second delay. `GEOCODE_DELAY_SECONDS` and the geocoder provider URL can be configured. A provider failure leaves the announcement export intact; the workflow summary reports data freshness and map coverage separately.
+`.github/workflows/monthly-refresh.yml` runs on the fifth day of each month and can be dispatched manually. It migrates a temporary SQLite database, restores both committed seeds, applies reviewed announcement changes, discovers eligible Taipei DOT PDFs, and imports new URLs. It validates parsed rows and source hashes, then exports `initial_announcements.json` before geocoding. It then processes at most `MONTHLY_GEOCODE_LIMIT` pending normalized location queries (default 25), sequentially with a 16-second delay. `GEOCODE_DELAY_SECONDS` and the geocoder provider URL can be configured. A provider failure leaves the announcement export intact; the workflow summary reports data freshness and map coverage separately.
 
 The workflow commits only changed seed JSON files. It dispatches CI after a commit; successful CI follows the normal image deployment workflow. Public Nominatim's [usage policy](https://operations.osmfoundation.org/policies/nominatim/) limits regularly scheduled geocoding to four requests per minute and requires a single thread, cached results, and an identifying User-Agent. Never send names or violation facts to the provider. The map omits unresolved coordinates while records remain in the table, filters, and statistics.
+
+### Reviewed announcement corrections and withdrawals
+
+Verify the change against the official source. A source missing from the monthly crawl can still be available on an older listing page.
+
+For a withdrawal, add the exact `pdfUrl` and old `contentHash` from the bundled seed to `data/seed/announcement_reviews.json` as `{"action":"withdraw","pdfUrl":"…","sha256":"…"}`. For a corrected PDF at the same URL, use `{"action":"replace","pdfUrl":"…","previousSha256":"…","sha256":"…"}`. Use the old seed hash and the SHA-256 of the reviewed replacement, respectively.
+
+For another correction, move the earlier `previousSha256` into `retiredSha256`, an array of older blocked digests. Keep that array when withdrawing a previously corrected PDF and add its last `previousSha256` to it. This keeps older copies blocked.
+
+Regenerate the bundled seed against a temporary database before committing the manifest and `data/seed/initial_announcements.json` together.
+
+```bash
+REVIEW_DIR="$(mktemp -d)"
+export SQLITE_PATH="$REVIEW_DIR/review.db"
+npm run db:migrate
+python3 scripts/seed_initial_data.py --for-refresh
+python3 scripts/refresh_monthly.py --review-only
+unset SQLITE_PATH
+```
+
+Check the resulting seed diff. Startup applies reviewed changes to persistent databases. A withdrawal removes the source and its rows and blocks future imports of the listed URL or digests. A replacement must match the new digest and preserves record hides. If a replacement cannot safely match a hidden row, it stops before changing data. Before deploying, review and resolve that case with the source hidden. Previously published Git history and deployed backups require separate handling.
 
 ## Admin Operations
 
@@ -60,6 +81,8 @@ The `/admin` page supports:
 
 Hide actions update flags and do not delete rows, preserving auditability.
 
+URL import accepts HTTPS links on `dot.gov.taipei` and `www-ws.gov.taipei`, including redirects within those hosts. For other authorized files, download and review them first, then use the local upload. Both paths limit PDF size to 20 MiB. Local uploads show the supplied source title without publishing the file path.
+
 ## CSV Export
 
 The dashboard CSV export uses the same public filters as `/api/records` and excludes hidden records/sources. It exports only fields already shown in the educational UI. CSV cells are sanitized to prevent spreadsheet formula execution when opened in desktop spreadsheet tools.
@@ -72,6 +95,7 @@ Rules:
 
 - Query format is `臺北市 {locationText}`.
 - Send only location text, never names or violation facts.
+- Skip locations that only occur in hidden records or hidden sources.
 - Cache every result in `geocoded_locations`.
 - Stop a batch after the first Nominatim `429 Too many requests`.
 - Use small batches and long delays on shared cloud hosts.
@@ -115,7 +139,8 @@ NODE_ENV="production"
 Workflows:
 
 - `.github/workflows/ci.yml`: lint, typecheck, unit/integration tests, coverage, Playwright e2e, and Lighthouse CI.
-- `.github/workflows/deploy.yml`: builds and publishes a Docker image to GitHub Container Registry after CI passes on `main`, or manually through `workflow_dispatch`.
+- `.github/workflows/monthly-refresh.yml`: prepares and verifies the seeds with read-only repository access; a separate job publishes changed seeds and dispatches CI.
+- `.github/workflows/deploy.yml`: builds the commit that passed CI on `main` and publishes its image to GitHub Container Registry. Maintainers can also dispatch builds manually.
 
 Published images:
 
@@ -189,6 +214,8 @@ npm run build
 ```
 
 `npm run test:coverage` enforces 80% project-focused coverage for tracked Python ingestion modules and Node server integration code. E2E and Lighthouse use a deterministic fixture database so CI does not depend on live Taipei DOT pages or Nominatim.
+
+Lighthouse CI 0.16 requires Node.js 22.19 or newer.
 
 ## Incident Response
 

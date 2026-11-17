@@ -1,7 +1,7 @@
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: "SQLITE_PATH=./drizzle/e2e.db ADMIN_TOKEN=e2e-secret npm run start -- -H 127.0.0.1 -p 4173",
+      startServerCommand: "npm run start -- -H 127.0.0.1 -p 4173",
       startServerReadyPattern: "Ready",
       startServerReadyTimeout: 120000,
       url: ["http://127.0.0.1:4173/", "http://127.0.0.1:4173/admin"],

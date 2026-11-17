@@ -12,7 +12,8 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: "SQLITE_PATH=./drizzle/e2e.db ADMIN_TOKEN=e2e-secret npm run start -- -H 127.0.0.1 -p 3100",
+    command: "npm run start -- -H 127.0.0.1 -p 3100",
+    env: { SQLITE_PATH: "./drizzle/e2e.db", ADMIN_TOKEN: "e2e-secret" },
     url: "http://127.0.0.1:3100",
     reuseExistingServer: false,
     timeout: 120_000,
@@ -20,7 +21,7 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: { ...devices["Desktop Chrome"], channel: process.env.PLAYWRIGHT_CHROMIUM_CHANNEL },
     },
   ],
 });

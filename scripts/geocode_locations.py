@@ -43,8 +43,9 @@ def _location_work(candidate_locations: Iterable[str] | None = None,
     """Return one candidate per query and counts for published location strings."""
     with connect_db() as conn:
         published = {row[0] for row in conn.execute(
-            "SELECT DISTINCT location_text FROM offender_records "
-            "WHERE location_text IS NOT NULL AND TRIM(location_text) != ''"
+            "SELECT DISTINCT r.location_text FROM offender_records r JOIN sources s ON s.id = r.source_id "
+            "WHERE r.is_hidden = 0 AND s.is_hidden = 0 "
+            "AND r.location_text IS NOT NULL AND TRIM(r.location_text) != ''"
         )}
         cache = {
             row[0]: (row[1], row[2], row[3])

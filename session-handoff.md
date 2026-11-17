@@ -1,8 +1,15 @@
 # Session Handoff
 
-Last Updated: 2026-11-05
-Current Objective: repair CI production build for E2E/Lighthouse after Tailwind CSS 4 removed the direct PostCSS plugin.
-Recommended Next Step: review PR #14 (all CI checks have passed), then merge if approved; observe the post-merge CI/deployment workflows.
+Last Updated: 2026-11-17
+Current Objective: complete F15 security fixes against remote main f575a94.
+Recommended Next Step: review the security branch and CI results, then observe the first monthly publish and image build after merge.
+
+## 2026-11-17 — Security audit fixes
+
+- Changed: PDF import routes and scripts, SQLite seeding and reviewed-announcement handling, public queries and citation display, monthly/CI/deploy workflows, Node dependencies, verification fixtures, and operations documentation.
+- Verified locally: `./init.sh`, production build, nine Chrome browser tests, Lighthouse on dashboard and admin, actionlint, disposable database migration, and `npm audit --json` (zero affected packages).
+- Blockers: the development Windows Python 3.14 rejected the live Taipei certificate chain as missing a Subject Key Identifier. TLS verification stays enabled. The live monthly write job and deployment have yet to run with this branch.
+- No corrections were asserted for individual announcements. Follow the reviewed announcement procedure in `docs/operations.md` for a confirmed withdrawal or replacement.
 
 ## 2026-11-05 — Tailwind PostCSS CI fix
 

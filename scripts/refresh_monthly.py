@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 
+from announcement_reviews import AnnouncementReview, apply_withdrawals, load_reviews
 from common import connect_db
 from crawl_sources import crawl
 from export_geocode_cache import export_geocode_cache
@@ -20,15 +21,20 @@ def published_locations() -> set[str]:
         return {
             row[0]
             for row in conn.execute(
-                "SELECT DISTINCT location_text FROM offender_records "
-                "WHERE location_text IS NOT NULL AND location_text != ''"
+                "SELECT DISTINCT r.location_text FROM offender_records r "
+                "JOIN sources s ON s.id = r.source_id WHERE r.is_hidden = 0 AND s.is_hidden = 0 "
+                "AND r.location_text IS NOT NULL AND r.location_text != ''"
             )
         }
 
 
 def dashboard_counts() -> dict[str, int | str | None]:
+    locations = published_locations()
     with connect_db() as conn:
-        totals = conn.execute("SELECT COUNT(*) AS records FROM offender_records").fetchone()
+        totals = conn.execute(
+            "SELECT COUNT(*) AS records FROM offender_records r JOIN sources s ON s.id = r.source_id "
+            "WHERE r.is_hidden = 0 AND s.is_hidden = 0"
+        ).fetchone()
         # The cache is keyed by normalized query, while published strings stay intact.
         cached_queries = {
             row[0]
@@ -36,16 +42,9 @@ def dashboard_counts() -> dict[str, int | str | None]:
                 "SELECT normalized_query FROM geocoded_locations WHERE lat IS NOT NULL AND lng IS NOT NULL"
             )
         }
-        locations = {
-            row[0]
-            for row in conn.execute(
-                "SELECT DISTINCT location_text FROM offender_records "
-                "WHERE location_text IS NOT NULL AND location_text != ''"
-            )
-        }
         mapped = sum(normalized_query(location) in cached_queries for location in locations)
         latest = conn.execute(
-            "SELECT title FROM sources WHERE parse_status = 'parsed' "
+            "SELECT title FROM sources WHERE parse_status = 'parsed' AND is_hidden = 0 "
             "ORDER BY published_date DESC, id DESC LIMIT 1"
         ).fetchone()
     return {
@@ -57,21 +56,46 @@ def dashboard_counts() -> dict[str, int | str | None]:
     }
 
 
-def refresh_monthly(max_pages: int = 3, geocode_limit: int = 25, geocode_delay: float = 16.0) -> dict:
+def import_reviewed_replacements(reviews: dict[str, AnnouncementReview]) -> int:
+    replacements = 0
+    for url, review in reviews.items():
+        if review.action != "replace":
+            continue
+        with connect_db() as conn:
+            source = conn.execute(
+                "SELECT title, content_hash FROM sources WHERE pdf_url = ? AND parse_status = 'parsed'", (url,)
+            ).fetchone()
+        if source is None or source["content_hash"] not in (review.previous_sha256, review.sha256):
+            raise ValueError("Reviewed replacement requires the matching prior announcement in the seed")
+        if source["content_hash"] == review.previous_sha256:
+            import_pdf(url, None, source["title"])
+            replacements += 1
+    return replacements
+
+
+def refresh_monthly(
+    max_pages: int = 3, geocode_limit: int = 25, geocode_delay: float = 16.0, review_only: bool = False
+) -> dict:
     if max_pages < 1 or geocode_limit < 0 or geocode_delay < 0:
         raise ValueError("max-pages must be positive; geocode-limit and geocode-delay must be nonnegative")
 
-    before_locations = published_locations()
+    reviews = load_reviews()
     with connect_db() as conn:
+        apply_withdrawals(conn, reviews)
         existing_urls = {row[0] for row in conn.execute("SELECT pdf_url FROM sources")}
+    before_locations = published_locations()
+    replacements = import_reviewed_replacements(reviews)
 
-    crawl(page_size=105, max_pages=max_pages)
-    with connect_db() as conn:
-        new_sources = conn.execute(
-            "SELECT title, pdf_url FROM sources WHERE parse_status = 'discovered' "
-            "ORDER BY published_date, id"
-        ).fetchall()
-    new_sources = [row for row in new_sources if row["pdf_url"] not in existing_urls]
+    new_sources = []
+    if not review_only:
+        crawl(page_size=105, max_pages=max_pages)
+        with connect_db() as conn:
+            new_sources = [
+                row for row in conn.execute(
+                    "SELECT title, pdf_url FROM sources WHERE parse_status = 'discovered' ORDER BY published_date, id"
+                )
+                if row["pdf_url"] not in existing_urls
+            ]
     parsed_records = 0
     for source in new_sources:
         count = import_pdf(source["pdf_url"], None, source["title"])
@@ -98,15 +122,17 @@ def refresh_monthly(max_pages: int = 3, geocode_limit: int = 25, geocode_delay: 
 
     geocode = {"attempted": 0, "success": 0, "not_found": 0, "deferred": 0, "remaining": 0}
     geocode_error = None
-    try:
-        geocode = geocode_pending_summary(limit=geocode_limit, delay_seconds=geocode_delay)
-        export_geocode_cache()
-    except Exception as exc:
-        # Parsed official data is publishable even when map enrichment fails.
-        geocode_error = str(exc)
+    if not review_only:
+        try:
+            geocode = geocode_pending_summary(limit=geocode_limit, delay_seconds=geocode_delay)
+            export_geocode_cache()
+        except Exception as exc:
+            # Parsed official data is publishable even when map enrichment fails.
+            geocode_error = str(exc)
 
     return {
         "new_announcements": len(new_sources),
+        "reviewed_replacements": replacements,
         "new_parsed_records": parsed_records,
         "new_unique_locations": len(new_locations),
         "already_cached": already_cached,
@@ -126,6 +152,7 @@ def summary_markdown(result: dict) -> str:
             "",
             f"Latest eligible announcement: {result['latest_announcement'] or 'none'}",
             f"New announcements: {result['new_announcements']}",
+            f"Reviewed replacements: {result['reviewed_replacements']}",
             f"New parsed records: {result['new_parsed_records']}",
             "",
             f"New unique locations: {result['new_unique_locations']}",
@@ -149,8 +176,9 @@ def main() -> None:
     parser.add_argument("--max-pages", type=int, default=3)
     parser.add_argument("--geocode-limit", type=int, default=int(os.environ.get("MONTHLY_GEOCODE_LIMIT", "25")))
     parser.add_argument("--geocode-delay", type=float, default=float(os.environ.get("GEOCODE_DELAY_SECONDS", "16")))
+    parser.add_argument("--review-only", action="store_true", help="Apply only documented announcement reviews.")
     args = parser.parse_args()
-    result = refresh_monthly(args.max_pages, args.geocode_limit, args.geocode_delay)
+    result = refresh_monthly(args.max_pages, args.geocode_limit, args.geocode_delay, args.review_only)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     summary = summary_markdown(result)
     print(summary)

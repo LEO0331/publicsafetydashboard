@@ -1,3 +1,4 @@
+import { isOfficialAnnouncementUrl } from "./announcement-import";
 import { sqlite } from "./sqlite";
 
 export type RecordFilters = {
@@ -9,6 +10,44 @@ export type RecordFilters = {
   page?: string | null;
   pageSize?: string | null;
 };
+
+type RecordFields = {
+  name: string | null;
+  violation_date: number | null;
+  violation_count: number | null;
+  violation_types_json: string | null;
+  location_text: string | null;
+  alcohol_mg_per_l: number | null;
+  source_title: string;
+  import_url: string;
+};
+
+const publicRecordFields = `
+  r.name, r.violation_date, r.violation_count, r.violation_types_json,
+  r.location_text, r.alcohol_mg_per_l, s.title AS source_title, s.pdf_url AS import_url
+`;
+
+function isEncodedPdfReference(value: string | null) {
+  return !!value && /^[A-Za-z0-9+/]+={0,2}$/.test(value)
+    && Buffer.from(value, "base64").toString("utf8").toLowerCase().endsWith(".pdf");
+}
+
+function publicPdfUrl(value: string) {
+  if (!isOfficialAnnouncementUrl(value)) return null;
+  const url = new URL(value);
+  if (/\.pdf$/i.test(url.pathname)) return url.search === "" ? url.href : null;
+  if (url.pathname.toLowerCase() !== "/download.ashx") return null;
+  // Preserve Taipei's public download parameters without publishing arbitrary import query strings.
+  const params = url.searchParams;
+  return [...params.keys()].length === 3 && isEncodedPdfReference(params.get("u"))
+    && isEncodedPdfReference(params.get("n")) && params.get("icon") === ".pdf"
+    ? url.href
+    : null;
+}
+
+function withPublicCitation<T extends RecordFields>({ import_url, ...row }: T) {
+  return { ...row, pdf_url: publicPdfUrl(import_url) };
+}
 
 function dateToMs(value?: string | null, endOfDay = false): number | null {
   if (!value) return null;
@@ -68,9 +107,9 @@ export function getRecords(filters: RecordFilters) {
   const { where, params } = baseRecordWhere(filters);
   const total = sqlite.prepare(`SELECT COUNT(*) AS count FROM offender_records r JOIN sources s ON s.id = r.source_id WHERE ${where}`).get(params) as { count: number };
   const rows = sqlite
-    .prepare(
+    .prepare<Record<string, unknown>, RecordFields & { id: number }>(
       `
-      SELECT r.*, s.title AS source_title, s.pdf_url, s.published_date
+      SELECT r.id, ${publicRecordFields}
       FROM offender_records r
       JOIN sources s ON s.id = r.source_id
       WHERE ${where}
@@ -79,23 +118,23 @@ export function getRecords(filters: RecordFilters) {
       `
     )
     .all({ ...params, limit: pageSize, offset: (page - 1) * pageSize });
-  return { rows, total: total.count, page, pageSize };
+  return { rows: rows.map(withPublicCitation), total: total.count, page, pageSize };
 }
 
 export function getExportRecords(filters: RecordFilters) {
   const { where, params } = baseRecordWhere(filters);
   return sqlite
-    .prepare(
+    .prepare<Record<string, unknown>, RecordFields>(
       `
-      SELECT r.name, r.violation_date, r.violation_count, r.violation_types_json,
-             r.location_text, r.alcohol_mg_per_l, s.title AS source_title, s.pdf_url
+      SELECT ${publicRecordFields}
       FROM offender_records r
       JOIN sources s ON s.id = r.source_id
       WHERE ${where}
       ORDER BY r.violation_date DESC, r.id DESC
       `
     )
-    .all(params);
+    .all(params)
+    .map(withPublicCitation);
 }
 
 export function getStats() {
