@@ -16,9 +16,11 @@ test("records query filters by violation count, type, location, and date", async
   }
   const violationDate = new Date("2026-05-23T00:00:00Z").getTime();
   const downloadedAt = new Date("2026-05-28T00:00:00Z").getTime();
+  const officialPdfUrl = "https://www-ws.gov.taipei/Download.ashx?u=L2EucGRm&n=YS5wZGY%3D&icon=.pdf";
+  const privateImportUrl = "https://www-ws.gov.taipei/example.pdf?signature=private-test";
   const source = db
     .prepare("INSERT INTO sources (title, source_url, pdf_url, published_date, downloaded_at, parse_status) VALUES (?, ?, ?, ?, ?, ?) RETURNING id")
-    .get("公告", "https://example.test/page", "https://example.test/a.pdf", violationDate, downloadedAt, "parsed");
+    .get("公告", "https://dot.gov.taipei/", officialPdfUrl, violationDate, downloadedAt, "parsed");
   db.prepare(
     `
     INSERT INTO offender_records
@@ -45,7 +47,7 @@ test("records query filters by violation count, type, location, and date", async
   ).run(source.id, violationDate);
   const secondSource = db
     .prepare("INSERT INTO sources (title, source_url, pdf_url, published_date, downloaded_at, parse_status) VALUES (?, ?, ?, ?, ?, ?) RETURNING id")
-    .get("同頁第二份公告", "https://example.test/page", "https://example.test/second.pdf", violationDate + 86400000, downloadedAt + 86400000, "parsed");
+    .get("同頁第二份公告", "https://dot.gov.taipei/", privateImportUrl, violationDate + 86400000, downloadedAt + 86400000, "parsed");
   db.prepare(
     `
     INSERT INTO offender_records
@@ -86,12 +88,23 @@ test("records query filters by violation count, type, location, and date", async
     pageSize: "10",
   });
   assert.equal(filtered.total, 1);
-  assert.equal(filtered.rows[0].location_text, "忠孝東路一段");
+  assert.deepEqual(filtered.rows[0], {
+    id: 1,
+    name: "王小明",
+    violation_date: violationDate,
+    violation_count: 2,
+    violation_types_json: '["酒駕"]',
+    location_text: "忠孝東路一段",
+    alcohol_mg_per_l: null,
+    source_title: "公告",
+    pdf_url: officialPdfUrl,
+  });
 
   const capped = getRecords({ page: "-10", pageSize: "500" });
   assert.equal(capped.page, 1);
   assert.equal(capped.pageSize, 100);
   assert.equal(capped.rows.some((row) => row.name === "隱藏個案"), false);
+  assert.equal(capped.rows.find((row) => row.name === "周小平").pdf_url, null);
 
   const invalidPagination = getRecords({ page: "not-a-page", pageSize: "not-a-size" });
   assert.equal(invalidPagination.page, 1);
@@ -133,6 +146,8 @@ test("records query filters by violation count, type, location, and date", async
     exportRows.map((row) => row.name).sort(),
     ["周小平", "王小明"].sort()
   );
+  assert.equal(exportRows.find((row) => row.name === "王小明").pdf_url, officialPdfUrl);
+  assert.equal(exportRows.find((row) => row.name === "周小平").pdf_url, null);
 
   const reviewItems = getReviewItems();
   assert.equal(reviewItems.length, 1);
@@ -141,6 +156,7 @@ test("records query filters by violation count, type, location, and date", async
   const adminSources = getAdminSources();
   assert.equal(adminSources.length, 4);
   assert.equal(adminSources.find((item) => item.id === secondSource.id).review_count, 1);
+  assert.equal(adminSources.find((item) => item.id === secondSource.id).pdf_url, privateImportUrl);
   assert.equal(adminSources.find((item) => item.id === emptyVisibleSource.id).record_count, 0);
 
   assert.equal(setRecordHidden(reviewItems[0].id, true), 1);
@@ -150,4 +166,10 @@ test("records query filters by violation count, type, location, and date", async
   assert.equal(getRecords({}).total, 2);
   assert.equal(setSourceHidden(secondSource.id, false), 1);
   assert.equal(getRecords({}).total, 4);
+
+  const updatedDb = new Database(dbPath);
+  updatedDb.prepare("UPDATE sources SET pdf_url = ? WHERE id = ?").run("file:///app/data/uploads/local.pdf", secondSource.id);
+  updatedDb.close();
+  assert.equal(getRecords({ location: "仁愛" }).rows[0].pdf_url, null);
+  assert.equal(getExportRecords({ location: "仁愛" })[0].pdf_url, null);
 });

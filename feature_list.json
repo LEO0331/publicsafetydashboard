@@ -1,6 +1,6 @@
 {
   "project": "Taipei Public Safety Dashboard",
-  "lastUpdated": "2026-10-06",
+  "lastUpdated": "2026-11-17",
   "activeFeatureId": null,
   "features": [
     {
@@ -374,6 +374,28 @@
         "./init.sh passed on 2026-10-06 using Git Bash and bundled Python 3.12: lint, typecheck, 30 Python tests, 5 Node integration tests",
         "Python coverage 85.59%; Node line coverage 96.01%",
         "Monthly growth regression validates an expanded temporary seed without modifying committed data"
+      ]
+    },
+    {
+      "id": "F15",
+      "name": "November security audit fixes",
+      "title": "November security audit fixes",
+      "description": "Protect hidden records during ingestion, constrain PDF imports, publish only intended fields, support reviewed announcement corrections, reduce workflow privileges, and patch flagged dependencies.",
+      "priority": 15,
+      "status": "completed",
+      "dependsOn": ["F13"],
+      "dependencies": ["F13"],
+      "doneCriteria": [
+        "Record and source visibility is preserved across applicable re-imports and startup",
+        "PDF ingestion validates approved hosts and redirects and enforces bounded I/O",
+        "Public JSON and CSV expose only intended columns and verified public citations",
+        "Reviewed withdrawals and replacements apply to the deployed database and bundled seed",
+        "Monthly refresh installs and parses with read-only permissions; publication uses the verified output",
+        "npm audit reports no affected packages and the local verification suite passes"
+      ],
+      "evidence": [
+        "Unit, integration, and coverage checks passed through ./init.sh",
+        "Production build, nine browser tests, Lighthouse, actionlint, and disposable SQLite migration passed"
       ]
     }
   ],

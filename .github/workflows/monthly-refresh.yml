@@ -6,8 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  actions: write
+  contents: read
 
 concurrency:
   group: monthly-taipei-dot-refresh
@@ -18,8 +17,12 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    outputs:
+      changed: ${{ steps.seeds.outputs.changed }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -34,7 +37,7 @@ jobs:
           SQLITE_PATH: ${{ runner.temp }}/monthly-refresh.db
         run: |
           npm run db:migrate
-          python scripts/seed_initial_data.py
+          python scripts/seed_initial_data.py --for-refresh
           python scripts/seed_geocode_cache.py
       - name: Refresh announcements and map cache
         env:
@@ -51,10 +54,49 @@ jobs:
           npm test
           npm run test:coverage
           git diff --check
+      - name: Check for seed changes
+        id: seeds
+        run: |
+          if git diff --quiet -- data/seed/initial_announcements.json data/seed/geocoded_locations.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Commit created: no seed changes" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Save verified seeds
+        if: steps.seeds.outputs.changed == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: verified-seeds
+          path: |
+            data/seed/initial_announcements.json
+            data/seed/geocoded_locations.json
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    needs: refresh
+    if: needs.refresh.outputs.changed == 'true' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: verified-seeds
+          path: ${{ runner.temp }}/verified-seeds
       - name: Commit changed seed files
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERIFIED_SEEDS: ${{ runner.temp }}/verified-seeds
         run: |
+          cp -- "$VERIFIED_SEEDS/initial_announcements.json" data/seed/initial_announcements.json
+          cp -- "$VERIFIED_SEEDS/geocoded_locations.json" data/seed/geocoded_locations.json
           git add -- data/seed/initial_announcements.json data/seed/geocoded_locations.json
           if git diff --cached --quiet; then
             echo "Announcement seed changed: no" >> "$GITHUB_STEP_SUMMARY"
@@ -70,6 +112,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Keep Taipei DOT public data current" -m "Refresh validated announcement rows and independently cached map locations." -m "Constraint: Public Nominatim batches are limited to 25 sequential requests at 16-second spacing." -m "Confidence: high" -m "Scope-risk: narrow" -m "Tested: CI lint, typecheck, unit, integration, coverage, JSON validation, diff check"
-          git push
+          git push origin HEAD:refs/heads/main
           echo "Commit created: yes" >> "$GITHUB_STEP_SUMMARY"
           gh workflow run ci.yml --ref main

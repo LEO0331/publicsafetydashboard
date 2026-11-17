@@ -1,5 +1,13 @@
 # Progress Log
 
+## 2026-11-17 (F15 security audit fixes)
+
+- Preserved hidden records during PDF replacement and counted all stored rows for empty-database seeding. Added a reviewed source manifest for official withdrawals and corrections, without changing the existing bundled announcement data.
+- Limited announcement URL imports and redirects to approved Taipei HTTPS hosts, capped bytes read, cleaned staging files, and limited public JSON/CSV to approved display fields and citations. Excluded locations only associated with hidden records or sources from geocoding.
+- Separated read-only monthly preparation from write-enabled publication, and tied automated images to the revision verified by CI. Updated Next.js and Lighthouse tooling and resolved the npm advisories.
+- Verification: `./init.sh` passed lint, typecheck, 42 Python tests, five Node integration tests, and coverage. Production build, nine Chrome E2E checks, Lighthouse on two routes, actionlint, disposable SQLite migration, and `npm audit --json` (zero affected packages) passed. Seed round-trip reproduced 96 sources and 2,436 records.
+- Follow-up: verify the first hosted monthly publish and image deployment after merge. Live Python 3.14 requests to Taipei were blocked by certificate-chain verification on this host, while the system curl could read the official listing. Git history and existing backups require separate handling for any confirmed takedown.
+
 ## 2026-11-05 (CI fix: Tailwind CSS v4 PostCSS integration)
 
 - Failed workflow: [CI run 39183485868, job 117840989954](https://github.com/LEO0331/publicsafetydashboard/actions/runs/39183485868/job/117840989954). Lint, TypeScript checks, unit/integration tests and coverage succeeded. Playwright E2E failed while `npm run build` compiled `app/globals.css` and Leaflet CSS with the incompatible Tailwind 4 PostCSS plugin; Lighthouse was skipped.

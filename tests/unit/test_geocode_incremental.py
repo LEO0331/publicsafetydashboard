@@ -42,7 +42,11 @@ class IncrementalGeocodeTests(unittest.TestCase):
         self.db_path.parent.mkdir(exist_ok=True)
         with sqlite3.connect(self.db_path, factory=ClosingConnection) as conn:
             conn.executescript("""
-                CREATE TABLE offender_records (location_text TEXT);
+                CREATE TABLE sources (id INTEGER PRIMARY KEY, is_hidden INTEGER DEFAULT 0);
+                INSERT INTO sources (id) VALUES (1);
+                CREATE TABLE offender_records (
+                  location_text TEXT, source_id INTEGER DEFAULT 1, is_hidden INTEGER DEFAULT 0
+                );
                 CREATE TABLE geocoded_locations (
                   location_text TEXT NOT NULL,
                   normalized_query TEXT NOT NULL UNIQUE,
@@ -73,7 +77,7 @@ class IncrementalGeocodeTests(unittest.TestCase):
 
     def records(self, *locations):
         with self.connect() as conn:
-            conn.executemany("INSERT INTO offender_records VALUES (?)", [(x,) for x in locations])
+            conn.executemany("INSERT INTO offender_records (location_text) VALUES (?)", [(x,) for x in locations])
 
     def cache(self, location, lat, lng, error=None):
         with self.connect() as conn:
@@ -152,6 +156,16 @@ class IncrementalGeocodeTests(unittest.TestCase):
             summary = geocode_locations.geocode_pending_summary(candidate_locations=["新路"], delay_seconds=0)
         self.assertEqual((summary["new_unique_locations"], summary["attempted"]), (1, 1))
         self.assertEqual(http.call_count, 1)
+
+    def test_hidden_records_and_sources_are_excluded(self):
+        self.records("公開路段")
+        with self.connect() as conn:
+            conn.execute("INSERT INTO sources (id, is_hidden) VALUES (2, 1)")
+            conn.executemany(
+                "INSERT INTO offender_records (location_text, source_id, is_hidden) VALUES (?, ?, ?)",
+                [("隱藏來源路段", 2, 0), ("隱藏紀錄路段", 1, 1)],
+            )
+        self.assertEqual(geocode_locations.pending_locations(), ["公開路段"])
 
 
 if __name__ == "__main__":

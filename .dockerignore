@@ -15,5 +15,10 @@ logs/import.log
 __pycache__
 *.pyc
 .env
-.env.local
+.env.*
+**/.env
+**/.env.*
+**/*.db-*
+**/*.sqlite-*
+**/*.sqlite3-*
 .DS_Store

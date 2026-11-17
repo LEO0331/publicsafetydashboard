@@ -4,12 +4,13 @@ import argparse
 import re
 import time
 import urllib.parse
-import urllib.request
 import unicodedata
 from dataclasses import dataclass
 from html.parser import HTMLParser
 
-from common import USER_AGENT, connect_db, log_import, normalize_space, parse_taiwan_date
+from announcement_download import LISTING_HOSTS, MAX_LISTING_BYTES, fetch_announcement, validate_announcement_url
+from announcement_reviews import load_reviews, withdrawn_or_superseded
+from common import connect_db, log_import, normalize_space, parse_taiwan_date
 
 BASE_URL = "https://dot.gov.taipei/News.aspx?n=8E3A7133A22A0C79&sms=97D77E8D19D60170"
 ROC_DATE = re.compile(r"(?<!\d)(?P<year>\d{2,3})\s*(?:[./-]|年)\s*(?P<month>\d{1,2})\s*(?:[./-]|月)\s*(?P<day>\d{1,2})\s*日?(?!\d)")
@@ -73,9 +74,7 @@ def page_url(page: int, page_size: int) -> str:
 
 
 def fetch_html(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=30) as res:
-        return res.read().decode("utf-8", errors="replace")
+    return fetch_announcement(url, LISTING_HOSTS, MAX_LISTING_BYTES, timeout=30).decode("utf-8", errors="replace")
 
 
 def extract_pdf_links(html: str, source_url: str) -> list[PdfLink]:
@@ -85,7 +84,11 @@ def extract_pdf_links(html: str, source_url: str) -> list[PdfLink]:
     fallback_date = parse_taiwan_date(body)
     links: list[PdfLink] = []
     for href, title in parser.anchors:
-        absolute = urllib.parse.urljoin(source_url, href)
+        try:
+            absolute = urllib.parse.urljoin(source_url, href)
+            validate_announcement_url(absolute)
+        except ValueError:
+            continue
         decoded = urllib.parse.unquote(absolute)
         if ".pdf" not in decoded.lower() and "download.ashx" not in decoded.lower():
             continue
@@ -115,11 +118,13 @@ def upsert_sources(links: list[PdfLink]) -> int:
                 (link.title, link.source_url, link.pdf_url, link.published_date),
             )
             inserted += cur.rowcount
-            log_import(f"source_discovered source={link.source_url} pdf={link.pdf_url}")
+            if cur.rowcount:
+                log_import(f"source_discovered id={cur.lastrowid}")
     return inserted
 
 
 def crawl(page_size: int = 20, delay_seconds: float = 1.0, max_pages: int | None = None) -> int:
+    reviews = load_reviews()
     seen: set[str] = set()
     total_inserted = 0
     page = 1
@@ -133,7 +138,11 @@ def crawl(page_size: int = 20, delay_seconds: float = 1.0, max_pages: int | None
             seen.add(link.pdf_url)
         if not new_links:
             break
-        eligible_links = [link for link in new_links if is_regular_repeat_offender_announcement(link.title)]
+        eligible_links = [
+            link for link in new_links
+            if is_regular_repeat_offender_announcement(link.title)
+            and not withdrawn_or_superseded(reviews, link.pdf_url, None)
+        ]
         if eligible_links:
             total_inserted += upsert_sources(eligible_links)
         page += 1
