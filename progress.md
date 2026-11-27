@@ -604,3 +604,21 @@
 - The scheduled GitHub Actions run and live Taipei DOT listing/PDF download were not executed in this local verification. Monitor the first run's summary and inspect its generated seed diff before relying on the schedule.
 - The remaining locations introduced by the latest three bundled announcements may still need a bounded location-only geocode batch; no live Nominatim requests were made for this change.
 - Existing dependency audit findings remain outside this feature; local `npm ci` reported 28 advisories (1 critical, 15 high, 9 moderate, 3 low). Next: review this diff, commit and deploy the workflow, then observe its first scheduled or manual run.
+
+## 2026-11-27 — F18 Admin authentication hardening (in progress)
+
+- Confirmed PR #20 merged at 9933050. Isolated worktree `.worktrees/admin-auth` preserves existing checkout changes.
+- Backend, frontend, regression tests and bilingual documentation have explicit parallel ownership under F18. No public data or deployment changes.
+- Initial sandboxed npm ci hit Windows EPERM; retrying the same locked install with reviewed sandbox escalation.
+- Next: integrate session lifecycle, run full verification and open the focused PR without merge/deploy.
+
+### F18 completed implementation and local verification
+
+- Added login/logout/session Route Handlers, shared bounded hashed opaque sessions (256-bit random ID;32 sessions;30-minute idle/8-hour absolute expiry), token rotation/removal invalidation, strict HttpOnly cookies and10-attempt rolling60-second login limiter. All existing admin routes share session authentication; retired x-admin-token is rejected.
+- Every admin mutation checks exact trusted Origin and x-admin-csrf:1; Render external URL is trusted configuration, never forwarded headers. Loopback production testing requires explicit opt-in and exact configured browser origin. Rejected CSRF does not extend idle.
+- Bilingual admin UI now requires explicit login and clears credentials; refresh restores valid sessions. Abort/generation guards and bounded status/expiration checks remove protected data on logout, unauthorized access or offline expiry. Existing import/review/visibility/security sections preserved, Phase2 details remain collapsed.
+- Authentication events reuse bounded audit actions without aggregate-v1 schema changes. No auth values, cookies, IDs/hashes, bodies or IPs are logged. English/Traditional Chinese operations docs cover rotation, Render and troubleshooting.
+- Verification: ./init.sh passed lint/typecheck,42 Python tests and21 Node tests; coverage84.06% Python/86.51% Node, existing80% gates unchanged. npm run test:e2e passed production build and15 Chromium tests. npm run lighthouse:ci passed all assertions for both pages. git diff --check passed. Windows verification uses Git Bash as npm script shell and installed Python3.14; remote CI uses Node22/Python3.12.
+- Corrected verification portability: init recognizes a Git worktree .git file; standalone TypeScript6 test compilation explicitly loads Node types. First browser run exposed Next loopback URL normalization; added exact configured test origin and restricted loopback normalization regression. All final checks passed.
+- Risks/trade-offs: process-local sessions/limiter reset at restart/deploy, no cross-process sessions; a shared credential has no individual attribution; global login abuse can temporarily affect legitimate operators. Offline UI deadline recheck is bounded5s, and browser background timer throttling can delay UI updates until resumed; server expiry remains authoritative. Logout cannot revoke an already-started maintenance operation. No live imports/geocoding, records/visibility changes, merge or deployment.
+- Next: publish focused PR, inspect remote CI, and await review before merge/deploy. Original checkout edits remain preserved outside isolated worktree.

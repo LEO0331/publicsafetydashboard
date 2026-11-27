@@ -1,7 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { csrfHeaders, loginApi, loginPage } from "./fixtures/admin-auth";
 
 test("protected aggregate security report observes real API handlers without retaining request values", async ({ request, page }) => {
-  const auth = { "x-admin-token": "e2e-secret" };
+  const auth = csrfHeaders;
+  expect((await page.request.get("/api/admin/security")).status()).toBe(401);
+  await loginApi(request);
   const beforeRes = await request.get("/api/admin/security", { headers: auth });
   expect(beforeRes.ok()).toBeTruthy();
   const before = await beforeRes.json();
@@ -10,7 +13,7 @@ test("protected aggregate security report observes real API handlers without ret
   expect(records.ok()).toBeTruthy();
   expect(records.headers()["x-request-id"]).toMatch(/^[a-f0-9-]{36}$/);
   expect((await request.get("/api/records/export.csv")).ok()).toBeTruthy();
-  expect((await request.get("/api/admin/security")).status()).toBe(401);
+  expect((await page.request.get("/api/admin/security")).status()).toBe(401);
   expect((await request.get("/api/.env?token=PRIVATE-QUERY")).status()).toBe(404);
   const large = await request.post("/api/admin/hide", { headers: { ...auth, "content-type": "application/json" }, data: "x".repeat(16385) });
   expect(large.status()).toBe(413);
@@ -25,12 +28,12 @@ test("protected aggregate security report observes real API handlers without ret
   expect(after.routes.find((row: {route:string}) => row.route === "admin_hide").status["413"]).toBeGreaterThan(0);
   for (const value of ["PRIVATE-", "192.0.2.99", "e2e-secret", "王小明", "/api/.env"]) expect(JSON.stringify(after)).not.toContain(value);
   await page.goto("/admin");
-  await expect(page.getByTestId("security-load")).toBeDisabled();
+  await expect(page.getByTestId("security-load")).toHaveCount(0);
   await page.getByTestId("admin-token").fill("wrong-token");
-  await page.getByTestId("security-load").click();
-  await expect(page.getByTestId("security-operations").getByRole("status")).toBeVisible();
+  await page.getByTestId("admin-login").click();
+  await expect(page.getByTestId("admin-auth-status")).not.toBeEmpty();
   await expect(page.getByTestId("security-report")).toHaveCount(0);
-  await page.getByTestId("admin-token").fill("e2e-secret");
+  await loginPage(page);
   await page.getByTestId("security-load").click();
   await expect(page.getByTestId("security-report")).toBeVisible();
   await page.getByTestId("admin-language-en").click();
@@ -48,14 +51,15 @@ test("protected aggregate security report observes real API handlers without ret
   await expect(page.getByTestId("security-recovery-message")).toContainText("failed");
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
-  await page.getByTestId("admin-token").fill("");
+  await page.getByTestId("admin-logout").click();
   await expect(page.getByTestId("security-report")).toHaveCount(0);
 });
 
-test("security exports and recovery endpoints require authorization and reject invalid uploads", async ({ request }) => {
-  const auth = { "x-admin-token": "e2e-secret" };
+test("security exports and recovery endpoints require authorization and reject invalid uploads", async ({ request, page }) => {
+  const auth = csrfHeaders;
   expect((await request.get("/api/admin/security?format=csv")).status()).toBe(401);
   expect((await request.get("/api/admin/security?format=jsonl")).status()).toBe(401);
+  await loginApi(request);
   const csv = await request.get("/api/admin/security?format=csv", { headers: auth });
   expect(csv.status()).toBe(200);
   expect(csv.headers()["cache-control"]).toContain("no-store");
@@ -66,7 +70,7 @@ test("security exports and recovery endpoints require authorization and reject i
   expect(jsonl.headers()["content-type"]).toContain("application/x-ndjson");
   expect((await request.get("/api/admin/security?format=unknown", { headers: auth })).status()).toBe(400);
   const restoreHeaders = { ...auth, "content-type": "text/plain", "x-security-restore": "1" };
-  expect((await request.post("/api/admin/security", { data: "not json" })).status()).toBe(401);
+  expect((await page.request.post("/api/admin/security", { data: "not json" })).status()).toBe(401);
   expect((await request.post("/api/admin/security", { headers: auth, data: "not json" })).status()).toBe(403);
   expect((await request.post("/api/admin/security", { headers: { ...restoreHeaders, "sec-fetch-site": "cross-site" }, data: "not json" })).status()).toBe(403);
   expect((await request.post("/api/admin/security", { headers: restoreHeaders, data: "not json" })).status()).toBe(400);

@@ -24,7 +24,7 @@ for file in "${required_files[@]}"; do
 done
 
 echo "[check] repository baseline"
-if [[ -d .git ]]; then
+if [[ -d .git || -f .git ]]; then
   echo "  - ok: git repository detected"
 else
   echo "  - fail: .git missing"

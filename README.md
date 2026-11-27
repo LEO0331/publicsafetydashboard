@@ -149,7 +149,13 @@ See [Architecture, Design, And Tradeoffs](./docs/architecture.md) for why these 
 - `POST /api/import/geocode`
 - `GET /api/import/logs`
 
-Admin import endpoints require `x-admin-token`.
+- `POST /api/admin/auth/login`
+- `POST /api/admin/auth/logout`
+- `GET /api/admin/auth/session`
+
+Protected admin endpoints use a server-side session cookie. Open `/admin`, enter the existing `ADMIN_TOKEN`, and click **Login**. The token is submitted once and cleared after successful login; subsequent requests use an HttpOnly cookie. Click **Logout** to revoke that session. The retired `x-admin-token` header is no longer accepted.
+
+Sessions expire after 30 minutes idle or 8 hours total, and survive page refresh while valid. Deployments and process restarts invalidate them. Login is limited to 10 attempts per rolling minute across the application process. All admin mutations require same-origin validation and `x-admin-csrf: 1`; production cookies are Secure and SameSite Strict. Existing Render environment values remain unchanged; no extra service or session database is needed. See [admin authentication operations](docs/operations.md#admin-authentication-hardening) for origin configuration, rotation, local HTTP testing and troubleshooting.
 
 ## Verification
 

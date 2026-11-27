@@ -1,5 +1,23 @@
 # Session Handoff
 
+Last Updated:2026-11-27
+Current Objective:F18 Admin Authentication Hardening implementation complete with full local verification.
+Blockers:None locally; inspect remote PR CI before merge. No merge/deploy authorized.
+Files changed:src/server/admin-session.ts, admin.ts, observability.ts; app/api/admin/auth/{login,logout,session}/route.ts; app/admin/page.tsx; src/components/{adminSession.ts,SecurityOperations.tsx,uiLanguage.ts}; integration/E2E tests and fixtures; playwright.config.ts; scripts/check-node-coverage.mjs; package.json; init.sh; bilingual READMEs/operations docs; lifecycle records.
+Recommended Next Step:Review the focused PR and remote CI. On a later approved deployment preserve existing ADMIN_TOKEN/ENABLE_API_OBSERVABILITY; Render RENDER_EXTERNAL_URL provides origin, custom domains may require ADMIN_APP_ORIGIN. Leave ADMIN_ALLOW_LOOPBACK_HTTP unset in production.
+
+## F18 verification and limitations
+
+- Based on latest main9933050; PR#20 merged and main CI succeeded. Worktree .worktrees/admin-auth on codex/admin-auth-hardening preserves original checkout changes.
+- ./init.sh passed lint/typecheck,42 Python/21 Node tests,84.06%/86.51% coverage. Production build and15 Playwright tests passed. Lighthouse CI passed both pages.
+- HttpOnly Strict cookies, explicit login/logout, opaque hashed sessions,30-minute idle/8-hour absolute expiry,32-session capacity, process-wide10-attempt/60s limiter, same-origin+custom-header CSRF. Existing security aggregate-v1 backups remain compatible.
+- Sessions/limiter are intentionally volatile and single-process; rotations/restarts require login. Bounded auth audit has no individual attribution. Offline UI recheck bounded5s; server always enforces expiry. In-flight authorized maintenance may complete after logout.
+- No original data/visibility rules changed, no live external ingestion/geocoding, merge or deployment.
+
+## Previous handoff
+
+# Session Handoff
+
 Last Updated: 2026-11-27
 Current Objective: F17 lightweight Phase 2 governance, keeping admin interface compact.
 Recommended Next Step: review the PR and remote CI, then verify the deployed Security & Operations report. Retain official-record visibility unless independently justified.
