@@ -149,7 +149,13 @@ Render 啟動時會自動執行 `scripts/seed_geocode_cache.py` 匯入快取座�
 - `POST /api/import/geocode`
 - `GET /api/import/logs`
 
-管理匯入端點需要 `x-admin-token`。
+- `POST /api/admin/auth/login`
+- `POST /api/admin/auth/logout`
+- `GET /api/admin/auth/session`
+
+受保護的管理端點使用伺服器端工作階段 cookie。開啟 `/admin`，輸入既有 `ADMIN_TOKEN` 並按「登入」。權杖只在登入時傳送一次，成功後立即清空；後續請求使用 HttpOnly cookie。按「登出」會撤銷目前工作階段。已停用舊有 `x-admin-token` 驗證。
+
+工作階段閒置 30 分鐘或建立滿 8 小時即失效，有效期間重新整理頁面可繼續使用；部署及程序重啟會使其失效。登入嘗試為整個程序每滾動 60 秒最多 10 次。所有管理異動皆要求同源驗證及 `x-admin-csrf: 1`，正式環境 cookie 使用 Secure 與 SameSite Strict。保留既有 Render 環境設定，不需額外服務或工作階段資料庫。來源設定、權杖輪替、本機 HTTP 測試與排錯請見[管理驗證操作文件](docs/operations.zh-TW.md#管理驗證強化)。
 
 ## 驗證
 

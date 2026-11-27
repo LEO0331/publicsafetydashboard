@@ -1,7 +1,7 @@
 {
   "project": "Taipei Public Safety Dashboard",
   "lastUpdated": "2026-11-27",
-  "activeFeatureId": "F17",
+  "activeFeatureId": null,
   "features": [
     {
       "id": "F01",
@@ -446,7 +446,7 @@
       "title": "Lightweight Phase 2 data access governance",
       "description": "Protected aggregate CSV, JSONL backup and restore, bounded privacy-preserving operation events, fixed investigation indicators and collapsed detail UI.",
       "priority": 17,
-      "status": "in-progress",
+      "status": "completed",
       "dependsOn": [
         "F16"
       ],
@@ -460,7 +460,34 @@
         "Integration, coverage, build, browser and Lighthouse checks pass"
       ],
       "evidence": [
-        "Implementation and regression coverage added on Phase 2 branch; remote CI pending. No local harness execution or production changes."
+        "Implementation and regression coverage added on Phase 2 branch; remote CI pending. No local harness execution or production changes.",
+        "PR #20 merged at 9933050; main CI run45918947003 succeeded, confirmed2026-11-27."
+      ]
+    },
+    {
+      "id": "F18",
+      "name": "Admin Authentication Hardening",
+      "title": "Admin Authentication Hardening",
+      "description": "Replace reusable browser token authentication with bounded opaque sessions, explicit login/logout, CSRF and login protection.",
+      "priority": 18,
+      "status": "completed",
+      "dependsOn": [
+        "F17"
+      ],
+      "dependencies": [
+        "F17"
+      ],
+      "doneCriteria": [
+        "All protected routes authenticate short-lived server-side sessions and reject legacy headers",
+        "Strict cookies, CSRF, bounded login parsing and process-wide rate limiting",
+        "Bilingual explicit login, refresh persistence, logout and stale-response cleanup",
+        "Existing verification suite, coverage, build, browser and Lighthouse checks pass"
+      ],
+      "evidence": [
+        "Based on main 9933050; PR #20 confirmed merged 2026-11-27. Original checkout changes preserved in isolated worktree.",
+        "./init.sh passed: lint, typecheck,42 Python tests,21 Node integration tests; Python coverage84.06%, Node coverage86.51% (unchanged80% gates).",
+        "npm run test:e2e passed: production build and15 Chromium tests including bilingual/mobile/public workflows, logout stale-response isolation and offline expiration.",
+        "npm run lighthouse:ci passed all assertions for public dashboard and unauthenticated admin page; no dependencies added."
       ]
     }
   ],
@@ -473,5 +500,6 @@
       "progress.md evidence",
       "session-handoff.md update"
     ]
-  }
+  },
+  "nextAction": "Review the authentication hardening PR and remote CI; merge/deploy only after user review."
 }

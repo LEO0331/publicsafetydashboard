@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 const { createObservability, observe, securityReport, classifyClient, classifyProbe } = await import("../../.tmp-test/observability.js");
+const { adminSessions } = await import("../../.tmp-test/admin-session.js");
 const { readJsonObject } = await import("../../.tmp-test/http.js");
 const { readBoundedImportBody, ImportBodyTimeoutError } = await import("../../.tmp-test/announcement-import.js");
 const { buildCsv } = await import("../../.tmp-test/csv-export.js");
@@ -40,7 +41,9 @@ test("observation cap and log backpressure never grow an unbounded queue", () =>
 test("wrapper auth, resource serialization, disabled mode and privacy", async () => {
   const oldFlag=process.env.ENABLE_API_OBSERVABILITY,oldToken=process.env.ADMIN_TOKEN;
   process.env.ADMIN_TOKEN="test-only-secret";
-  const req=(path="/api/records",token="test-only-secret",method="GET")=>new Request("http://localhost"+path,{method,headers:{"x-admin-token":token,"user-agent":"curl/8 SECRET-UA","cookie":"SECRET-COOKIE","x-forwarded-for":"192.0.2.10"}});
+  const session = adminSessions().login("test-only-secret");
+  assert.equal(session.status,200);
+  const req=(path="/api/records",token="test-only-secret",method="GET")=>new Request("https://localhost"+path,{method,headers:{"origin":"https://localhost","x-admin-csrf":"1","user-agent":"curl/8 SECRET-UA","cookie":"__Host-admin-session="+(token === "test-only-secret" ? session.identifier : "wrong-cookie"),"x-forwarded-for":"192.0.2.10"}});
   try {
     delete process.env.ENABLE_API_OBSERVABILITY;
     const plain=observe("records",()=>Response.json({ok:true}));
@@ -70,7 +73,7 @@ test("wrapper auth, resource serialization, disabled mode and privacy", async ()
     assert.ok(report.audit.some(event => event.action === "import_crawl" && event.status === 200));
     assert.ok(report.audit.some(event => event.action === "visibility_change" && event.status === 429));
     assert.ok(report.audit.some(event => event.action === "import_url" && event.status === 500));
-    assert.ok(!report.audit.some(event => event.status === 401));
+    assert.ok(!report.audit.some(event => event.action === "import_crawl" && event.status === 401));
     const serialized=JSON.stringify(report);
     for(const value of ["SECRET","test-only-secret","192.0.2.10","/.env","location="])assert.ok(!serialized.includes(value),value);
   } finally {

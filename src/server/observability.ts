@@ -14,7 +14,7 @@ const STATUS = ["2xx", "3xx", "400", "401", "403", "404", "413", "429", "other_4
 const LATENCY = [10, 50, 100, 250, 500, 1000, 5000, 30000, 120000] as const;
 const WINDOW = 300000, RETENTION = 288, MAX_REQUESTS = 100000;
 export const MAX_RESTORE_BYTES = 4 * 1024 * 1024;
-const AUDIT_ACTIONS = ["import_crawl", "import_url", "import_file", "import_geocode", "visibility_change", "hide_record", "unhide_record", "hide_source", "unhide_source", "restore_aggregates"] as const;
+const AUDIT_ACTIONS = ["import_crawl", "import_url", "import_file", "import_geocode", "visibility_change", "hide_record", "unhide_record", "hide_source", "unhide_source", "restore_aggregates", "auth_login", "auth_login_failed", "auth_login_limited", "auth_logout", "auth_session_invalid"] as const;
 type AuditAction = typeof AUDIT_ACTIONS[number];
 type AuditEvent = { at: string; action: AuditAction; status: number };
 const MAX_AUDIT = 100;
@@ -258,6 +258,13 @@ function tracker() {
   return state.tracker;
 }
 export function securityReport() { return enabled() ? tracker().report() : { enabled: false as const }; }
+
+// Authentication uses the existing bounded audit stream, without changing aggregate v1.
+export function recordAuthentication(action: Extract<AuditAction, `auth_${string}`>, status: number) {
+  if (enabled()) {
+    try { tracker().recordAudit(action, status); } catch { /* no impact on authentication */ }
+  }
+}
 
 export function securityBackup() { return tracker().backup(); }
 export function securityCsv() { return tracker().csv(); }

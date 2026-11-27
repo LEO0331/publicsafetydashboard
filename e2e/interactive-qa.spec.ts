@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { loginPage } from "./fixtures/admin-auth";
 
 test.describe("互動式 QA 檢查", () => {
   test("桌面首屏主要區塊可見且沒有頁面級水平溢出", async ({ page }) => {
@@ -61,8 +62,9 @@ test.describe("互動式 QA 檢查", () => {
     await page.getByTestId("admin-language-en").click();
 
     await expect(page.getByRole("heading", { name: "Import Admin" })).toBeVisible();
-    await expect(page.getByText("Government Page Crawl")).toBeVisible();
     await expect(page.getByPlaceholder("Enter ADMIN_TOKEN")).toBeVisible();
+    await loginPage(page);
+    await expect(page.getByText("Government Page Crawl")).toBeVisible();
 
     await page.goto("/");
     await expect(page.getByRole("heading", { name: /Taipei Repeat DUI/ })).toBeVisible();

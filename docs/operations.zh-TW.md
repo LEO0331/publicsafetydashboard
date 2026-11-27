@@ -42,6 +42,33 @@ npm run seed:geocode
 
 ## Admin Operations
 
+### 管理驗證強化
+
+原先瀏覽器保留 `ADMIN_TOKEN`，每次管理請求都透過 `x-admin-token` 傳送。現在請開啟 `/admin`，輸入「管理權杖」並按「登入」。只有 `POST /api/admin/auth/login` 會收到原始憑證，正式環境透過 HTTPS 傳送。登入成功後立即清空輸入框與 React 權杖狀態，才開始載入受保護資料。後續請求使用不透明的 HttpOnly cookie；憑證及工作階段識別碼不存入 localStorage、sessionStorage 或 IndexedDB。舊有標頭已停用，沒有相容開關。直接執行 CLI 匯入不使用 HTTP 管理驗證。
+
+`GET /api/admin/auth/session` 僅回傳驗證狀態與到期資訊，不回傳識別碼；重新整理頁面會檢查現有工作階段，正常狀態查詢不延長閒置期限。按「登出」會呼叫 `POST /api/admin/auth/logout`，撤銷伺服器端工作階段並清除 cookie。登出或到期會清空包含資安報告的受保護畫面資料；較早驗證狀態的延遲回應不能重新填入畫面。驗證失敗訊息採通用文字，驗證回應使用 `Cache-Control: no-store`。
+
+- 伺服器產生具 **256 位元隨機性**的工作階段識別碼，只在 Route Handlers 共用的程序內有界儲存區保留其雜湊及生命週期資訊。**閒置 30 分鐘**或**建立滿 8 小時**即失效，以先到者為準；伺服器自行驗證，不只依賴 cookie 到期。最多 **32 個有效工作階段**，清除過期項目後仍滿載就拒絕新建。登出只撤銷目前工作階段。
+- 登入為**整個程序每滾動 60 秒最多 10 次嘗試**，超過回傳 429 與 `Retry-After`，時間到自動恢復。僅使用有界記憶體，不保存 IP 或信任轉送標頭。惡意流量可能暫時影響合法管理者；程序重啟會重設限流並使全部工作階段失效。
+- 正式環境使用 `__Host-admin-session`，設定 `HttpOnly`、`Secure`、`SameSite=Strict`、`Path=/`、到期時間，且不設定 Domain；刪除時採相符屬性。HttpOnly 防止 JavaScript 讀出識別碼，但同源惡意腳本仍可能代管理者操作，因此不能取代 XSS 防護。
+- 所有管理異動（登入、登出、匯入、爬取、地理編碼、可見性及彙總還原）皆要求 **`x-admin-csrf: 1`** 及精確符合信任來源的 **`Origin`**。拒絕跨來源瀏覽器異動，不開放寬鬆 CORS。還原仍額外要求既有的 `x-security-restore: 1`。維護與匯出請求不再傳原始權杖。
+
+Render 保留現有 `ADMIN_TOKEN` 與 `ENABLE_API_OBSERVABILITY` 值，使用平台自動提供的 `RENDER_EXTERNAL_URL` 作為公開來源。若使用自訂網域或其他反向代理，設定唯一可選的伺服器端 **`ADMIN_APP_ORIGIN=https://實際公開主機`**，精確對應管理者瀏覽器中的來源（協定、主機及非預設連接埠，不含路徑）。兩者皆未設定時使用請求 URL 的來源，不以用戶端 `Forwarded`、`X-Forwarded-Host` 或 `X-Forwarded-Proto` 決定信任來源。管理驗證不需新增 Blueprint、執行個體、工作階段資料庫、Redis 或磁碟。部署、重啟或改由另一程序處理請求會使工作階段失效；此設計以單一應用程序為前提。
+
+一般非正式開發只允許在 loopback（`localhost`、`127.0.0.1` 或 `::1`）使用 HTTP 與無前綴 cookie。正式建置的自動化測試需明確設定 **`ADMIN_ALLOW_LOOPBACK_HTTP=1`** 才可在 loopback HTTP 使用；此例外不會開放遠端正式主機的不安全 cookie。Render 請勿設定此選項。Docker 的 HTTP 本機預覽若使用正式建置，必須透過 loopback 存取並明確啟用此測試例外，或改用 HTTPS。
+
+輪替憑證時，在既有服務設定以強隨機值取代伺服器端 `ADMIN_TOKEN`，套用環境變更後重新登入。設定權杖變更或移除即使既有工作階段失效；缺少權杖或使用 `change-me` 會拒絕驗證。不得將權杖放入 `NEXT_PUBLIC_*`、截圖、問題回報、回應內容或日誌。關閉 `ENABLE_API_OBSERVABILITY` 仍保留驗證、CSRF、登入限流與維護資源保護。
+
+排錯方式：
+
+- **401／回到登入畫面：**工作階段已到期、遭撤銷，或因重啟／輪替遺失，請重新登入。舊有 `x-admin-token` 用戶端需改為登入及 cookie 流程。
+- **登入 503：**確認伺服器有非預設 `ADMIN_TOKEN`，並檢查是否已有 32 個有效工作階段。等候未使用項目到期，或將其登出；排錯不得印出 cookie。
+- **403：**檢查瀏覽器來源是否符合 `ADMIN_APP_ORIGIN` 或 `RENDER_EXTERNAL_URL`；自訂網域可能需要前者。API 用戶端需提供正確 Origin 與 `x-admin-csrf: 1`，還原另保留專用標頭。
+- **429：**依 `Retry-After` 等候，區分登入限流與既有維護併行限制，不會永久鎖定帳戶。
+- **登入成功但重新整理失效：**確認瀏覽器接受 cookie、正式環境為 HTTPS，且請求皆由同一程序處理。本機測試才檢查 loopback 例外，不可降低正式 cookie 安全設定。
+
+啟用觀測時，登入成功／失敗／受限、登出及無效或過期工作階段存取，使用既有有界操作稽核機制，只記錄固定動作、UTC 時間與狀態；不含憑證、工作階段識別碼或雜湊、cookie／標頭值、請求內容或原始 IP。正常成功的工作階段查詢不膨脹活動統計。彙總備份維持 Phase 1／2 格式及還原規則，不包含驗證操作事件。
+
 `/admin` 頁支援：
 
 - 爬取臺北市交通局公告。
@@ -165,7 +192,7 @@ docker run --rm -p 3000:3000 \
 Layers：
 
 - Python unit tests：parser、crawler extraction、violation parsing、geocoder privacy、geocode cache、starter seeding。
-- Node integration tests：SQLite/API query behavior 與 admin token enforcement。
+- Node integration tests：SQLite/API query behavior、工作階段生命週期、登入限流與管理授權。
 - Playwright e2e：dashboard、filters、pagination、map、language persistence、admin auth 與 responsive checks。
 - Lighthouse CI：`/` 與 `/admin` 的 performance、accessibility、best practices、SEO gates。
 
@@ -217,7 +244,7 @@ First 10 minutes：
 - Map empty after import：執行 admin geocode generation 或匯入 local geocode cache。
 - Nominatim 429：停止、等待、用更小 batch/delay 重試，或使用 local cache workflow。
 - PDF parser regression：保留 partial rows、為新 table shape 加 parser test、修 fallback logic、重新 import。
-- Admin token issue：設定或 rotate strong token、restart deployment、檢查 import logs。
+- 管理驗證問題：依上述驗證排錯步驟處理，不在診斷日誌中放入憑證或 cookie。
 - Docker native addon failure：保留 Dockerfile 的 `build-essential`，並測試 Node base image changes。
 
 Evidence to capture：
@@ -234,11 +261,11 @@ Evidence to capture：
 - PDF table formats 可能改變，需要 parser updates/manual review。
 - Live import 與 geocoding 需要 network access，可能獨立於 dashboard 失敗。
 - Render free 只適合 demo，因為沒有 persistent storage。
-- Multi-admin production version 應將 single admin token 升級成 real authentication 與 audit logs。
+- 多管理者版本需個別帳戶及可歸責的操作事件；目前共用憑證不能辨識個別操作人員。
 
 ## 兼顧隱私的 API 可觀測性（F16）
 
-於既有 Render 服務設定 `ENABLE_API_OBSERVABILITY=true` 並重新部署（預設關閉）。使用原有強度足夠的 `ADMIN_TOKEN`，在 `/admin` 輸入權杖後按「載入資安報告」，或由受驗證的 `GET /api/admin/security` 取得 JSON。僅手動更新；更換或清空權杖會清除畫面上的報告。正式環境應使用 HTTPS；不另建服務、資料庫或付費資源。
+於既有 Render 服務設定 `ENABLE_API_OBSERVABILITY=true` 並重新部署（預設關閉）。在 `/admin` 使用原有強度足夠的 `ADMIN_TOKEN` 明確登入後，再按「載入資安報告」，或由具有效工作階段的 `GET /api/admin/security` 取得 JSON。僅手動更新；登出或工作階段到期會清除畫面上的報告。正式環境應使用 HTTPS；不另建服務、資料庫或付費資源。
 
 - 彙總固定路由、HTTP 方法、處理器回應狀態、延遲區間、未驗證用戶端分類、管理驗證結果與公開列表／CSV 回傳列數。成功讀取資安報告不計入統計；驗證失敗仍計入。回應識別碼僅置於回應標頭，不保存。不保存原始 IP、轉送標頭、UA、URL、搜尋條件、請求內容、權杖、姓名或個案瀏覽紀錄；既有應用及主機日誌不在此保證範圍。
 - 未知 API 路徑僅依固定分類被動觀測並回傳 404，不執行掃描、來源識別、指紋、地理情資或依分類自動封鎖。僅涵蓋已包裝的處理器回應，不代表網路送達、靜態頁面或框架所有錯誤。
@@ -254,6 +281,6 @@ Evidence to capture：
 
 待檢查資料列的條件為信心值低於 1 或缺少違規類型；信心值 1 不保證解讀完整。先核對官方 PDF，不必為清空清單而隱藏正確資料。正常 parsed 且 0 review 的公告通常不需處理。確認錯誤、撤回或隱私問題時才暫時隱藏；永久修正依既有公告複核 manifest 流程。免費主機重啟可能遺失本機可見性異動，本次不自動修改任何資料。
 
-資安 CSV 為獨立彙總匯出，含 UTC 視窗、live/restored、固定指標與數量，省略零值（不含姓名或識別資料），供離線分析，不用於還原。JSONL 備份僅包含已結束的五分鐘視窗，不含目前視窗及個別操作紀錄；已結束不代表完整觀測。僅使用自己單一程序的合法匯出或去除主機前綴的 Phase 1 彙總日誌。還原需原權杖、同源及專用標頭，限制 4 MiB／288 視窗／每列 16 KiB／10 秒收取；驗證固定欄位與計數、拒絕無效內容並略過重複、過期、未完成或目前程序啟動後的視窗。只還原約 24 小時範圍內的歷史，仍為記憶體資料，非持久化或簽章備份。
+資安 CSV 為獨立彙總匯出，含 UTC 視窗、live/restored、固定指標與數量，省略零值（不含姓名或識別資料），供離線分析，不用於還原。JSONL 備份僅包含已結束的五分鐘視窗，不含目前視窗及個別操作紀錄；已結束不代表完整觀測。僅使用自己單一程序的合法匯出或去除主機前綴的 Phase 1 彙總日誌。還原需有效工作階段 cookie、精確同源 Origin、`x-admin-csrf: 1` 及 `x-security-restore: 1`，限制 4 MiB／288 視窗／每列 16 KiB／10 秒收取；驗證固定欄位與計數、拒絕無效內容並略過重複、過期、未完成或目前程序啟動後的視窗。只還原約 24 小時範圍內的歷史，仍為記憶體資料，非持久化或簽章備份。
 
 管理操作紀錄只保留 UTC、固定動作及 HTTP 狀態（含單筆／整份公告的隱藏或取消隱藏類別），不保存目標 ID、姓名、權杖或管理者個人身分。記憶體最多 100 筆，畫面顯示最新 20 筆，每五分鐘最多輸出 100 筆；可能因容量與日誌阻塞遺失，非永久或防竄改稽核帳本，不能個別歸責。個別事件不還原。調查訊號使用固定門檻：每五分鐘 CSV 成功回應至少 10 次、管理驗證拒絕至少 5 次、5xx 及觀測限制。非已確認的攻擊，不自動封鎖。無額外服務、資料庫或付費資源。

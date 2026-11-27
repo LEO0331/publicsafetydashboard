@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { csrfHeaders, loginApi } from "./fixtures/admin-auth";
 
 test.describe("核心業務流程", () => {
   test("儀表板會從 SQLite 經 API 顯示統計、資料列，並套用違規篩選", async ({ page, request }) => {
@@ -68,21 +69,17 @@ test.describe("核心業務流程", () => {
     await expect(page.getByRole("button", { name: /忠孝東路一段/ })).toBeVisible();
   });
 
-  test("匯入管理未提供正確權杖時會拒絕 PDF URL 匯入", async ({ page }) => {
+  test("匯入管理未驗證時不允許執行匯入，錯誤權杖登入會被拒絕", async ({ page }) => {
     await page.goto("/admin");
     await expect(page.getByTestId("admin-page")).toBeVisible();
-
     await page.getByTestId("admin-token").fill("wrong-token");
-    await page.getByTestId("pdf-url-input").fill("https://example.test/announcement.pdf");
-    await page.getByTestId("import-url-button").click();
-
-    await expect(page.getByTestId("admin-result")).toContainText("Unauthorized");
-
-    await expect(page.getByText("地圖座標產生")).toBeVisible();
-    await page.getByTestId("geocode-button").click();
-    await expect(page.getByTestId("admin-result")).toContainText("Unauthorized");
+    await page.getByTestId("admin-login").click();
+    await expect(page.getByTestId("admin-auth-status")).not.toBeEmpty();
+    await expect(page.getByTestId("admin-token")).toBeVisible();
+    await expect(page.getByTestId("admin-logout")).toHaveCount(0);
+    await expect(page.getByTestId("import-url-button")).toHaveCount(0);
+    await expect(page.getByTestId("geocode-button")).toHaveCount(0);
   });
-
   test("匯入紀錄 API 未授權時不可讀取", async ({ request }) => {
     const logs = await request.get("/api/import/logs");
     expect(logs.status()).toBe(401);
@@ -93,7 +90,8 @@ test.describe("核心業務流程", () => {
     const unauthorized = await request.get("/api/admin/review");
     expect(unauthorized.status()).toBe(401);
 
-    const review = await request.get("/api/admin/review", { headers: { "x-admin-token": "e2e-secret" } });
+    await loginApi(request);
+    const review = await request.get("/api/admin/review");
     expect(review.ok()).toBeTruthy();
     expect(review.headers()["cache-control"]).toContain("no-store");
     const body = await review.json();
@@ -103,21 +101,21 @@ test.describe("核心業務流程", () => {
     const recordId = body.reviewItems[0].id;
     const sourceId = body.sources[0].id;
     const invalidHidden = await request.post("/api/admin/hide", {
-      headers: { "x-admin-token": "e2e-secret" },
+      headers: csrfHeaders,
       data: { target: "record", id: recordId, hidden: "false" },
     });
     expect(invalidHidden.status()).toBe(400);
     expect(invalidHidden.headers()["cache-control"]).toContain("no-store");
 
     const invalidJsonImport = await request.post("/api/import/pdf-url", {
-      headers: { "content-type": "application/json", "x-admin-token": "e2e-secret" },
+      headers: { ...csrfHeaders, "content-type": "application/json" },
       data: "{not-json",
     });
     expect(invalidJsonImport.status()).toBe(400);
     expect(invalidJsonImport.headers()["cache-control"]).toContain("no-store");
 
     const hideRecord = await request.post("/api/admin/hide", {
-      headers: { "x-admin-token": "e2e-secret" },
+      headers: csrfHeaders,
       data: { target: "record", id: recordId, hidden: true },
     });
     expect(hideRecord.ok()).toBeTruthy();
@@ -125,18 +123,18 @@ test.describe("核心業務流程", () => {
     expect((await afterRecordHide.json()).needsReview).toBe(0);
 
     const unhideRecord = await request.post("/api/admin/hide", {
-      headers: { "x-admin-token": "e2e-secret" },
+      headers: csrfHeaders,
       data: { target: "record", id: recordId, hidden: false },
     });
     expect(unhideRecord.ok()).toBeTruthy();
 
     const hideSource = await request.post("/api/admin/hide", {
-      headers: { "x-admin-token": "e2e-secret" },
+      headers: csrfHeaders,
       data: { target: "source", id: sourceId, hidden: true },
     });
     expect(hideSource.ok()).toBeTruthy();
     const unhideSource = await request.post("/api/admin/hide", {
-      headers: { "x-admin-token": "e2e-secret" },
+      headers: csrfHeaders,
       data: { target: "source", id: sourceId, hidden: false },
     });
     expect(unhideSource.ok()).toBeTruthy();

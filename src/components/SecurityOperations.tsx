@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import type { AdminRequest } from "./adminSession";
 import type { Language } from "./uiLanguage";
 import type { SecurityReport } from "../server/observability";
 
@@ -29,8 +30,7 @@ function Distribution({ title, counts }: { title: string; counts: Record<string,
   </dl></div>;
 }
 
-export default function SecurityOperations({ token, language }: { token: string; language: Language }) {
-  // The parent keys this component by token, so changing credentials clears old metrics.
+export default function SecurityOperations({ request, signal, language }: { request: AdminRequest; signal: AbortSignal; language: Language }) {
   const t = copy[language];
   const [report, setReport] = useState<SecurityReport | null>(null);
   const [working, setWorking] = useState(false);
@@ -41,30 +41,32 @@ export default function SecurityOperations({ token, language }: { token: string;
     setReport(null);
     setStatus("busy");
     try {
-      const response = await fetch("/api/admin/security", { headers: { "x-admin-token": token }, cache: "no-store", signal: AbortSignal.timeout(10000) });
+      const response = await request("/api/admin/security", { signal: AbortSignal.timeout(10000) });
       if (response.status === 401 || response.status === 503) { setStatus("unauthorized"); return; }
       if (!response.ok) throw Error("report");
       const data = await response.json();
+      if (signal.aborted) return;
       if (!data.enabled) { setStatus("disabled"); return; }
       setReport(data as SecurityReport);
       setStatus("idle");
-    } catch { setStatus("failure"); }
+    } catch { if (!signal.aborted) setStatus("failure"); }
   }
   async function download(format: "csv" | "jsonl") {
     if (working) return;
     setWorking(true); setRecoveryMessage("");
     try {
-      const response = await fetch("/api/admin/security?format=" + format, { headers: { "x-admin-token": token }, cache: "no-store", signal: AbortSignal.timeout(10000) });
+      const response = await request("/api/admin/security?format=" + format, { signal: AbortSignal.timeout(10000) });
       if (!response.ok) throw Error("download");
       const blob = await response.blob();
+      if (signal.aborted) return;
       if (!blob.size) { setRecoveryMessage(t.emptyBackup); return; }
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = url; anchor.download = "public-safety-security." + format;
       document.body.appendChild(anchor); anchor.click(); anchor.remove();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
-    } catch { setRecoveryMessage(t.downloadFailed); }
-    finally { setWorking(false); }
+    } catch { if (!signal.aborted) setRecoveryMessage(t.downloadFailed); }
+    finally { if (!signal.aborted) setWorking(false); }
   }
   async function restore() {
     if (working) return;
@@ -72,28 +74,30 @@ export default function SecurityOperations({ token, language }: { token: string;
     if (!file || !file.size || file.size > 4 * 1024 * 1024) { setRecoveryMessage(t.invalidFile); return; }
     setWorking(true); setRecoveryMessage("");
     try {
-      const response = await fetch("/api/admin/security", {
-        method: "POST", headers: { "x-admin-token": token, "x-security-restore": "1", "content-type": "text/plain" },
+      const response = await request("/api/admin/security", {
+        method: "POST", headers: { "x-security-restore": "1", "content-type": "text/plain" },
         body: file, cache: "no-store", signal: AbortSignal.timeout(15000),
       });
       if (!response.ok) throw Error("restore");
       const result = await response.json();
+      if (signal.aborted) return;
       setRecoveryMessage(t.restoredResult + ": " + result.accepted + " / " + result.skipped);
       if (fileInput.current) fileInput.current.value = "";
       // Refresh data without clearing the panel or closing the disclosure.
-      const next = await fetch("/api/admin/security", { headers: { "x-admin-token": token }, cache: "no-store", signal: AbortSignal.timeout(10000) });
+      const next = await request("/api/admin/security", { signal: AbortSignal.timeout(10000) });
       if (!next.ok) throw Error("refresh");
       const data = await next.json();
+      if (signal.aborted) return;
       if (!data.enabled) { setReport(null); setStatus("disabled"); return; }
       setReport(data as SecurityReport);
-    } catch { setRecoveryMessage(t.downloadFailed); }
-    finally { setWorking(false); }
+    } catch { if (!signal.aborted) setRecoveryMessage(t.downloadFailed); }
+    finally { if (!signal.aborted) setWorking(false); }
   }
   const p95 = (value: number | null, count: number) => value === null ? count ? ">120,000 ms" : "—" : `≤ ${value.toLocaleString()} ms`;
   return <section className="ledger-panel mt-5 min-w-0 p-4" data-testid="security-operations">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <h2 className="font-medium">{t.title}</h2>
-      <button type="button" disabled={!token || status === "busy" || working} onClick={load} className="focus-ring border border-[var(--ink)] px-3 py-2 text-sm disabled:opacity-50" data-testid="security-load">{status === "busy" ? t.busy : t.refresh}</button>
+      <button type="button" disabled={status === "busy" || working} onClick={load} className="focus-ring border border-[var(--ink)] px-3 py-2 text-sm disabled:opacity-50" data-testid="security-load">{status === "busy" ? t.busy : t.refresh}</button>
     </div>
     <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{t.intro}</p>
     <p className="mt-1 text-xs leading-5 text-[var(--muted)]">{t.coverage}</p>
