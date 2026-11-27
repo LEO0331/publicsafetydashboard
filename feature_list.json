@@ -1,7 +1,7 @@
 {
   "project": "Taipei Public Safety Dashboard",
   "lastUpdated": "2026-11-27",
-  "activeFeatureId": "F16",
+  "activeFeatureId": "F17",
   "features": [
     {
       "id": "F01",
@@ -422,7 +422,7 @@
       "title": "Privacy-preserving API observability and data access governance",
       "description": "Integrated protected aggregate API metrics, bounded exports and maintenance resource controls without person-level tracking.",
       "priority": 16,
-      "status": "in-progress",
+      "status": "completed",
       "dependsOn": [
         "F15"
       ],
@@ -436,7 +436,31 @@
         "Relevant unit, coverage, browser, build and Lighthouse CI pass"
       ],
       "evidence": [
-        "Inspected main d529597a and existing API/query/admin contracts; implemented focused route wrappers, in-memory buckets, report UI and tests. Final remote checks pending; no live deployment."
+        "Inspected main d529597a and existing API/query/admin contracts; implemented focused route wrappers, in-memory buckets, report UI and tests. Final remote checks pending; no live deployment.",
+        "PR #19 merged at 3dc68f79; PR and feature branch CI verify succeeded (runs 45916226728 and 45916198920). User reports existing deployed admin maintenance sections visible; new report production validation remains separate."
+      ]
+    },
+    {
+      "id": "F17",
+      "name": "Lightweight Phase 2 data access governance",
+      "title": "Lightweight Phase 2 data access governance",
+      "description": "Protected aggregate CSV, JSONL backup and restore, bounded privacy-preserving operation events, fixed investigation indicators and collapsed detail UI.",
+      "priority": 17,
+      "status": "in-progress",
+      "dependsOn": [
+        "F16"
+      ],
+      "dependencies": [
+        "F16"
+      ],
+      "doneCriteria": [
+        "Validated authenticated aggregate export and restore, no personal data or overlap",
+        "Sanitized bounded audit outcomes and fixed descriptive investigation signals",
+        "Compact bilingual disclosure and clear parser review guidance; no automatic hiding",
+        "Integration, coverage, build, browser and Lighthouse checks pass"
+      ],
+      "evidence": [
+        "Implementation and regression coverage added on Phase 2 branch; remote CI pending. No local harness execution or production changes."
       ]
     }
   ],

@@ -1,5 +1,12 @@
 # Progress Log
 
+## 2026-11-27 (F17 lightweight Phase 2 governance)
+
+- F16 merged via PR #19, both PR and branch verify checks passed. User reports existing admin sections accessible after setting flag; no independent live security-report validation.
+- Reviewed parser condition and source visibility queries. Added bilingual guidance without changing public records, parser, review flags or source visibility. Confirmed official withdrawal/replacement workflow remains separate.
+- Added protected sparse CSV, ended-bucket JSONL backup/restore (strict schema, bounded size/time, overlap/age guards), capped operation events, fixed investigation indicators and collapsed report details. No new env vars or dependencies; no identity attribution or durable audit storage.
+- Added regression tests for recovery, authorization, privacy, caps, indicators and compact UI. Remote checks pending; local ./init.sh not run through MCP. Review checks and deploy only after approval.
+
 ## 2026-11-27 (F16 privacy-preserving API observability)
 
 - Integrated fixed-label route/status/latency/client/auth/row counts, bounded in-memory windows and structured aggregate logs, optional protected bilingual report. No raw IP, identity, search filters, person-level history or request data retained by the module.
