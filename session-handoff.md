@@ -1,6 +1,18 @@
 # Session Handoff
 
 Last Updated: 2026-11-27
+Current Objective: F17 lightweight Phase 2 governance, keeping admin interface compact.
+Recommended Next Step: review the PR and remote CI, then verify the deployed Security & Operations report. Retain official-record visibility unless independently justified.
+
+## F17 candidate
+
+- Changed: observability aggregation/recovery/audit, protected security route, hide operation action label, bilingual disclosure/review guidance, integration and browser tests, operations docs and lifecycle records.
+- F16 PR #19 merged and both verify checks passed. F17 checks pending; local harness not executed through MCP. No live deployment, data changes or official PDF verification for individual examples.
+- Limitations: aggregate history remains volatile; ended windows only, 24-hour recovery; operation events not attributable to individual operators and not restored; no automatic blocking or correction. Existing Render flags/token unchanged.
+
+## Previous handoff
+
+Last Updated: 2026-11-27
 Current Objective: F16 integrated privacy-preserving API observability and resource guards.
 Recommended Next Step: review the branch and final CI, then merge and enable the Render-owned flag only when approved.
 

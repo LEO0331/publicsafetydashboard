@@ -254,6 +254,7 @@ export default function AdminPage() {
         <section className="mt-5 grid gap-4 lg:grid-cols-2">
           <div className="ledger-panel p-4">
             <h2 className="font-medium">{t.reviewTitle}</h2>
+            <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t.reviewHint}</p>
             <div className="mt-3 space-y-2" data-testid="admin-review-rows">
               {reviewItems.length ? (
                 reviewItems.map((item) => (
@@ -274,6 +275,7 @@ export default function AdminPage() {
 
           <div className="ledger-panel p-4">
             <h2 className="font-medium">{t.sourcesTitle}</h2>
+            <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t.sourceHint}</p>
             <div className="mt-3 max-h-96 space-y-2 overflow-auto" data-testid="admin-source-list">
               {sources.map((source) => {
                 const hidden = Boolean(source.is_hidden);
