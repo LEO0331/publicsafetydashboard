@@ -1,5 +1,6 @@
-import { getExportRecords } from "../../../../src/server/queries";
-import { noStoreHeaders } from "../../../../src/server/http";
+import { observe } from "../../../../src/server/observability";
+import { getExportRecords, MAX_EXPORT_ROWS } from "../../../../src/server/queries";
+import { noStoreHeaders, jsonNoStore } from "../../../../src/server/http";
 
 export const runtime = "nodejs";
 
@@ -25,7 +26,7 @@ function formatTypes(value: unknown) {
   }
 }
 
-export function GET(request: Request) {
+export const GET = observe("export", async (request, context) => {
   const params = new URL(request.url).searchParams;
   const rows = getExportRecords({
     violationCount: params.get("violationCount"),
@@ -34,9 +35,11 @@ export function GET(request: Request) {
     dateFrom: params.get("dateFrom"),
     dateTo: params.get("dateTo"),
   });
-  const body = [
-    headers.map(csvCell).join(","),
-    ...rows.map((row) =>
+  if (rows.length > MAX_EXPORT_ROWS) return jsonNoStore({ error: "Export exceeds 10,000 rows; narrow filters" }, { status: 413 });
+  const lines = [headers.map(csvCell).join(",")];
+  let bytes = Buffer.byteLength(lines[0]) + 4;
+  for (const row of rows) {
+    const line =
       [
         row.name,
         formatDateMs(row.violation_date),
@@ -58,4 +61,4 @@ export function GET(request: Request) {
       "content-disposition": 'attachment; filename="taipei-public-safety-records.csv"',
     }),
   });
-}
+});

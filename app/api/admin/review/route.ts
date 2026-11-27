@@ -1,15 +1,14 @@
-import { NextRequest } from "next/server";
-import { assertAdmin } from "../../../../src/server/admin";
+import { observe } from "../../../../src/server/observability";
 import { jsonNoStore } from "../../../../src/server/http";
 import { getAdminSources, getReviewItems } from "../../../../src/server/queries";
 
 export const runtime = "nodejs";
 
-export function GET(request: NextRequest) {
+export const GET = observe("admin_review", async () => {
   const unauthorized = assertAdmin(request);
   if (unauthorized) return unauthorized;
   return jsonNoStore({
     reviewItems: getReviewItems(),
     sources: getAdminSources(),
   });
-}
+}, { admin: true });

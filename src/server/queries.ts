@@ -102,7 +102,7 @@ function baseRecordWhere(filters: RecordFilters) {
 }
 
 export function getRecords(filters: RecordFilters) {
-  const page = positiveInt(filters.page, 1);
+  const page = Math.min(positiveInt(filters.page, 1), 1000000);
   const pageSize = Math.min(positiveInt(filters.pageSize, 25), 100);
   const { where, params } = baseRecordWhere(filters);
   const total = sqlite.prepare(`SELECT COUNT(*) AS count FROM offender_records r JOIN sources s ON s.id = r.source_id WHERE ${where}`).get(params) as { count: number };
@@ -121,6 +121,7 @@ export function getRecords(filters: RecordFilters) {
   return { rows: rows.map(withPublicCitation), total: total.count, page, pageSize };
 }
 
+export const MAX_EXPORT_ROWS = 10000;
 export function getExportRecords(filters: RecordFilters) {
   const { where, params } = baseRecordWhere(filters);
   return sqlite
@@ -131,9 +132,10 @@ export function getExportRecords(filters: RecordFilters) {
       JOIN sources s ON s.id = r.source_id
       WHERE ${where}
       ORDER BY r.violation_date DESC, r.id DESC
+      LIMIT @exportLimit
       `
     )
-    .all(params)
+    .all({ ...params, exportLimit: MAX_EXPORT_ROWS + 1 })
     .map(withPublicCitation);
 }
 

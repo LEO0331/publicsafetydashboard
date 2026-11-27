@@ -1,12 +1,12 @@
+import { observe } from "../../../src/server/observability";
 import { getRecords } from "../../../src/server/queries";
 import { jsonNoStore } from "../../../src/server/http";
 
 export const runtime = "nodejs";
 
-export function GET(request: Request) {
+export const GET = observe("records", async (request, context) => {
   const params = new URL(request.url).searchParams;
-  return jsonNoStore(
-    getRecords({
+  const result = getRecords({
       violationCount: params.get("violationCount"),
       type: params.get("type"),
       location: params.get("location"),
@@ -14,6 +14,7 @@ export function GET(request: Request) {
       dateTo: params.get("dateTo"),
       page: params.get("page"),
       pageSize: params.get("pageSize"),
-    })
-  );
-}
+    });
+  context.rows(result.rows.length);
+  return jsonNoStore(result);
+});

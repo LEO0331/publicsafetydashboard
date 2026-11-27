@@ -1,10 +1,10 @@
-import { NextRequest } from "next/server";
-import { assertAdmin, runPythonScript } from "../../../../src/server/admin";
+import { observe } from "../../../../src/server/observability";
+import { runPythonScript } from "../../../../src/server/admin";
 import { boundedNumber, jsonNoStore, readJsonObject } from "../../../../src/server/http";
 
 export const runtime = "nodejs";
 
-export async function POST(request: NextRequest) {
+export const POST = observe("import_crawl", async (request) => {
   const unauthorized = assertAdmin(request);
   if (unauthorized) return unauthorized;
   const body = await readJsonObject(request);
@@ -13,4 +13,4 @@ export async function POST(request: NextRequest) {
   if (body.pageSize) args.push("--page-size", String(Math.trunc(boundedNumber(body.pageSize, 20, 1, 200))));
   const result = await runPythonScript(args);
   return jsonNoStore(result);
-}
+}, { admin: true, maintenance: true });

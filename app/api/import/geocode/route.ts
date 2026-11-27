@@ -1,10 +1,10 @@
-import { NextRequest } from "next/server";
-import { assertAdmin, runPythonScript } from "../../../../src/server/admin";
+import { observe } from "../../../../src/server/observability";
+import { runPythonScript } from "../../../../src/server/admin";
 import { boundedNumber, jsonNoStore, readJsonObject } from "../../../../src/server/http";
 
 export const runtime = "nodejs";
 
-export async function POST(request: NextRequest) {
+export const POST = observe("import_geocode", async (request) => {
   const unauthorized = assertAdmin(request);
   if (unauthorized) return unauthorized;
   const body = await readJsonObject(request);
@@ -13,4 +13,4 @@ export async function POST(request: NextRequest) {
   args.push("--delay", String(boundedNumber(body.delay, 16, 16, 60)));
   const result = await runPythonScript(args);
   return jsonNoStore(result);
-}
+}, { admin: true, maintenance: true });
