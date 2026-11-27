@@ -181,3 +181,7 @@ Render free works for demos, but SQLite data and uploaded files can reset after 
 - PDF layouts may change; incomplete parsed rows are retained with `needsReview=true`.
 - Nominatim can rate-limit cloud providers. Use cached/local geocoding for deployment.
 - SQLite is intentionally local-first. A multi-user production system may eventually need Postgres or another managed database.
+
+### Optional API security observability
+
+The existing admin page includes a privacy-preserving Security & Operations panel. Set `ENABLE_API_OBSERVABILITY=true` on the service and redeploy to enable aggregate-only route, latency, export and authentication metrics; it is disabled by default. Resource guards remain active independently. See [operations](docs/operations.md#privacy-preserving-api-observability-f16).

@@ -1,5 +1,12 @@
 # Progress Log
 
+## 2026-11-27 (F16 privacy-preserving API observability)
+
+- Integrated fixed-label route/status/latency/client/auth/row counts, bounded in-memory windows and structured aggregate logs, optional protected bilingual report. No raw IP, identity, search filters, person-level history or request data retained by the module.
+- Added timing-safe token validation, maintenance serialization, bounded body reads and explicit CSV size/row limits. No public-data changes, dependencies, migration or extra hosting. Unknown API catch-all is limited to paths reaching the handler; this is not full ingress coverage.
+- Added unit/integration and real-handler E2E assertions, including redaction, guard behavior and bilingual panel. Remote CI pending. Local ./init.sh was not run through MCP (no local checkout/runtime); final acceptance and production proxy/host logging review remain outstanding.
+- Next: review PR and CI; deploy only after approval, enable optional flag in Render, collect normal-use observations.
+
 ## 2026-11-17 (F15 security audit fixes)
 
 - Preserved hidden records during PDF replacement and counted all stored rows for empty-database seeding. Added a reviewed source manifest for official withdrawals and corrections, without changing the existing bundled announcement data.

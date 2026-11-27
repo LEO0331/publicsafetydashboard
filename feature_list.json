@@ -1,7 +1,7 @@
 {
   "project": "Taipei Public Safety Dashboard",
-  "lastUpdated": "2026-11-17",
-  "activeFeatureId": null,
+  "lastUpdated": "2026-11-27",
+  "activeFeatureId": "F16",
   "features": [
     {
       "id": "F01",
@@ -318,8 +318,12 @@
       "description": "Refresh the bundled regular Taipei DOT announcement seed through the latest listing entry, while preserving the existing exclusion of the separate three-or-more Taipei-registered subtype.",
       "priority": 12,
       "status": "completed",
-      "dependsOn": ["F07"],
-      "dependencies": ["F07"],
+      "dependsOn": [
+        "F07"
+      ],
+      "dependencies": [
+        "F07"
+      ],
       "doneCriteria": [
         "Latest regular official PDF announcements are parsed into the bundled seed",
         "Source hashes are present for every bundled source",
@@ -338,8 +342,14 @@
       "description": "Discover regular announcements across ROC years, publish validated new records, and maintain a bounded durable geocode cache independently.",
       "priority": 13,
       "status": "completed",
-      "dependsOn": ["F05", "F12"],
-      "dependencies": ["F05", "F12"],
+      "dependsOn": [
+        "F05",
+        "F12"
+      ],
+      "dependencies": [
+        "F05",
+        "F12"
+      ],
       "doneCriteria": [
         "Future ROC years and historical regular title variants match without hardcoded year; separate three-or-more subtype stays excluded",
         "Monthly workflow imports only new valid PDFs and publishes data even when geocoding fails",
@@ -362,8 +372,12 @@
       "description": "Remove frozen dataset totals from seed tests so new monthly records and map cache entries can pass the workflow publication gate.",
       "priority": 14,
       "status": "completed",
-      "dependsOn": ["F13"],
-      "dependencies": ["F13"],
+      "dependsOn": [
+        "F13"
+      ],
+      "dependencies": [
+        "F13"
+      ],
       "doneCriteria": [
         "Seed insertion counts and review totals match current JSON payloads",
         "Privacy, idempotency, cache uniqueness, and mapped/not-found validation remain enforced",
@@ -383,8 +397,12 @@
       "description": "Protect hidden records during ingestion, constrain PDF imports, publish only intended fields, support reviewed announcement corrections, reduce workflow privileges, and patch flagged dependencies.",
       "priority": 15,
       "status": "completed",
-      "dependsOn": ["F13"],
-      "dependencies": ["F13"],
+      "dependsOn": [
+        "F13"
+      ],
+      "dependencies": [
+        "F13"
+      ],
       "doneCriteria": [
         "Record and source visibility is preserved across applicable re-imports and startup",
         "PDF ingestion validates approved hosts and redirects and enforces bounded I/O",
@@ -396,6 +414,29 @@
       "evidence": [
         "Unit, integration, and coverage checks passed through ./init.sh",
         "Production build, nine browser tests, Lighthouse, actionlint, and disposable SQLite migration passed"
+      ]
+    },
+    {
+      "id": "F16",
+      "name": "Privacy-preserving API observability and data access governance",
+      "title": "Privacy-preserving API observability and data access governance",
+      "description": "Integrated protected aggregate API metrics, bounded exports and maintenance resource controls without person-level tracking.",
+      "priority": 16,
+      "status": "in-progress",
+      "dependsOn": [
+        "F15"
+      ],
+      "dependencies": [
+        "F15"
+      ],
+      "doneCriteria": [
+        "Public API and admin outcomes aggregate under fixed labels, with no raw identifiers or search values",
+        "Protected bilingual operator report uses existing token and defaults disabled",
+        "Export and maintenance request limits preserve existing public data contracts",
+        "Relevant unit, coverage, browser, build and Lighthouse CI pass"
+      ],
+      "evidence": [
+        "Inspected main d529597a and existing API/query/admin contracts; implemented focused route wrappers, in-memory buckets, report UI and tests. Final remote checks pending; no live deployment."
       ]
     }
   ],

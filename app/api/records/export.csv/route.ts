@@ -1,31 +1,12 @@
+import { observe } from "../../../../src/server/observability";
 import { getExportRecords } from "../../../../src/server/queries";
-import { noStoreHeaders } from "../../../../src/server/http";
+import { noStoreHeaders, jsonNoStore } from "../../../../src/server/http";
+
+import { buildCsv } from "../../../../src/server/csv-export";
 
 export const runtime = "nodejs";
 
-const headers = ["name", "violation_date", "violation_count", "violation_types", "location", "alcohol_mg_per_l", "source_title", "pdf_url"];
-
-function csvCell(value: unknown) {
-  const text = value === null || value === undefined ? "" : String(value);
-  const safeText = /^[=+\-@＝＋－＠\t\r\n]/.test(text) ? `'${text}` : text;
-  return `"${safeText.replaceAll('"', '""')}"`;
-}
-
-function formatDateMs(value: unknown) {
-  return typeof value === "number" && Number.isFinite(value) ? new Date(value).toISOString().slice(0, 10) : "";
-}
-
-function formatTypes(value: unknown) {
-  if (typeof value !== "string") return "";
-  try {
-    const parsed = JSON.parse(value) as unknown;
-    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string").join(";") : "";
-  } catch {
-    return "";
-  }
-}
-
-export function GET(request: Request) {
+export const GET = observe("export", async (request, context) => {
   const params = new URL(request.url).searchParams;
   const rows = getExportRecords({
     violationCount: params.get("violationCount"),
@@ -34,28 +15,14 @@ export function GET(request: Request) {
     dateFrom: params.get("dateFrom"),
     dateTo: params.get("dateTo"),
   });
-  const body = [
-    headers.map(csvCell).join(","),
-    ...rows.map((row) =>
-      [
-        row.name,
-        formatDateMs(row.violation_date),
-        row.violation_count,
-        formatTypes(row.violation_types_json),
-        row.location_text,
-        row.alcohol_mg_per_l,
-        row.source_title,
-        row.pdf_url,
-      ]
-        .map(csvCell)
-        .join(",")
-    ),
-  ].join("\n");
+  const body = buildCsv(rows);
+  if (body === null) return jsonNoStore({ error: "Export exceeds 10,000 rows or 8 MiB; narrow filters" }, { status: 413 });
+  context.rows(rows.length);
 
-  return new Response(`\uFEFF${body}\n`, {
+  return new Response(body, {
     headers: noStoreHeaders({
       "content-type": "text/csv; charset=utf-8",
       "content-disposition": 'attachment; filename="taipei-public-safety-records.csv"',
     }),
   });
-}
+});

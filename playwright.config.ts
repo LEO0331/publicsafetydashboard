@@ -13,7 +13,7 @@ export default defineConfig({
   },
   webServer: {
     command: "npm run start -- -H 127.0.0.1 -p 3100",
-    env: { SQLITE_PATH: "./drizzle/e2e.db", ADMIN_TOKEN: "e2e-secret" },
+    env: { SQLITE_PATH: "./drizzle/e2e.db", ADMIN_TOKEN: "e2e-secret", ENABLE_API_OBSERVABILITY: "true" },
     url: "http://127.0.0.1:3100",
     reuseExistingServer: false,
     timeout: 120_000,

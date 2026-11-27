@@ -1,14 +1,11 @@
-import { NextRequest } from "next/server";
-import { assertAdmin, runPythonScript } from "../../../../src/server/admin";
+import { observe } from "../../../../src/server/observability";
+import { runPythonScript } from "../../../../src/server/admin";
 import { ImportBodyTooLargeError, isOfficialAnnouncementUrl, readBoundedImportBody } from "../../../../src/server/announcement-import";
 import { jsonNoStore } from "../../../../src/server/http";
 
 export const runtime = "nodejs";
 
-export async function POST(request: NextRequest) {
-  const unauthorized = assertAdmin(request);
-  if (unauthorized) return unauthorized;
-
+export const POST = observe("import_url", async (request) => {
   let body: unknown;
   try {
     body = await (await readBoundedImportBody(request, 16 * 1024)).json();
@@ -33,4 +30,4 @@ export async function POST(request: NextRequest) {
   } catch {
     return jsonNoStore({ error: "Unable to import the PDF" }, { status: 422 });
   }
-}
+}, { admin: true, maintenance: true });

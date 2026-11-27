@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, FileUp, Globe2, KeyRound, ListRestart, MapPinned, RefreshCw, Upload } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import LanguageToggle from "../../src/components/LanguageToggle";
+import SecurityOperations from "../../src/components/SecurityOperations";
 import { adminCopy, usePersistedLanguage } from "../../src/components/uiLanguage";
 
 type ReviewItem = {
@@ -184,6 +185,8 @@ export default function AdminPage() {
           </span>
           <input value={token} onChange={(event) => setToken(event.target.value)} className="focus-ring w-full border border-[var(--line)] bg-white p-2 font-normal" type="password" placeholder={t.tokenPlaceholder} data-testid="admin-token" />
         </label>
+
+        <SecurityOperations key={token} token={token} language={language} />
 
         <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <form onSubmit={crawl} className="ledger-panel p-4">

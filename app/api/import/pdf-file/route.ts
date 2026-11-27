@@ -1,8 +1,8 @@
-import { NextRequest } from "next/server";
+import { observe } from "../../../../src/server/observability";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import path from "node:path";
-import { assertAdmin, runPythonScript } from "../../../../src/server/admin";
+import { runPythonScript } from "../../../../src/server/admin";
 import { ImportBodyTooLargeError, MAX_PDF_BYTES, readBoundedImportBody } from "../../../../src/server/announcement-import";
 import { jsonNoStore } from "../../../../src/server/http";
 
@@ -10,10 +10,7 @@ export const runtime = "nodejs";
 
 const MAX_MULTIPART_BYTES = MAX_PDF_BYTES + 128 * 1024;
 
-export async function POST(request: NextRequest) {
-  const unauthorized = assertAdmin(request);
-  if (unauthorized) return unauthorized;
-
+export const POST = observe("import_file", async (request) => {
   let form: FormData;
   try {
     form = await (await readBoundedImportBody(request, MAX_MULTIPART_BYTES)).formData();
@@ -52,4 +49,4 @@ export async function POST(request: NextRequest) {
   } finally {
     await rm(target, { force: true });
   }
-}
+}, { admin: true, maintenance: true });

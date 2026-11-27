@@ -15,8 +15,9 @@ export function isOfficialAnnouncementUrl(value: string) {
 }
 
 export class ImportBodyTooLargeError extends Error {}
+export class ImportBodyTimeoutError extends Error {}
 
-export async function readBoundedImportBody(request: Request, maxBytes: number) {
+export async function readBoundedImportBody(request: Request, maxBytes: number, timeoutMs = 30000) {
   if (Number(request.headers.get("content-length")) > maxBytes) throw new ImportBodyTooLargeError();
 
   const contentType = request.headers.get("content-type");
@@ -25,10 +26,13 @@ export async function readBoundedImportBody(request: Request, maxBytes: number) 
   if (!reader) return new Response(null, { headers });
 
   const chunks: Uint8Array[] = [];
+  let timedOut = false;
+  const timeout = setTimeout(() => { timedOut = true; void reader.cancel().catch(() => {}); }, timeoutMs);
   let bytesRead = 0;
   try {
     while (true) {
       const chunk = await reader.read();
+      if (timedOut) throw new ImportBodyTimeoutError();
       if (chunk.done) break;
       bytesRead += chunk.value.byteLength;
       if (bytesRead > maxBytes) {
@@ -38,6 +42,7 @@ export async function readBoundedImportBody(request: Request, maxBytes: number) 
       chunks.push(chunk.value);
     }
   } finally {
+    clearTimeout(timeout);
     reader.releaseLock();
   }
   const body = new Uint8Array(bytesRead);

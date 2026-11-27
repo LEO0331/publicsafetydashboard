@@ -172,4 +172,5 @@ test("records query filters by violation count, type, location, and date", async
   updatedDb.close();
   assert.equal(getRecords({ location: "仁愛" }).rows[0].pdf_url, null);
   assert.equal(getExportRecords({ location: "仁愛" })[0].pdf_url, null);
+  assert.equal(getRecords({ page: "9999999999999999999999" }).page, 1000000);
 });

@@ -1,5 +1,17 @@
 # Session Handoff
 
+Last Updated: 2026-11-27
+Current Objective: F16 integrated privacy-preserving API observability and resource guards.
+Recommended Next Step: review the branch and final CI, then merge and enable the Render-owned flag only when approved.
+
+## F16 candidate
+
+- Changed: shared observability, admin auth/body helpers, public/admin route handlers, export helper and queries, Next headers, bilingual admin panel, tests/coverage config and documentation.
+- Blockers: final remote CI pending; local harness not executed through MCP. No deployment or live observations. Per-process memory, handler-only coverage, no source attribution or durable backup.
+- Existing database/seed/public fields unchanged. Existing production token remains valid; new optional feature flag defaults off.
+
+## Previous handoff
+
 Last Updated: 2026-11-17
 Current Objective: complete F15 security fixes against remote main f575a94.
 Recommended Next Step: review the security branch and CI results, then observe the first monthly publish and image build after merge.

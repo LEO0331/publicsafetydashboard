@@ -1,14 +1,10 @@
-import { NextRequest } from "next/server";
-import { assertAdmin } from "../../../../src/server/admin";
+import { observe } from "../../../../src/server/observability";
 import { jsonNoStore, readJsonObject } from "../../../../src/server/http";
 import { setRecordHidden, setSourceHidden } from "../../../../src/server/queries";
 
 export const runtime = "nodejs";
 
-export async function POST(request: NextRequest) {
-  const unauthorized = assertAdmin(request);
-  if (unauthorized) return unauthorized;
-
+export const POST = observe("admin_hide", async (request) => {
   const body = await readJsonObject(request);
   const id = Number(body?.id);
   if (!body || !Number.isInteger(id) || id <= 0 || typeof body.hidden !== "boolean" || (body.target !== "source" && body.target !== "record")) {
@@ -20,4 +16,4 @@ export async function POST(request: NextRequest) {
     return jsonNoStore({ error: "Target not found" }, { status: 404 });
   }
   return jsonNoStore({ ok: true, target: body.target, id, hidden: body.hidden });
-}
+}, { admin: true, maintenance: true });
