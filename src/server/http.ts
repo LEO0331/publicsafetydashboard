@@ -15,7 +15,9 @@ export function jsonNoStore(data: unknown, init: ResponseInit = {}) {
 }
 
 export async function readJsonObject(request: Request): Promise<Record<string, unknown>> {
-  const body: unknown = await (await readBoundedImportBody(request, 16 * 1024)).json();
+  const bounded = await readBoundedImportBody(request, 16 * 1024);
+  const text = await bounded.text();
+  const body: unknown = text.trim() === "" ? {} : JSON.parse(text);
   if (!body || typeof body !== "object" || Array.isArray(body)) throw new SyntaxError("Invalid JSON object");
   return body as Record<string, unknown>;
 }

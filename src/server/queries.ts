@@ -1,3 +1,4 @@
+import { MAX_EXPORT_ROWS } from "./export-limits";
 import { isOfficialAnnouncementUrl } from "./announcement-import";
 import { sqlite } from "./sqlite";
 
@@ -121,7 +122,6 @@ export function getRecords(filters: RecordFilters) {
   return { rows: rows.map(withPublicCitation), total: total.count, page, pageSize };
 }
 
-export const MAX_EXPORT_ROWS = 10000;
 export function getExportRecords(filters: RecordFilters) {
   const { where, params } = baseRecordWhere(filters);
   return sqlite

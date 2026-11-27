@@ -107,7 +107,7 @@ export function createObservability({ now = Date.now, emit }: { now?: () => numb
     route.status[statusKey(o.status)]++;
     const bucket = LATENCY.findIndex(ms => o.ms <= ms);
     route.latency[bucket < 0 ? LATENCY.length : bucket]++;
-    const rows = Number.isSafeInteger(o.rows) && o.rows! >= 0 && o.rows! <= 10000 && o.status >= 200 && o.status < 300 ? o.rows! : 0;
+    const rows = typeof o.rows === "number" && Number.isSafeInteger(o.rows) && o.rows >= 0 && o.rows <= 10000 && o.status >= 200 && o.status < 300 ? o.rows : 0;
     route.rows += rows;
     if (o.route === "export" && o.method === "GET" && o.status === 200) { c.exportResponses++; c.exportRows += rows; }
   }
