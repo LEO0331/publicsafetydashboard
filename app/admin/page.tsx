@@ -29,6 +29,7 @@ type SourceItem = {
 type AdminData = {
   logs: string[];
   reviewItems: ReviewItem[];
+  reviewCount: number;
   sources: SourceItem[];
 };
 
@@ -48,6 +49,7 @@ async function loadAdminData(request: AdminRequest): Promise<AdminData> {
   return {
     logs: Array.isArray(logsBody.logs) ? logsBody.logs : [],
     reviewItems: Array.isArray(reviewBody.reviewItems) ? reviewBody.reviewItems : [],
+    reviewCount: typeof reviewBody.reviewCount === "number" ? reviewBody.reviewCount : 0,
     sources: Array.isArray(reviewBody.sources) ? reviewBody.sources : [],
   };
 }
@@ -55,6 +57,7 @@ async function loadAdminData(request: AdminRequest): Promise<AdminData> {
 function AdminWorkspace({ language, request, signal }: { language: Language; request: AdminRequest; signal: AbortSignal }) {
   const [logs, setLogs] = useState<string[]>([]);
   const [reviewItems, setReviewItems] = useState<ReviewItem[]>([]);
+  const [reviewCount, setReviewCount] = useState(0);
   const [sources, setSources] = useState<SourceItem[]>([]);
   const [message, setMessage] = useState("");
   const [isRunning, setIsRunning] = useState(false);
@@ -63,6 +66,7 @@ function AdminWorkspace({ language, request, signal }: { language: Language; req
   function setAdminData(data: AdminData) {
     setLogs(data.logs);
     setReviewItems(data.reviewItems);
+    setReviewCount(data.reviewCount);
     setSources(data.sources);
   }
 
@@ -218,9 +222,12 @@ function AdminWorkspace({ language, request, signal }: { language: Language; req
 
         <section className="mt-5 grid gap-4 lg:grid-cols-2">
           <div className="ledger-panel p-4">
-            <h2 className="font-medium">{t.reviewTitle}</h2>
+            <h2 id="admin-review-title" className="font-medium">{t.reviewTitle} ({reviewCount})</h2>
             <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t.reviewHint}</p>
-            <div className="mt-3 space-y-2" data-testid="admin-review-rows">
+            {reviewCount > reviewItems.length ? (
+              <p className="mt-2 text-xs text-[var(--muted)]">{t.reviewShown(reviewItems.length, reviewCount)}</p>
+            ) : null}
+            <div className="focus-ring mt-3 max-h-96 space-y-2 overflow-auto" role="region" aria-labelledby="admin-review-title" tabIndex={0} data-testid="admin-review-rows">
               {reviewItems.length ? (
                 reviewItems.map((item) => (
                   <div key={item.id} className="border border-[var(--line)] bg-[#fbf7ee] p-3 text-sm">

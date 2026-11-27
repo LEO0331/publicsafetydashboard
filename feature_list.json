@@ -489,6 +489,26 @@
         "npm run test:e2e passed: production build and15 Chromium tests including bilingual/mobile/public workflows, logout stale-response isolation and offline expiration.",
         "npm run lighthouse:ci passed all assertions for public dashboard and unauthenticated admin page; no dependencies added."
       ]
+    },
+    {
+      "id": "F19",
+      "name": "Bounded admin review list",
+      "title": "Bounded admin review list",
+      "description": "Bound the review panel height and show the full pending count with bilingual loaded/total text.",
+      "priority": 19,
+      "status": "completed",
+      "dependsOn": ["F18"],
+      "dependencies": ["F18"],
+      "doneCriteria": [
+        "Review list uses the announcement panel height limit and supports keyboard scrolling",
+        "Pending count respects hidden records and sources; capped results show loaded/total",
+        "Relevant verification passes"
+      ],
+      "evidence": [
+        "Integrated with main 41345c9 and its current admin session authentication; preserved source-review guidance and unrelated local changes",
+        "Full ./init.sh passed: lint, typecheck, 42 Python tests, 21 Node integration tests, and coverage gates; production build passed",
+        "All 15 current Playwright tests passed; targeted authenticated desktop/mobile/keyboard/bilingual/capped-count/empty-state browser verification passed"
+      ]
     }
   ],
   "workflowPolicy": {
@@ -501,5 +521,5 @@
       "session-handoff.md update"
     ]
   },
-  "nextAction": "Review the authentication hardening PR and remote CI; merge/deploy only after user review."
+  "nextAction": "Complete the user-authorized commit and push of F19 to main, then inspect normal CI."
 }

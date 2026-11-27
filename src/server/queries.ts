@@ -190,6 +190,15 @@ export function getStats() {
   };
 }
 
+export function getReviewCount() {
+  return (sqlite.prepare(`
+    SELECT COUNT(*) AS count
+    FROM offender_records r
+    JOIN sources s ON s.id = r.source_id
+    WHERE r.is_hidden = 0 AND s.is_hidden = 0 AND r.needs_review = 1
+  `).get() as { count: number }).count;
+}
+
 export function getReviewItems(limit = 25) {
   return sqlite
     .prepare(

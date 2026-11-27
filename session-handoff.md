@@ -1,5 +1,21 @@
 # Session Handoff
 
+Last Updated: 2026-11-27
+Current Objective: F19 bounded admin review list completed and verified on current main (base 41345c9).
+Blockers: None. Existing API still returns the first 25 rows; loaded/total text now makes this explicit.
+Files changed: app/admin/page.tsx, app/api/admin/review/route.ts, src/server/queries.ts, src/components/uiLanguage.ts, feature_list.json, progress.md, session-handoff.md.
+Recommended Next Step: User authorized commit and push to main. Complete publication and inspect normal CI; no live deployment result is claimed.
+
+## F19 verification and workspace
+
+- Review list matches the announcement panel's 384px maximum height and supports keyboard scrolling. The heading reports the full pending count, excluding hidden records/sources. Chinese/English loaded-versus-total text appears for capped results. Existing confidence/newest ordering, review guidance, sessions, and source visibility behavior are preserved.
+- Full `./init.sh` passed with Git Bash and bundled Python: lint, typecheck, 42 Python tests, 21 Node integration tests, and coverage gates. Production build and all 15 current Playwright tests passed.
+- Targeted authenticated browser check passed: API total, desktop/mobile height and keyboard scrolling, no horizontal page overflow, bilingual 25-of-42 display, and empty state.
+- Integrated in `.worktrees/admin-review-scroll` on `codex/admin-review-scroll` from current main. Original checkout and unrelated edits remain preserved. The original checkout assigned this UI feature F15 before discovering newer remote history; current main already used F15, so the integrated feature is F19.
+- No dependencies, source data, search, pagination, or review-resolution workflow changes.
+
+## Previous handoff
+
 Last Updated:2026-11-27
 Current Objective:F18 Admin Authentication Hardening implementation complete with full local verification.
 Blockers:None locally; inspect remote PR CI before merge. No merge/deploy authorized.
