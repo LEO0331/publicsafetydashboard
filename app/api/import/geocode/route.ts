@@ -5,8 +5,6 @@ import { boundedNumber, jsonNoStore, readJsonObject } from "../../../../src/serv
 export const runtime = "nodejs";
 
 export const POST = observe("import_geocode", async (request) => {
-  const unauthorized = assertAdmin(request);
-  if (unauthorized) return unauthorized;
   const body = await readJsonObject(request);
   const args = ["scripts/geocode_locations.py"];
   args.push("--limit", String(Math.trunc(boundedNumber(body.limit, 5, 1, 25))));

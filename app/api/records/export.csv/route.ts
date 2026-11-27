@@ -51,9 +51,13 @@ export const GET = observe("export", async (request, context) => {
         row.pdf_url,
       ]
         .map(csvCell)
-        .join(",")
-    ),
-  ].join("\n");
+        .join(",");
+    bytes += Buffer.byteLength(line) + 1;
+    if (bytes > 8 * 1024 * 1024) return jsonNoStore({ error: "Export exceeds 8 MiB; narrow filters" }, { status: 413 });
+    lines.push(line);
+  }
+  const body = lines.join("\n");
+  context.rows(rows.length);
 
   return new Response(`\uFEFF${body}\n`, {
     headers: noStoreHeaders({

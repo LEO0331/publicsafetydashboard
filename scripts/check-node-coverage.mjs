@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 
 const threshold = 80;
-const result = spawnSync(process.execPath, ["--experimental-test-coverage", "--test", "tests/integration/admin_auth.test.mjs", "tests/integration/api_filters.test.mjs"], {
+const result = spawnSync(process.execPath, ["--experimental-test-coverage", "--test", "tests/integration/admin_auth.test.mjs", "tests/integration/api_filters.test.mjs", "tests/integration/observability.test.mjs"], {
   encoding: "utf8",
 });
 

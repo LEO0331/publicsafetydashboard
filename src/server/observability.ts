@@ -6,6 +6,7 @@ import { jsonNoStore } from "./http";
 
 export const ROUTES = ["records", "export", "stats", "locations", "admin_review", "admin_hide", "import_logs", "import_crawl", "import_url", "import_file", "import_geocode", "security_report", "unknown_api"] as const;
 export type Route = typeof ROUTES[number];
+const METHODS = ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "other"] as const;
 const CLIENTS = ["browser_like", "claimed_bot", "automated_client", "suspected_scanner", "unknown"] as const;
 const PROBES = ["environment", "git", "traversal", "credentials", "wordpress", "configuration", "backup", "administration", "none"] as const;
 const AUTH = ["not_applicable", "accepted", "denied", "unconfigured"] as const;
@@ -51,13 +52,14 @@ function newRoute() {
   return { requests: 0, rows: 0, status: zeros(STATUS), latency: Array<number>(LATENCY.length + 1).fill(0) };
 }
 function newCounts() {
-  return { requests: 0, dropped: 0, exportResponses: 0, exportRows: 0, clients: zeros(CLIENTS), probes: zeros(PROBES), auth: zeros(AUTH), routes: Object.fromEntries(ROUTES.map(route => [route, newRoute()])) as Record<Route, ReturnType<typeof newRoute>> };
+  return { requests: 0, dropped: 0, exportResponses: 0, exportRows: 0, methods: zeros(METHODS), clients: zeros(CLIENTS), probes: zeros(PROBES), auth: zeros(AUTH), routes: Object.fromEntries(ROUTES.map(route => [route, newRoute()])) as Record<Route, ReturnType<typeof newRoute>> };
 }
 type Counts = ReturnType<typeof newCounts>;
 type Window = { start: number; counts: Counts };
-type Observation = { route: Route; status: number; ms: number; rows?: number; client: typeof CLIENTS[number]; probe: typeof PROBES[number]; auth: typeof AUTH[number] };
+type Observation = { route: Route; method: typeof METHODS[number]; status: number; ms: number; rows?: number; client: typeof CLIENTS[number]; probe: typeof PROBES[number]; auth: typeof AUTH[number] };
 function merge(target: Counts, source: Counts) {
   for (const key of ["requests", "dropped", "exportResponses", "exportRows"] as const) target[key] += source[key];
+  for (const key of METHODS) target.methods[key] += source.methods[key];
   for (const key of CLIENTS) target.clients[key] += source.clients[key];
   for (const key of PROBES) target.probes[key] += source.probes[key];
   for (const key of AUTH) target.auth[key] += source.auth[key];
@@ -79,14 +81,14 @@ function p95(hist: number[]) {
   }
   return null;
 }
-export function createObservability({ now = Date.now, emit = (_report: unknown) => {} } = {}) {
+export function createObservability({ now = Date.now, emit }: { now?: () => number; emit?: (report: unknown) => void } = {}) {
   const startedAt = now(), windows: Window[] = [];
   let current: Window | undefined, skippedLogs = 0;
   function rotate() {
     const start = Math.floor(now() / WINDOW) * WINDOW;
     if (current && current.start !== start) {
       try {
-        emit({ event: "public_safety.api_aggregate.v1", windowStart: new Date(current.start).toISOString(), windowEnd: new Date(current.start + WINDOW).toISOString(), skippedLogsBefore: skippedLogs, ...current.counts });
+        emit?.({ event: "public_safety.api_aggregate.v1", windowStart: new Date(current.start).toISOString(), windowEnd: new Date(current.start + WINDOW).toISOString(), skippedLogsBefore: skippedLogs, ...current.counts });
         skippedLogs = 0;
       } catch { skippedLogs++; }
       current = undefined;
@@ -101,13 +103,13 @@ export function createObservability({ now = Date.now, emit = (_report: unknown) 
     if (c.requests >= MAX_REQUESTS) { c.dropped = Math.min(c.dropped + 1, Number.MAX_SAFE_INTEGER); return; }
     const route = c.routes[o.route];
     c.requests++; route.requests++;
-    c.clients[o.client]++; c.probes[o.probe]++; c.auth[o.auth]++;
+    c.methods[o.method]++; c.clients[o.client]++; c.probes[o.probe]++; c.auth[o.auth]++;
     route.status[statusKey(o.status)]++;
     const bucket = LATENCY.findIndex(ms => o.ms <= ms);
     route.latency[bucket < 0 ? LATENCY.length : bucket]++;
     const rows = Number.isSafeInteger(o.rows) && o.rows! >= 0 && o.rows! <= 10000 && o.status >= 200 && o.status < 300 ? o.rows! : 0;
     route.rows += rows;
-    if (o.route === "export" && o.status === 200) { c.exportResponses++; c.exportRows += rows; }
+    if (o.route === "export" && o.method === "GET" && o.status === 200) { c.exportResponses++; c.exportRows += rows; }
   }
   function report() {
     rotate();
@@ -119,7 +121,7 @@ export function createObservability({ now = Date.now, emit = (_report: unknown) 
       enabled: true, scope: "api_handler_responses_only", asOf: new Date(now()).toISOString(), startedAt: new Date(startedAt).toISOString(),
       windowCount: windows.length, oldestWindow: windows.length ? new Date(windows[0].start).toISOString() : null,
       retentionHours: 24, skippedLogs, requests: sum.requests, dropped: sum.dropped, exportResponses: sum.exportResponses, exportRows: sum.exportRows,
-      p95UpperMs: p95(hist), clients: sum.clients, probes: sum.probes, auth: sum.auth,
+      p95UpperMs: p95(hist), methods: sum.methods, clients: sum.clients, probes: sum.probes, auth: sum.auth,
       routes: ROUTES.map(route => ({ route, ...sum.routes[route], p95UpperMs: p95(sum.routes[route].latency) })),
       windows: windows.map(w => ({ start: new Date(w.start).toISOString(), requests: w.counts.requests, exports: w.counts.exportResponses, denied: w.counts.auth.denied, dropped: w.counts.dropped })),
     };
@@ -172,7 +174,7 @@ export function observe(route: Route, handler: (request: Request, context: Conte
     if (enabled() && !(options.report && auth === "accepted")) {
       try {
         const probe = route === "unknown_api" ? classifyProbe(new URL(request.url).pathname) : "none";
-        tracker().record({ route, status: response.status, ms: performance.now() - start, rows, client: classifyClient(request.headers.get("user-agent")), probe, auth });
+        tracker().record({ route, method: METHODS.includes(request.method as typeof METHODS[number]) ? request.method as typeof METHODS[number] : "other", status: response.status, ms: performance.now() - start, rows: request.method === "GET" ? rows : 0, client: classifyClient(request.headers.get("user-agent")), probe, auth });
         response.headers.set("x-request-id", randomUUID());
       } catch { /* observation must never change the response */ }
     }

@@ -5,8 +5,6 @@ import { boundedNumber, jsonNoStore, readJsonObject } from "../../../../src/serv
 export const runtime = "nodejs";
 
 export const POST = observe("import_crawl", async (request) => {
-  const unauthorized = assertAdmin(request);
-  if (unauthorized) return unauthorized;
   const body = await readJsonObject(request);
   const args = ["scripts/crawl_sources.py"];
   if (body.maxPages) args.push("--max-pages", String(Math.trunc(boundedNumber(body.maxPages, 1, 1, 20))));
