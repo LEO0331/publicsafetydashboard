@@ -181,3 +181,7 @@ Render free 可做展示，但 SQLite 資料與上傳檔案可能在重啟或重
 - PDF 版面可能變動；解析不完整的資料列會以 `needsReview=true` 保留。
 - Nominatim 可能限制雲端服務商 IP；部署時建議使用本機 geocoding 快取。
 - SQLite 是 local-first 選擇；若未來需要多人長期使用，可評估 Postgres 或其他 managed database。
+
+### 可選 API 資安可觀測性
+
+既有管理介面新增資安與營運區塊。於服務設定 `ENABLE_API_OBSERVABILITY=true` 並重新部署後啟用彙總路由、延遲、匯出與驗證結果；預設關閉，資源限制獨立生效。參考[操作文件](docs/operations.zh-TW.md)。
