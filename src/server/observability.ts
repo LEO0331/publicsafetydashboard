@@ -18,6 +18,7 @@ const AUDIT_ACTIONS = ["import_crawl", "import_url", "import_file", "import_geoc
 type AuditAction = typeof AUDIT_ACTIONS[number];
 type AuditEvent = { at: string; action: AuditAction; status: number };
 const MAX_AUDIT = 100;
+const MAX_COUNT = 1000000000;
 const MAX_AUDIT_LOGS_PER_WINDOW = 100;
 const zeros = <T extends string>(keys: readonly T[]) => Object.fromEntries(keys.map(key => [key, 0])) as Record<T, number>;
 const statusKey = (status: number): typeof STATUS[number] => {
@@ -61,7 +62,7 @@ function newCounts() {
   return { requests: 0, dropped: 0, exportResponses: 0, exportRows: 0, methods: zeros(METHODS), clients: zeros(CLIENTS), probes: zeros(PROBES), auth: zeros(AUTH), routes: Object.fromEntries(ROUTES.map(route => [route, newRoute()])) as Record<Route, ReturnType<typeof newRoute>> };
 }
 type Counts = ReturnType<typeof newCounts>;
-type Window = { start: number; counts: Counts; restored?: boolean };
+type Window = { start: number; counts: Counts; restored?: boolean; skippedLogsBefore?: number };
 type Observation = { route: Route; method: typeof METHODS[number]; status: number; ms: number; rows?: number; client: typeof CLIENTS[number]; probe: typeof PROBES[number]; auth: typeof AUTH[number] };
 function merge(target: Counts, source: Counts) {
   for (const key of ["requests", "dropped", "exportResponses", "exportRows"] as const) target[key] += source[key];
@@ -124,16 +125,16 @@ function parseBackup(text: string): Window[] {
     if (event !== "public_safety.api_aggregate.v1" || !Number.isFinite(start) || start % WINDOW !== 0 ||
       new Date(start).toISOString() !== windowStart || new Date(start + WINDOW).toISOString() !== windowEnd ||
       !count(skippedLogsBefore, Number.MAX_SAFE_INTEGER) || seen.has(start) ||
-      !exactCounts(counts, newCounts(), Number.MAX_SAFE_INTEGER) || !validCounts(counts as Counts)) throw Error("invalid window");
+      !exactCounts(counts, newCounts(), MAX_COUNT) || !validCounts(counts as Counts)) throw Error("invalid window");
     seen.add(start);
-    return { start, counts: counts as Counts, restored: true };
+    return { start, counts: counts as Counts, restored: true, skippedLogsBefore };
   }).sort((a, b) => a.start - b.start);
 }
-function serializeWindow(w: Window, skippedLogsBefore = 0) {
+function serializeWindow(w: Window, skippedLogsBefore = w.skippedLogsBefore ?? 0) {
   return { event: "public_safety.api_aggregate.v1", windowStart: new Date(w.start).toISOString(), windowEnd: new Date(w.start + WINDOW).toISOString(), skippedLogsBefore, ...w.counts };
 }
 function flatten(prefix: string, value: unknown, output: string[]) {
-  if (typeof value === "number") { output.push(prefix + "," + value); return; }
+  if (typeof value === "number") { if (value !== 0 || prefix === "counts.requests") output.push(prefix + "," + value); return; }
   if (value && typeof value === "object") {
     for (const [key, child] of Object.entries(value)) flatten(prefix + "." + key, child, output);
   }
@@ -144,9 +145,10 @@ export function createObservability({ now = Date.now, emit }: { now?: () => numb
   let current: Window | undefined, skippedLogs = 0, auditWindow = -1, auditLogs = 0, auditDropped = 0;
   function rotate() {
     const start = Math.floor(now() / WINDOW) * WINDOW;
-    if (current && current.start !== start) {
+    if (current && current.start < start) {
       try {
-        emit?.(serializeWindow(current, skippedLogs));
+        current.skippedLogsBefore = skippedLogs;
+        emit?.(serializeWindow(current));
         skippedLogs = 0;
       } catch { skippedLogs++; }
       current = undefined;
@@ -156,16 +158,14 @@ export function createObservability({ now = Date.now, emit }: { now?: () => numb
   }
   function record(o: Observation) {
     const start = rotate();
+    // Avoid duplicate or overlapping reports if the wall clock moves backwards.
+    if (start < Math.floor(startedAt / WINDOW) * WINDOW || (current && current.start > start) || (!current && windows.some(w => w.start >= start))) { skippedLogs++; return; }
     if (!current) {
-      // Reuse an existing live bucket if the wall clock moved backwards; never mutate imported data.
-      const existing = windows.find(w => w.start === start);
-      if (existing?.restored) return;
-      current = existing ?? { start, counts: newCounts() };
-      if (!existing) { windows.push(current); windows.sort((a, b) => a.start - b.start); }
+      current = { start, counts: newCounts() }; windows.push(current);
       while (windows.length > RETENTION) windows.shift();
     }
     const c = current.counts;
-    if (c.requests >= MAX_REQUESTS) { c.dropped = Math.min(c.dropped + 1, Number.MAX_SAFE_INTEGER); return; }
+    if (c.requests >= MAX_REQUESTS) { c.dropped = Math.min(c.dropped + 1, MAX_COUNT); return; }
     const route = c.routes[o.route];
     c.requests++; route.requests++;
     c.methods[o.method]++; c.clients[o.client]++; c.probes[o.probe]++; c.auth[o.auth]++;
@@ -173,7 +173,7 @@ export function createObservability({ now = Date.now, emit }: { now?: () => numb
     const bucket = LATENCY.findIndex(ms => o.ms <= ms);
     route.latency[bucket < 0 ? LATENCY.length : bucket]++;
     const rows = typeof o.rows === "number" && Number.isSafeInteger(o.rows) && o.rows >= 0 && o.rows <= 10000 && o.status >= 200 && o.status < 300 ? o.rows : 0;
-    route.rows += rows;
+    if (o.method === "GET" && (o.route === "records" || o.route === "export" && o.status === 200)) route.rows += rows;
     if (o.route === "export" && o.method === "GET" && o.status === 200) { c.exportResponses++; c.exportRows += rows; }
   }
   function recordAudit(action: AuditAction, status: number) {
@@ -231,7 +231,7 @@ export function createObservability({ now = Date.now, emit }: { now?: () => numb
         exportBurst: windows.filter(w => w.counts.exportResponses >= 10).length,
         authFailures: windows.filter(w => w.counts.auth.denied >= 5).length,
         serverErrors: Object.values(sum.routes).reduce((n, r) => n + r.status["503"] + r.status.other_5xx, 0),
-        limitedCoverage: sum.dropped > 0 || skippedLogs > 0 || auditDropped > 0,
+        limitedCoverage: sum.dropped > 0 || skippedLogs > 0 || auditDropped > 0 || windows.some(w => (w.skippedLogsBefore ?? 0) > 0),
       }, requests: sum.requests, dropped: sum.dropped, exportResponses: sum.exportResponses, exportRows: sum.exportRows,
       p95UpperMs: p95(hist), methods: sum.methods, clients: sum.clients, probes: sum.probes, auth: sum.auth,
       routes: ROUTES.map(route => ({ route, ...sum.routes[route], p95UpperMs: p95(sum.routes[route].latency) })),

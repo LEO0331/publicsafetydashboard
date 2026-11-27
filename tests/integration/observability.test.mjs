@@ -67,6 +67,10 @@ test("wrapper auth, resource serialization, disabled mode and privacy", async ()
     assert.equal((await unknown(req("/api/.env?secret=SECRET-QUERY"))).status,404);
     const report=securityReport();
     assert.equal(report.probes.environment,1);assert.ok(report.auth.denied>=2);
+    assert.ok(report.audit.some(event => event.action === "import_crawl" && event.status === 200));
+    assert.ok(report.audit.some(event => event.action === "visibility_change" && event.status === 429));
+    assert.ok(report.audit.some(event => event.action === "import_url" && event.status === 500));
+    assert.ok(!report.audit.some(event => event.status === 401));
     const serialized=JSON.stringify(report);
     for(const value of ["SECRET","test-only-secret","192.0.2.10","/.env","location="])assert.ok(!serialized.includes(value),value);
   } finally {
@@ -86,4 +90,57 @@ test("bounded JSON, timeout and CSV guards preserve normal export",async()=>{
   const row={name:"=formula",violation_date:null,violation_count:2,violation_types_json:'["酒駕"]',location_text:"location",alcohol_mg_per_l:null,source_title:"source",pdf_url:null};
   const csv=buildCsv([row]);assert.ok(csv.startsWith("\uFEFF"));assert.ok(csv.includes("\"'=formula\""));
   assert.equal(buildCsv(Array(10001).fill(row)),null);assert.equal(buildCsv([{...row,name:"x".repeat(1000)}],512),null);
+});
+
+test("Phase 2 backup restores only validated completed pre-process windows", () => {
+  let now = base;
+  const previous = createObservability({ now: () => now });
+  for (let i = 0; i < 10; i++) previous.record({ ...observation, route: "export", rows: 2 });
+  for (let i = 0; i < 5; i++) previous.record({ ...observation, route: "admin_hide", method: "POST", status: 401, auth: "denied", rows: 0 });
+  previous.record({ ...observation, status: 503, rows: 0 });
+  assert.equal(previous.backup(), "");
+  assert.equal(previous.report().indicators.exportBurst, 1);
+  assert.equal(previous.report().indicators.authFailures, 1);
+  assert.equal(previous.report().indicators.serverErrors, 1);
+  assert.match(previous.csv(), /window_start_utc,origin,metric,count/);
+  assert.match(previous.csv(), /counts.exportResponses,10/);
+  now += 300000;
+  const backup = previous.backup(), raw = JSON.parse(backup);
+  assert.equal(raw.requests, 16);
+  const restored = createObservability({ now: () => now });
+  for (const invalid of ["", "not json", JSON.stringify({...raw, privateName:"SECRET"}), JSON.stringify({...raw,requests:17}), JSON.stringify({...raw, windowEnd:raw.windowStart}), JSON.stringify({...raw, dropped:1e12}), backup+backup, "x".repeat(4*1024*1024+1)]) {
+    assert.throws(() => restored.restore(invalid));
+    assert.equal(restored.report().requests, 0);
+  }
+  assert.deepEqual(restored.restore(backup), { accepted: 1, skipped: 0 });
+  assert.deepEqual(restored.restore(backup), { accepted: 0, skipped: 1 });
+  assert.equal(restored.report().restoredWindows, 1);
+  assert.equal(restored.report().requests, 16);
+  assert.match(restored.csv(), /,restored,counts.requests,16/);
+  restored.record(observation);
+  assert.equal(restored.report().requests, 17);
+  const future = {...raw, windowStart: new Date(now).toISOString(), windowEnd: new Date(now+300000).toISOString()};
+  assert.deepEqual(restored.restore(JSON.stringify(future)), {accepted:0,skipped:1});
+  now += 24*3600000;
+  assert.equal(restored.report().requests, 0);
+  assert.deepEqual(restored.restore(backup), {accepted:0,skipped:1});
+});
+
+test("Phase 2 audit is bounded, sanitized and separate from request counts", () => {
+  let now = base;
+  const events = [], store = createObservability({ now: () => now, emit: event => events.push(event) });
+  store.recordAudit("hide_record", 200);
+  store.recordAudit("unhide_source", 404);
+  store.recordAudit("PRIVATE-ID", 200);
+  store.recordAudit("hide_source", 999);
+  assert.equal(store.report().requests, 0);
+  assert.deepEqual(store.report().audit.map(event => [event.action,event.status]), [["unhide_source",404],["hide_record",200]]);
+  assert.equal(events[0].event,"public_safety.admin_operation.v1");
+  assert.deepEqual(Object.keys(events[0]).sort(),["action","at","event","status"]);
+  for(let i=0;i<100;i++)store.recordAudit("import_url",422);
+  assert.equal(store.report().audit.length,100);
+  assert.equal(store.report().auditDropped,2);
+  assert.equal(store.report().indicators.limitedCoverage,true);
+  now += 24*3600000+1;
+  assert.equal(store.report().audit.length,0);
 });
